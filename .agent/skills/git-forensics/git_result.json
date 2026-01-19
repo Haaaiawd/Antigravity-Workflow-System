@@ -1,0 +1,166 @@
+{
+  "target_file": "src/flask/app.py",
+  "analysis_period_days": 180,
+  "total_commits_modifying_target": 2,
+  "co_changed_files": [
+    {
+      "file": "CHANGES.rst",
+      "co_change_count": 2,
+      "frequency": 1.0,
+      "category": "DOC_FILE",
+      "warning": "HIGH_COUPLING"
+    },
+    {
+      "file": "src/flask/ctx.py",
+      "co_change_count": 2,
+      "frequency": 1.0,
+      "category": "PRODUCTION",
+      "warning": "HIGH_COUPLING"
+    },
+    {
+      "file": "src/flask/templating.py",
+      "co_change_count": 2,
+      "frequency": 1.0,
+      "category": "PRODUCTION",
+      "warning": "HIGH_COUPLING"
+    },
+    {
+      "file": "tests/test_reqctx.py",
+      "co_change_count": 2,
+      "frequency": 1.0,
+      "category": "TEST_FILE",
+      "warning": "HIGH_COUPLING"
+    },
+    {
+      "file": "tests/test_subclassing.py",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "TEST_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/api.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/appcontext.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/design.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/extensiondev.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/index.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/lifecycle.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/patterns/sqlalchemy.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/patterns/sqlite3.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/patterns/streaming.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/quickstart.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/reqcontext.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/shell.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/signals.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/testing.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "TEST_FILE",
+      "warning": "MEDIUM_COUPLING"
+    },
+    {
+      "file": "docs/tutorial/blog.rst",
+      "co_change_count": 1,
+      "frequency": 0.5,
+      "category": "DOC_FILE",
+      "warning": "MEDIUM_COUPLING"
+    }
+  ],
+  "last_modified_date": "2025-09-19",
+  "primary_authors": [
+    "David Lord",
+    "bre-17387639"
+  ],
+  "analysis": {
+    "high_risk_files": [
+      "src/flask/ctx.py",
+      "src/flask/templating.py"
+    ],
+    "recommendations": [
+      "发现 2 个高耦合生产文件。考虑：(1) 合并为同一模块；(2) 提取公共接口；(3) 使用事件解耦。",
+      "检测到 1 个测试文件高频共改，这是正常的测试-代码耦合。"
+    ]
+  },
+  "metadata": {
+    "is_shallow_clone": true,
+    "total_repo_commits": 171
+  }
+}
