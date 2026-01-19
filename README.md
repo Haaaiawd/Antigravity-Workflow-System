@@ -6,6 +6,8 @@
 [![Target: Antigravity](https://img.shields.io/badge/Environment-Antigravity-blueviolet)](https://github.com/google-deepmind/antigravity)
 [![Vibe Coding](https://img.shields.io/badge/Vibe%20Coding-Enabled-ff69b4)](https://github.com/karpathy/vibe-coding)
 
+[English](./README.md) | [中文](./README_CN.md)
+
 </div>
 
 ---
