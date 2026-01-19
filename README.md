@@ -73,7 +73,6 @@ Antigravity is an Agentic AI coding environment that natively recognizes `.agent
 ```bash
 # Clone or download, then copy to your project root
 cp -r .agent/ /path/to/your/project/
-cp AGENTS.md /path/to/your/project/
 ```
 
 ### 2. Tell Your AI

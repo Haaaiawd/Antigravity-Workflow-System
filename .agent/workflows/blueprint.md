@@ -132,22 +132,22 @@ graph TD
 
 **目标**: 保存最终的任务清单，并**更新 AGENTS.md**。
 
-1.  **保存任务清单**:
-    ```bash
-    write_to_file {TARGET_DIR}/05_TASKS.md
-    ```
+**目标**: 保存最终的任务清单，并**更新 .agent/rules/agents.md**。
 
-2.  **更新 00_MANIFEST.md**:
-    在 `{TARGET_DIR}/00_MANIFEST.md` 的文档清单中标记:
-    ```markdown
-    - [x] 05_TASKS.md
-    ```
+1.  **保存**: `write_to_file genesis/v{N}/05_TASKS.md`
+2.  **验证**: 确保文件包含所有任务、验收标准和依赖图。
+3.  **更新 .agent/rules/agents.md "当前状态"**:
+    - 活动任务清单: `genesis/v{N}/05_TASKS.md`
+    - 待办任务数: `{X}` (计算 total tasks)
+    - 最近一次更新: `{Today}`
 
-3.  **更新 AGENTS.md "当前状态"**:
-    ```markdown
-    - **活动任务清单**: `{TARGET_DIR}/05_TASKS.md`
-    - **待办任务数**: {N} 个
-    ```
+---
+
+## 检查清单
+- ✅ 05_TASKS.md 是否包含所有 WBS 任务？
+- ✅ 每个任务是否有 Context 和 Acceptance Criteria？
+- ✅ 是否生成了 Mermaid 依赖图？
+- ✅ 已更新 .agent/rules/agents.md？
 
 ---
 
@@ -178,6 +178,6 @@ graph TD
 - ✅ 任务清单 `05_TASKS.md` 已生成
 - ✅ 每个 Level 3 任务包含验证说明
 - ✅ 生成了 Mermaid 依赖图
-- ✅ 更新了 AGENTS.md
+- ✅ 已更新 .agent/rules/agents.md
 - ✅ 用户已确认
 </completion_criteria>

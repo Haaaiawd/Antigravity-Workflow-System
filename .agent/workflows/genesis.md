@@ -198,15 +198,15 @@ description: 从 0 到代码的项目启动全流程，将模糊想法转化为�
 
 ## Step 7: 完成总结 (Completion Summary)
 
-**目标**: 总结产出，并**更新 AGENTS.md** 以反映新版本。
+**目标**: 总结产出，并**更新 .agent/rules/agents.md** 以反映新版本。
 
 > [!IMPORTANT]
 > **必须完成以下 3 个更新动作**:
-> 1. 更新 AGENTS.md "当前状态"
-> 2. 更新 AGENTS.md "项目结构"
-> 3. 更新 AGENTS.md "导航指南"
+> 1. 更新 .agent/rules/agents.md "当前状态"
+> 2. 更新 .agent/rules/agents.md "项目结构"
+> 3. 更新 .agent/rules/agents.md "导航指南"
 
-### 7.1 更新 AGENTS.md
+### 7.1 更新 .agent/rules/agents.md
 
 使用 `replace_file_content` 或 `multi_replace_file_content`:
 
@@ -243,44 +243,16 @@ description: 从 0 到代码的项目启动全流程，将模糊想法转化为�
 
 ### 7.2 更新 00_MANIFEST.md
 
-将文档清单中的 checkbox 标记为已完成：
-```markdown
-## 文档清单
-- [x] 00_MANIFEST.md
-- [x] 01_PRD.md
-- [x] 02_ARCHITECTURE_OVERVIEW.md
-- [x] 03_ADR/
-- [ ] 04_SYSTEM_DESIGN/ (由 /design-system 生成)
-- [ ] 05_TASKS.md (由 /blueprint 生成)
-- [x] 06_CHANGELOG.md
-```
+将文档清单中的 checkbox 标记为已完成。
 
 ### 7.3 展示产出
 
-```markdown
-✅ Genesis (v{N}) 阶段完成！
-
-📁 产出文档 (Base: genesis/v{N}/):
-  - 00_MANIFEST.md (版本元数据)
-  - concept_model.json
-  - 01_PRD.md
-  - 02_ARCHITECTURE_OVERVIEW.md
-  - 03_ADR/
-  - 06_CHANGELOG.md
-
-📍 已更新 AGENTS.md 指向 v{N}。
-
-📋 下一步行动:
-  1. 运行 /design-system (针对具体系统)
-  2. 运行 /blueprint (基于 genesis/v{N} 生成任务)
-```
-
----
+告知用户阶段完成，列出产出文档，并指引下一步行动（design-system 或 blueprint）。
 
 <completion_criteria>
 - ✅ 创建了 `genesis/v{N}/00_MANIFEST.md`
 - ✅ 创建了 `genesis/v{N}/06_CHANGELOG.md`
 - ✅ 生成了 PRD, Architecture Overview, ADRs
-- ✅ 更新了 AGENTS.md (当前状态、项目结构、导航指南)
+- ✅ 更新了 .agent/rules/agents.md (当前状态、项目结构、导航指南)
 - ✅ 用户已在人类检查点确认
 </completion_criteria>
