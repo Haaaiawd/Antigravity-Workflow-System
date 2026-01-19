@@ -1,13 +1,10 @@
 <div align="center">
 
-# 🚀 Antigravity Workflow System
-
-**让 AI 像高级架构师一样思考**
+![Antigravity Workflow System](ANTIGRAVITYWS.png)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Target: Antigravity](https://img.shields.io/badge/Environment-Antigravity-blueviolet)](https://github.com/google-deepmind/antigravity)
 [![Vibe Coding](https://img.shields.io/badge/Vibe%20Coding-Enabled-ff69b4)](https://github.com/karpathy/vibe-coding)
-
 
 </div>
 
