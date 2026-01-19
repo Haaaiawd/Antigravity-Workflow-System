@@ -25,7 +25,7 @@ A **structured workflow framework** for Agentic AI assistants, designed to solve
 |------------|-------------|--------------|
 | **Architecture Drift** | AI generates inconsistent patterns across the same codebase | `/genesis` forces PRD & architecture design first |
 | **Spaghetti Code** | AI lacks project context, writes code that doesn't fit | Tasks include constraints & acceptance criteria |
-| **Context Amnesia** | New session = AI forgets all previous decisions | `AGENTS.md` + versioned docs as persistent memory |
+| **Context Amnesia** | New session = AI forgets all previous decisions | `.agent/rules/agents.md` + versioned docs as persistent memory |
 | **Lack of Planning** | Vibe Coding skips design, creates tech debt | Mandatory design-first workflow |
 
 ---
@@ -78,7 +78,7 @@ cp -r .agent/ /path/to/your/project/
 ### 2. Tell Your AI
 
 ```
-Please read AGENTS.md to understand the project structure.
+Please read .agent/rules/agents.md to understand the project structure.
 ```
 
 ### 3. Invoke Workflows
@@ -129,9 +129,10 @@ Just speak naturally. Antigravity will automatically select and run the right wo
 
 ```
 your-project/
-├── AGENTS.md              # 🧠 AI's anchor point
 ├── .agent/
-│   ├── workflows/         # Workflow definitions
+│   ├── rules/
+│   │   └── agents.md          # 🧠 AI's anchor point
+│   ├── workflows/             # Workflow definitions
 │   │   ├── genesis.md
 │   │   ├── scout.md
 │   │   ├── design-system.md
