@@ -70,8 +70,14 @@ Antigravity 是一个 Agentic AI 编程环境，它能原生识别 `.agent/workf
 ### 1. 复制到你的项目
 
 ```bash
-# Clone 或下载，然后复制到你的项目根目录
-cp -r .agent/ /path/to/your/project/
+# 1. 克隆本仓库
+git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
+
+# 2. 将 .agent/ 目录复制到你的项目根目录
+# (Mac/Linux)
+cp -r Antigravity-Workflow-System/.agent ./
+# (Windows PowerShell)
+Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 ```
 
 ### 2. 告诉你的 AI

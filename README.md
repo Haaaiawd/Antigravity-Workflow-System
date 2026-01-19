@@ -70,8 +70,14 @@ Antigravity is an Agentic AI coding environment that natively recognizes `.agent
 ### 1. Copy to Your Project
 
 ```bash
-# Clone or download, then copy to your project root
-cp -r .agent/ /path/to/your/project/
+# 1. Clone this repository
+git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
+
+# 2. Copy .agent/ contents to your project root
+# (Example for Unix/Mac)
+cp -r Antigravity-Workflow-System/.agent ./
+# (Example for Windows PowerShell)
+Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 ```
 
 ### 2. Tell Your AI
