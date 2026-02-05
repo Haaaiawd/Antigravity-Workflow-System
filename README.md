@@ -29,7 +29,7 @@ A **structured workflow framework** for Agentic AI assistants, designed to solve
 
 ---
 
-## 🛠️ Compatibility
+## 🛠️ Compatibility & Prerequisites
 
 > ⚠️ **Important**: This framework requires **Antigravity** environment with `.agent/workflows/` support.
 
@@ -44,15 +44,32 @@ A **structured workflow framework** for Agentic AI assistants, designed to solve
 
 Antigravity is an Agentic AI coding environment that natively recognizes `.agent/workflows/` directory and can execute slash commands like `/genesis`, `/blueprint`, etc.
 
-**Required Capabilities:**
-- Workflow recognition (`.agent/workflows/*.md`)
-- Skill loading (`.agent/skills/*/SKILL.md`)
-- File system access (`view_file`, `write_to_file`)
-- Command execution (`run_command`)
+### 🔌 Required: Sequential Thinking MCP Server
+
+This framework uses `sequentialthinking` for deep reasoning. Install it via MCP Store:
+
+1. Open **Antigravity Editor**
+2. Click **"..."** (three dots) in the sidebar → **Additional Options**
+3. Select **MCP Servers**
+4. Open **MCP Store** and search for `sequential-thinking`
+5. Click **Add** to install
+
+> 💡 Without this, workflows still work, but deep thinking features will be limited.
 
 ---
 
-## 📋 Workflows
+## � Choose Your Level
+
+| Level | Workflows | Best For |
+|-------|-----------|----------|
+| **🐣 Beginner** | `/genesis` → `/blueprint` + `/explore` | Most projects, learning the system |
+| **🦁 Advanced** | + `/scout` + `/design-system` + `/change` | Large projects, legacy code, complex architecture |
+
+> 💡 **Start with Beginner level.** Master the core flow first, then explore advanced workflows when needed.
+
+---
+
+## �📋 Workflows
 
 | Command | Purpose | Input | Output |
 |---------|---------|-------|--------|
@@ -70,21 +87,35 @@ Antigravity is an Agentic AI coding environment that natively recognizes `.agent
 ### 1. Copy to Your Project
 
 ```bash
-# 1. Clone this repository
+# Clone this repository
 git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
 
-# 2. Copy .agent/ contents to your project root
-# (Example for Unix/Mac)
+# Copy .agent/ to your project root
+# Unix/Mac:
 cp -r Antigravity-Workflow-System/.agent ./
-# (Example for Windows PowerShell)
+# Windows PowerShell:
 Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 ```
 
-### 2. Tell Your AI
+### 2. Your First Project (5 Minutes) 🐣
 
 ```
-Please read .agent/rules/agents.md to understand the project structure.
+You: "I want to build a todo app with React"
+     ↓
+AI runs /genesis
+     ↓
+📄 Outputs: PRD + Architecture
+     ↓
+You: "Let's plan the tasks"
+     ↓
+AI runs /blueprint  
+     ↓
+📋 Outputs: TASKS.md with clear task list
+     ↓
+🎉 Start coding with guidance!
 ```
+
+**That's the core flow.** Everything else is optional until you need it.
 
 ### 3. Invoke Workflows
 

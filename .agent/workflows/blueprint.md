@@ -34,9 +34,7 @@ description: 将架构设计拆解为可执行的 WBS 任务清单，每个任�
 **目标**: 找到 Source of Truth。
 
 1.  **扫描版本**:
-    ```bash
-    list_dir genesis/
-    ```
+    扫描 `genesis/` 目录，找到最新版本号 `v{N}`
 2.  **确定最新版本**:
     - 找到数字最大的文件夹 `v{N}` (例如 `v3`)。
     - **TARGET_DIR** = `genesis/v{N}`。
@@ -53,10 +51,10 @@ description: 将架构设计拆解为可执行的 WBS 任务清单，每个任�
 
 **目标**: 从 **`{TARGET_DIR}`** 加载文档。
 
-1.  **读取 Architecture**: `view_file {TARGET_DIR}/02_ARCHITECTURE_OVERVIEW.md`
-2.  **读取 PRD**: `view_file {TARGET_DIR}/01_PRD.md`
-3.  **读取 ADRs**: `list_dir {TARGET_DIR}/03_ADR/`
-4.  **调用技能**: `view_file .agent/skills/task-planner/SKILL.md`
+1.  **读取 Architecture**: 读取 `{TARGET_DIR}/02_ARCHITECTURE_OVERVIEW.md`
+2.  **读取 PRD**: 读取 `{TARGET_DIR}/01_PRD.md`
+3.  **读取 ADRs**: 扫描 `{TARGET_DIR}/03_ADR/` 目录
+4.  **调用技能**: `task-planner`
 
 ---
 
@@ -121,7 +119,7 @@ graph TD
 
 ## Step 4: 复杂度审计
 
-调用 `view_file .agent/skills/complexity-guard/SKILL.md` 确保:
+调用 `complexity-guard` 确保:
 - 单个任务 ≤ 8 小时
 - 依赖关系不超过 5 层
 - 无循环依赖
@@ -134,7 +132,7 @@ graph TD
 
 **目标**: 保存最终的任务清单，并**更新 .agent/rules/agents.md**。
 
-1.  **保存**: `write_to_file genesis/v{N}/05_TASKS.md`
+1.  **保存**: 将内容保存到 `genesis/v{N}/05_TASKS.md`
 2.  **验证**: 确保文件包含所有任务、验收标准和依赖图。
 3.  **更新 .agent/rules/agents.md "当前状态"**:
     - 活动任务清单: `genesis/v{N}/05_TASKS.md`

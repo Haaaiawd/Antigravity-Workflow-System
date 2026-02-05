@@ -17,16 +17,15 @@ description: 为单个系统设计详细的技术文档，通过调研最佳实�
 > **深度优于广度** —— 每个系统都值得被认真设计
 
 **使用方式**:
-```bash
-/design-system <system-id>
+运行 `/design-system <system-id>` 命令启动系统设计
 
-示例:
-/design-system frontend-system
-/design-system backend-api-system
-/design-system database-system
-```
+**示例**:
+- `/design-system frontend-system`
+- `/design-system backend-api-system`
+- `/design-system database-system`
+- `/design-system agent-system`
 
-**Output Goal**: `genesis/04_SYSTEM_DESIGN/{system-id}.md`
+**Output Goal**: `genesis/v{N}/04_SYSTEM_DESIGN/{system-id}.md`
 </phase_context>
 
 ---
@@ -96,14 +95,12 @@ description: 为单个系统设计详细的技术文档，通过调研最佳实�
 **加载步骤**:
 
 ### 1.1 检查文件存在性
-```bash
-list_dir genesis/
-```
+扫描 `genesis/` 目录，找到所有 `v{N}` 版本文件夹。
 
 **检查**:
-- [ ] `genesis/01_PRD.md` 存在
-- [ ] `genesis/02_ARCHITECTURE_OVERVIEW.md` 存在
-- [ ] `genesis/03_ADR/` 存在
+- [ ] `genesis/v{N}/01_PRD.md` 存在
+- [ ] `genesis/v{N}/02_ARCHITECTURE_OVERVIEW.md` 存在
+- [ ] `genesis/v{N}/03_ADR/` 存在
 
 **如果缺失**:
 - 提示用户先运行 `/genesis`
@@ -112,9 +109,7 @@ list_dir genesis/
 ---
 
 ### 1.2 加载PRD
-```bash
-view_file genesis/01_PRD.md
-```
+读取 `genesis/v{N}/01_PRD.md`
 
 **关注重点**:
 - Executive Summary - 项目核心目的
@@ -127,9 +122,7 @@ view_file genesis/01_PRD.md
 ---
 
 ### 1.3 加载Architecture Overview
-```bash
-view_file genesis/02_ARCHITECTURE_OVERVIEW.md
-```
+读取 `genesis/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 
 **关注重点**:
 - 系统清单 - 了解所有系统
@@ -139,9 +132,7 @@ view_file genesis/02_ARCHITECTURE_OVERVIEW.md
 ---
 
 ### 1.4 查找该系统的详细定义
-```bash
-grep_search "system-id" genesis/02_ARCHITECTURE_OVERVIEW.md
-```
+在 `genesis/v{N}/02_ARCHITECTURE_OVERVIEW.md` 中搜索 system-id 相关内容
 
 或手动在Architecture Overview中查找该系统的：
 - **职责 (Responsibility)**: 这个系统负责什么
@@ -152,18 +143,14 @@ grep_search "system-id" genesis/02_ARCHITECTURE_OVERVIEW.md
 ---
 
 ### 1.5 加载相关ADR
-```bash
-list_dir genesis/03_ADR/
-```
+扫描 `genesis/v{N}/03_ADR/` 目录
 
 **选择性加载**与该系统相关的ADR，例如：
 - 技术栈选择 (ADR001_TECH_STACK.md)
 - 认证方式 (ADR002_AUTHENTICATION.md，如果该系统涉及认证)
 - 数据库选择 (如果该系统是后端或数据库系统)
 
-```bash
-view_file genesis/03_ADR/ADR001_TECH_STACK.md
-```
+读取 `genesis/v{N}/03_ADR/ADR001_TECH_STACK.md`
 
 ---
 
@@ -275,7 +262,7 @@ view_file genesis/03_ADR/ADR001_TECH_STACK.md
 ```
 
 **产出**:
-- 调研报告自动保存到: `genesis/04_SYSTEM_DESIGN/_research/{system-id}-research.md`
+- 调研报告自动保存到: `genesis/v{N}/04_SYSTEM_DESIGN/_research/{system-id}-research.md`
 
 **关键要点**: 从调研中提取:
 - 推荐的架构模式
@@ -373,9 +360,7 @@ view_file genesis/03_ADR/ADR001_TECH_STACK.md
 **步骤**:
 
 ### 5.1 加载模板
-```bash
-view_file .agent/templates/system-design-template.md
-```
+读取 `.agent/templates/system-design-template.md`
 
 ### 5.2 填充内容
 
@@ -404,13 +389,11 @@ view_file .agent/templates/system-design-template.md
 - **约束继承**: 从PRD和ADR继承约束
 
 ### 5.3 保存文档
-```bash
-write_to_file genesis/04_SYSTEM_DESIGN/{system-id}.md
-```
+将内容保存到 `genesis/v{N}/04_SYSTEM_DESIGN/{system-id}.md`
 
 **示例路径**:
-- `genesis/04_SYSTEM_DESIGN/frontend-system.md`
-- `genesis/04_SYSTEM_DESIGN/backend-api-system.md`
+- `genesis/v{N}/04_SYSTEM_DESIGN/frontend-system.md`
+- `genesis/v{N}/04_SYSTEM_DESIGN/backend-api-system.md`
 
 ---
 
@@ -425,7 +408,7 @@ write_to_file genesis/04_SYSTEM_DESIGN/{system-id}.md
 
 **调用方式**:
 ```
-/challenge genesis/04_SYSTEM_DESIGN/{system-id}.md
+/challenge genesis/v{N}/04_SYSTEM_DESIGN/{system-id}.md
 ```
 
 **产出**: 质疑报告 + 改进建议
@@ -448,8 +431,8 @@ write_to_file genesis/04_SYSTEM_DESIGN/{system-id}.md
 **展示**:
 ```
 ✅ 系统设计文档已生成:
-  - 文件: genesis/04_SYSTEM_DESIGN/{system-id}.md
-  - 调研: genesis/04_SYSTEM_DESIGN/_research/{system-id}-research.md
+  - 文件: genesis/v{N}/04_SYSTEM_DESIGN/{system-id}.md
+  - 调研: genesis/v{N}/04_SYSTEM_DESIGN/_research/{system-id}-research.md
 
 📋 文档包含:
   - 14个章节（完整版）或 11个章节（简化版）
@@ -484,19 +467,17 @@ write_to_file genesis/04_SYSTEM_DESIGN/{system-id}.md
 
 ## 📚 示例提示词
 
-```bash
-# 为前端系统设计
-/design-system frontend-system
+**为前端系统设计**:
+`/design-system frontend-system`
 
-# 为后端API系统设计
-/design-system backend-api-system
+**为后端API系统设计**:
+`/design-system backend-api-system`
 
-# 为数据库系统设计
-/design-system database-system
+**为数据库系统设计**:
+`/design-system database-system`
 
-# 为多智能体系统设计
-/design-system agent-system
-```
+**为多智能体系统设计**:
+`/design-system agent-system`
 
 ---
 

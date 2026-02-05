@@ -67,7 +67,7 @@
 | 工作流 | 触发时机 | 产出 |
 |--------|---------|------|
 | `/genesis` | 新项目 / 重大重构 | PRD, Architecture, ADRs |
-| `/scout` | 变更前 / 接手项目 | SCOUT_RISK_REPORT.md |
+| `/scout` | 变更前 / 接手项目 | `scout/reports/{Date}_SCOUT_RISK_REPORT.md` |
 | `/design-system` | genesis 后 | 04_SYSTEM_DESIGN/*.md |
 | `/blueprint` | genesis 后 | 05_TASKS.md |
 | `/change` | 轻量变更 | 更新 TASKS + CHANGELOG |

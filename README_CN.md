@@ -29,7 +29,7 @@
 
 ---
 
-## 🛠️ 兼容性
+## 🛠️ 兼容性与前置要求
 
 > ⚠️ **重要**: 本框架需要支持 `.agent/workflows/` 的 **Antigravity** 环境。
 
@@ -44,11 +44,28 @@
 
 Antigravity 是一个 Agentic AI 编程环境，它能原生识别 `.agent/workflows/` 目录，并执行 `/genesis`, `/blueprint` 等斜杠命令。
 
-**所需能力:**
-- 工作流识别 (`.agent/workflows/*.md`)
-- 技能加载 (`.agent/skills/*/SKILL.md`)
-- 文件系统访问 (`view_file`, `write_to_file`)
-- 命令行执行 (`run_command`)
+### 🔌 必装: Sequential Thinking MCP Server
+
+本框架使用 `sequentialthinking` 实现深度推理。请通过 MCP Store 安装:
+
+1. 打开 **Antigravity Editor**
+2. 点击侧边栏 **"..."** (三个点) → **Additional Options**
+3. 选择 **MCP Servers**
+4. 打开 **MCP Store** 搜索 `sequential-thinking`
+5. 点击 **Add** 安装
+
+> 💡 未安装时工作流仍可运行，但深度思考功能会受限。
+
+---
+
+## 📊 选择你的使用级别
+
+| 级别 | 工作流 | 适用场景 |
+|------|--------|----------|
+| **🐣 入门** | `/genesis` → `/blueprint` + `/explore` | 大多数项目、学习系统 |
+| **🦁 进阶** | + `/scout` + `/design-system` + `/change` | 大型项目、遗留代码、复杂架构 |
+
+> 💡 **从入门级别开始**。先掌握核心流程，需要时再探索进阶工作流。
 
 ---
 
@@ -70,21 +87,35 @@ Antigravity 是一个 Agentic AI 编程环境，它能原生识别 `.agent/workf
 ### 1. 复制到你的项目
 
 ```bash
-# 1. 克隆本仓库
+# 克隆本仓库
 git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
 
-# 2. 将 .agent/ 目录复制到你的项目根目录
-# (Mac/Linux)
+# 将 .agent/ 目录复制到你的项目根目录
+# Mac/Linux:
 cp -r Antigravity-Workflow-System/.agent ./
-# (Windows PowerShell)
+# Windows PowerShell:
 Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 ```
 
-### 2. 告诉你的 AI
+### 2. 你的第一个项目 (5分钟) 🐣
 
 ```
-请阅读 .agent/rules/agents.md 以理解项目结构。
+你: "我想用 React 做一个 Todo 应用"
+    ↓
+AI 执行 /genesis
+    ↓
+📄 产出: PRD + 架构文档
+    ↓
+你: "来规划一下任务"
+    ↓
+AI 执行 /blueprint  
+    ↓
+📋 产出: TASKS.md 清晰的任务清单
+    ↓
+🎉 开始有指导地编码！
 ```
+
+**这就是核心流程**。其他功能等你需要时再学习。
 
 ### 3. 调用工作流
 
@@ -187,44 +218,7 @@ your-project/
 
 ---
 
-## 🤔 常见问题 (FAQ)
-
-<details>
-<summary><b>为什么不直接用 .cursorrules?</b></summary>
-
-`.cursorrules` 定义了**怎么写代码**（代码风格、模式）。  
-本框架定义了**要做什么**（需求、架构、任务分解）。
-
-它们解决的是不同的问题，你可以配合使用。
-</details>
-
-<details>
-<summary><b>这支持 Cursor 或 GitHub Copilot 吗?</b></summary>
-
-不支持。本框架需要 **Agentic AI**（智能体）能力：
-- 读取工作区中的任意文件
-- 创建新文件
-- 执行终端命令
-
-Cursor/Copilot 目前在聊天界面中不具备这些完整的自主能力。
-</details>
-
-<details>
-<summary><b>学习曲线如何?</b></summary>
-
-- **5 分钟**: 理解核心概念
-- **1 个项目**: 熟悉 `/genesis` → `/blueprint` 流程
-- **3 个项目**: 完全掌握整套体系
-</details>
-
----
-
-## 🙌 贡献
-
-欢迎贡献！在提交 PR 之前请阅读我们的贡献指南。
-
----
-
+---  
 ## 📜 许可证
 
 [MIT](LICENSE) © 2026

@@ -34,9 +34,7 @@ description: 处理轻量变更请求，通过 5 问题法评估影响范围，�
 ## Step 0: 定位当前版本
 
 1.  **扫描版本**:
-    ```bash
-    list_dir genesis/
-    ```
+    扫描 `genesis/` 目录，找到最新版本号 `v{N}`
 2.  **确定当前版本**:
     - 找到数字最大的文件夹 `v{N}`。
     - **TARGET_DIR** = `genesis/v{N}`。
@@ -92,9 +90,7 @@ description: 处理轻量变更请求，通过 5 问题法评估影响范围，�
 **目标**: 将变更作为新任务追加到当前任务清单。
 
 1.  **读取当前任务清单**:
-    ```bash
-    view_file {TARGET_DIR}/05_TASKS.md
-    ```
+    读取 `{TARGET_DIR}/05_TASKS.md`
 
 2.  **确定新任务 ID**:
     - 找到最后一个任务的 ID (如 `T3.2.5`)
@@ -124,9 +120,7 @@ description: 处理轻量变更请求，通过 5 问题法评估影响范围，�
 **目标**: 在 CHANGELOG 中记录此次变更。
 
 1.  **读取 CHANGELOG**:
-    ```bash
-    view_file {TARGET_DIR}/06_CHANGELOG.md
-    ```
+    读取 `{TARGET_DIR}/06_CHANGELOG.md`
 
 2.  **追加变更记录**:
     ```markdown

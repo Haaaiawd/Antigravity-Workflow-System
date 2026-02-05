@@ -26,7 +26,7 @@ Scout 的发现将作为**输入**反馈给 Architectural Overview。
 
 ## Step 1: 建立大局观 (System Fingerprint)
 
-1.  **扫描根目录**: `list_dir .`
+1.  **扫描根目录**: 列出项目根目录下的所有文件和文件夹
 2.  **获取当前架构上下文** (Optional):
     - 如果存在 `genesis/v{N}`，读取其 `02_ARCHITECTURE_OVERVIEW.md` 以对比"计划"与"现实"。
 
@@ -77,12 +77,11 @@ Scout 的发现将作为**输入**反馈给 Architectural Overview。
 
 **目标**: 保存带有时间戳的报告，防止覆盖历史记录。
 
-```bash
-run_command "mkdir -p scout/reports"
-# Generate filename with date
-report_file="scout/reports/$(date +%Y%m%d)_SCOUT_RISK_REPORT.md"
-write_to_file $report_file
-```
+保存报告到 `scout/reports/{YYYYMMDD}_SCOUT_RISK_REPORT.md`
+
+（例如: `scout/reports/20260204_SCOUT_RISK_REPORT.md`）
+
+确保 `scout/reports/` 目录存在。
 
 **报告必须包含**:
 1.  **System Fingerprint**
