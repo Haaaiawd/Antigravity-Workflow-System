@@ -63,7 +63,7 @@ This framework uses `sequentialthinking` for deep reasoning. Install it via MCP 
 | Level | Workflows | Best For |
 |-------|-----------|----------|
 | **🐣 Beginner** | `/genesis` → `/blueprint` + `/explore` | Most projects, learning the system |
-| **🦁 Advanced** | + `/scout` + `/design-system` + `/change` | Large projects, legacy code, complex architecture |
+| **🦁 Advanced** | + `/scout` + `/design-system` + `/challenge` + `/change` | Large projects, legacy code, complex architecture |
 
 > 💡 **Start with Beginner level.** Master the core flow first, then explore advanced workflows when needed.
 
@@ -76,6 +76,7 @@ This framework uses `sequentialthinking` for deep reasoning. Install it via MCP 
 | `/genesis` | Start from zero, create PRD & architecture | Vague idea | PRD, Architecture, ADRs |
 | `/scout` | Analyze legacy codebase risks | Existing code | Risk report, Gap analysis |
 | `/design-system` | Detailed design for a system | Architecture | System Design doc |
+| `/challenge` | Systemic 3-tier review & audit | Full Design Docs | Challenge Report (Graded) |
 | `/blueprint` | Break architecture into tasks | PRD + Arch | TASKS.md (WBS) |
 | `/change` | Handle lightweight changes | Small request | Updated TASKS |
 | `/explore` | Deep research & brainstorm | Topic/Question | Exploration report |
@@ -131,6 +132,7 @@ Directly type the command in the chat or editor to trigger the workflow.
 Just speak naturally. Antigravity will automatically select and run the right workflow.
 - *"I want to start a new project for a todo app"* → Triggers `/genesis`
 - *"Help me understand this legacy code and its risks"* → Triggers `/scout`
+- *"I think there are gaps in this design, challenge it"* → Triggers `/challenge`
 - *"The architecture is ready, let's plan the tasks"* → Triggers `/blueprint`
 - *"I need to add a back-to-top button"* → Triggers `/change`
 
@@ -172,6 +174,7 @@ your-project/
 │   │   ├── genesis.md
 │   │   ├── scout.md
 │   │   ├── design-system.md
+│   │   ├── challenge.md
 │   │   ├── blueprint.md
 │   │   ├── change.md
 │   │   └── explore.md
@@ -187,7 +190,8 @@ your-project/
     │   ├── 01_PRD.md
     │   ├── 02_ARCHITECTURE.md
     │   ├── 03_ADR/
-    │   └── 05_TASKS.md
+    │   ├── 05_TASKS.md
+    │   └── 07_CHALLENGE_REPORT.md
     └── v2/                # New version on major changes
 ```
 

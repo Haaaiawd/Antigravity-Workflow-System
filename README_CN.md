@@ -63,7 +63,7 @@ Antigravity 是一个 Agentic AI 编程环境，它能原生识别 `.agent/workf
 | 级别 | 工作流 | 适用场景 |
 |------|--------|----------|
 | **🐣 入门** | `/genesis` → `/blueprint` + `/explore` | 大多数项目、学习系统 |
-| **🦁 进阶** | + `/scout` + `/design-system` + `/change` | 大型项目、遗留代码、复杂架构 |
+| **🦁 进阶** | + `/scout` + `/design-system` + `/challenge` + `/change` | 大型项目、遗留代码、复杂架构 |
 
 > 💡 **从入门级别开始**。先掌握核心流程，需要时再探索进阶工作流。
 
@@ -76,6 +76,7 @@ Antigravity 是一个 Agentic AI 编程环境，它能原生识别 `.agent/workf
 | `/genesis` | 从零开始，创建 PRD 和架构 | 模糊的想法 | PRD, 架构文档, ADRs |
 | `/scout` | 分析遗留代码的风险 | 现有代码 | 风险报告, 差距分析 |
 | `/design-system` | 单个系统的详细设计 | 架构概览 | System Design 文档 |
+| `/challenge` | 系统性三维度质疑审查 | 完整设计文档 | 质疑报告 (分级) |
 | `/blueprint` | 将架构拆解为任务清单 | PRD + 架构 | TASKS.md (WBS) |
 | `/change` | 处理轻量级变更 | 小需求 | 更新后的任务清单 |
 | `/explore` | 深度调研与头脑风暴 | 话题/问题 | 探索报告 |
@@ -131,6 +132,7 @@ Antigravity 会自动识别你的意图并触发相应的工作流。你有两�
 像平常说话一样即可。Antigravity 会自动选择并运行正确的工作流。
 - *"我想做一个全新的待办事项 App"* → 触发 `/genesis`
 - *"帮我看看这段老代码有什么风险"* → 触发 `/scout`
+- *"我觉得这个设计有漏洞，帮我找找茬"* → 触发 `/challenge`
 - *"架构设计好了，我们来规划一下任务"* → 触发 `/blueprint`
 - *"我需要加一个返回顶部按钮"* → 触发 `/change`
 
@@ -172,6 +174,7 @@ your-project/
 │   │   ├── genesis.md
 │   │   ├── scout.md
 │   │   ├── design-system.md
+│   │   ├── challenge.md
 │   │   ├── blueprint.md
 │   │   ├── change.md
 │   │   └── explore.md
@@ -187,7 +190,8 @@ your-project/
     │   ├── 01_PRD.md
     │   ├── 02_ARCHITECTURE.md
     │   ├── 03_ADR/
-    │   └── 05_TASKS.md
+    │   ├── 05_TASKS.md
+    │   └── 07_CHALLENGE_REPORT.md
     └── v2/                # 重大变更时的新版本
 ```
 
