@@ -72,6 +72,7 @@
 | `/blueprint` | genesis 后 | 05_TASKS.md |
 | `/change` | 轻量变更 | 更新 TASKS + CHANGELOG |
 | `/explore` | 调研时 | 探索报告 |
+| `/challenge` | 决策前质疑 | 07_CHALLENGE_REPORT.md |
 
 ---
 
