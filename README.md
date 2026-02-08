@@ -69,7 +69,7 @@ This framework uses `sequentialthinking` for deep reasoning. Install it via MCP 
 
 ---
 
-## �📋 Workflows
+## 📋 Workflows
 
 | Command | Purpose | Input | Output |
 |---------|---------|-------|--------|
@@ -98,7 +98,7 @@ cp -r Antigravity-Workflow-System/.agent ./
 Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 ```
 
-### 2. Your First Project (5 Minutes) 🐣
+### 2. Your First Project 🐣
 
 > **Example Prompt**: "I want to build a web-based macOS simulator, including Dock, top bar, and several system apps. Please start this new project from scratch according to the development process."
 

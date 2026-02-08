@@ -98,7 +98,7 @@ cp -r Antigravity-Workflow-System/.agent ./
 Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 ```
 
-### 2. 你的第一个项目 (5分钟) 🐣
+### 2. 你的第一个项目 🐣
 
 > **示例提示词**: "我想做一个 Web 版的 macOS 系统模拟器，包含 Dock、顶栏和几个系统应用，请你根据开发流程从0开启这个新项目吧"
 
