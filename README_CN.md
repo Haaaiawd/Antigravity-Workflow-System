@@ -29,6 +29,100 @@
 
 ---
 
+##  快速开始
+
+### 1. 复制到你的项目
+
+```bash
+# 克隆本仓库
+git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
+
+# 将 .agent/ 目录复制到你的项目根目录
+# Mac/Linux:
+cp -r Antigravity-Workflow-System/.agent ./
+# Windows PowerShell:
+Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
+```
+
+### 2. 你的第一个项目 🐣
+
+> **示例提示词**: "我想做一个 Web 版的 macOS 系统模拟器，包含 Dock、顶栏和几个系统应用，请你根据开发流程从0开启这个新项目吧"
+
+**深度思考与架构设计**：AI 将会自动执行 `/genesis` 工作流，深度思考项目需求并产出 PRD 与架构设计。
+<img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis Workflow">
+
+**交互式需求对齐**：AI 会针对模糊需求进行追问，确保设计符合你的直觉。
+<img src="assets/与人类交互确认细节.jpg" width="800" alt="Human Interaction">
+
+**自主任务拆解与执行**：AI 会自主调用必要的 Skills（如 `spec-writer`, `task-planner` 等）来完成文档建设与任务拆解。
+<img src="assets/自主调用skills.jpg" width="800" alt="Skills Execution">
+
+---
+
+## 🗺️ 决策流程图
+
+```
+                    ┌─────────────────┐
+                    │     你目前在哪?    │
+                    └────────┬────────┘
+           ┌─────────────────┼─────────────────┐
+           ▼                 ▼                 ▼
+    ┌──────────┐      ┌──────────┐      ┌──────────┐
+    │   新项目   │      │  接手旧代码 │      │ 现有项目 │
+    │   (New)  │      │  (Legacy) │      │  变更    │
+    └────┬─────┘      └────┬─────┘      └────┬─────┘
+         │                 │                 │
+         ▼                 ▼                 ▼
+    /genesis          /scout           大还是小?
+         │                 │              /     \
+         │                 │             /       \
+         └────────┬────────┘        /change   /genesis
+                  │                     │         │
+                  ▼                     └────┬────┘
+             /blueprint ◄────────────────────┘
+```
+
+---
+
+## � 核心理念
+
+### 1. 版本化架构 (Versioned Architecture)
+> 不要“修补”架构文档，要**演进**它们。
+
+- 发生重大变更时，从 `genesis/v1` 复制到 `genesis/v2`。
+- 完整的决策可追溯性。
+- 拒绝“本来就是这样”的玄学代码。
+
+### 2. 深度思考优先 (Deep Thinking First)
+> AI 必须先思考，再动笔。
+
+- 工作流通过 `sequentialthinking` 强制进行多步推理。
+- 使用 `[!IMPORTANT]` 块作为护栏。
+- 拒绝肤浅的、扫描式的快速回答。
+
+### 3. 文件即记忆 (Filesystem as Memory)
+> 聊天是短暂的，文件是永恒的。
+
+- `.agent/rules/agents.md` 是 AI 的锚点。
+- 架构文档是持久化的决策记录。
+- 新会话可迅速恢复完整上下文。
+
+---
+
+## 📋 工作流一览
+
+| 命令 | 用途 | 输入 | 输出 |
+|------|------|------|------|
+| `/genesis` | 从零开始，创建 PRD 和架构 | 模糊的想法 | PRD, 架构文档, ADRs |
+| `/scout` | 分析遗留代码的风险 | 现有代码 | 风险报告, 差距分析 |
+| `/design-system` | 单个系统的详细设计 | 架构概览 | System Design 文档 |
+| `/challenge` | 系统性三维度质疑审查 | 完整设计文档 | 质疑报告 (分级) |
+| `/blueprint` | 将架构拆解为任务清单 | PRD + 架构 | TASKS.md (WBS) |
+| `/change` | 处理轻量级变更 | 小需求 | 更新后的任务清单 |
+| `/explore` | 深度调研与头脑风暴 | 话题/问题 | 探索报告 |
+
+---
+
 ## 🛠️ 兼容性与前置要求
 
 > ⚠️ **重要**: 本框架需要支持 `.agent/workflows/` 的 **Antigravity** 环境。
@@ -58,60 +152,7 @@ Antigravity 是一个 Agentic AI 编程环境，它能原生识别 `.agent/workf
 
 ---
 
-## 📊 选择你的使用级别
-
-| 级别 | 工作流 | 适用场景 |
-|------|--------|----------|
-| **🐣 入门** | `/genesis` → `/blueprint` + `/explore` | 大多数项目、学习系统 |
-| **🦁 进阶** | + `/scout` + `/design-system` + `/challenge` + `/change` | 大型项目、遗留代码、复杂架构 |
-
-> 💡 **从入门级别开始**。先掌握核心流程，需要时再探索进阶工作流。
-
----
-
-## 📋 工作流一览
-
-| 命令 | 用途 | 输入 | 输出 |
-|------|------|------|------|
-| `/genesis` | 从零开始，创建 PRD 和架构 | 模糊的想法 | PRD, 架构文档, ADRs |
-| `/scout` | 分析遗留代码的风险 | 现有代码 | 风险报告, 差距分析 |
-| `/design-system` | 单个系统的详细设计 | 架构概览 | System Design 文档 |
-| `/challenge` | 系统性三维度质疑审查 | 完整设计文档 | 质疑报告 (分级) |
-| `/blueprint` | 将架构拆解为任务清单 | PRD + 架构 | TASKS.md (WBS) |
-| `/change` | 处理轻量级变更 | 小需求 | 更新后的任务清单 |
-| `/explore` | 深度调研与头脑风暴 | 话题/问题 | 探索报告 |
-
----
-
-## 🚀 快速开始
-
-### 1. 复制到你的项目
-
-```bash
-# 克隆本仓库
-git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
-
-# 将 .agent/ 目录复制到你的项目根目录
-# Mac/Linux:
-cp -r Antigravity-Workflow-System/.agent ./
-# Windows PowerShell:
-Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
-```
-
-### 2. 你的第一个项目 🐣
-
-> **示例提示词**: "我想做一个 Web 版的 macOS 系统模拟器，包含 Dock、顶栏和几个系统应用，请你根据开发流程从0开启这个新项目吧"
-
-**深度思考与架构设计**：AI 将会自动执行 `/genesis` 工作流，深度思考项目需求并产出 PRD 与架构设计。
-<img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis Workflow">
-
-**交互式需求对齐**：AI 会针对模糊需求进行追问，确保设计符合你的直觉。
-<img src="assets/与人类交互确认细节.jpg" width="800" alt="Human Interaction">
-
-**自主任务拆解与执行**：AI 会自主调用必要的 Skills（如 `spec-writer`, `task-planner` 等）来完成文档建设与任务拆解。
-<img src="assets/自主调用skills.jpg" width="800" alt="Skills Execution">
-
-### 3. 调用工作流
+## ⚡ 调用工作流
 
 Antigravity 会自动识别你的意图并触发相应的工作流。你有两种使用方式：
 
@@ -131,32 +172,7 @@ Antigravity 会自动识别你的意图并触发相应的工作流。你有两�
 
 ---
 
-## 🗺️ 决策流程图
-
-```
-                    ┌─────────────────┐
-                    │     你目前在哪?    │
-                    └────────┬────────┘
-           ┌─────────────────┼─────────────────┐
-           ▼                 ▼                 ▼
-    ┌──────────┐      ┌──────────┐      ┌──────────┐
-    │   新项目   │      │  接手旧代码 │      │ 现有项目 │
-    │   (New)  │      │  (Legacy) │      │  变更    │
-    └────┬─────┘      └────┬─────┘      └────┬─────┘
-         │                 │                 │
-         ▼                 ▼                 ▼
-    /genesis          /scout           大还是小?
-         │                 │              /     \
-         │                 │             /       \
-         └────────┬────────┘        /change   /genesis
-                  │                     │         │
-                  ▼                     └────┬────┘
-             /blueprint ◄────────────────────┘
-```
-
----
-
-## 📁 项目结构
+## �📁 项目结构
 
 ```
 your-project/
@@ -190,32 +206,6 @@ your-project/
 
 ---
 
-## 🔑 核心理念
-
-### 1. 版本化架构 (Versioned Architecture)
-> 不要“修补”架构文档，要**演进**它们。
-
-- 发生重大变更时，从 `genesis/v1` 复制到 `genesis/v2`。
-- 完整的决策可追溯性。
-- 拒绝“本来就是这样”的玄学代码。
-
-### 2. 深度思考优先 (Deep Thinking First)
-> AI 必须先思考，再动笔。
-
-- 工作流通过 `sequentialthinking` 强制进行多步推理。
-- 使用 `[!IMPORTANT]` 块作为护栏。
-- 拒绝肤浅的、扫描式的快速回答。
-
-### 3. 文件即记忆 (Filesystem as Memory)
-> 聊天是短暂的，文件是永恒的。
-
-- `.agent/rules/agents.md` 是 AI 的锚点。
-- 架构文档是持久化的决策记录。
-- 新会话可迅速恢复完整上下文。
-
----
-
----  
 ## 📜 许可证
 
 [MIT](LICENSE) © 2026

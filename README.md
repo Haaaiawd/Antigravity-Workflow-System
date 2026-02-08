@@ -29,6 +29,100 @@ A **structured workflow framework** for Agentic AI assistants, designed to solve
 
 ---
 
+## 🚀 Quick Start
+
+### 1. Copy to Your Project
+
+```bash
+# Clone this repository
+git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
+
+# Copy .agent/ to your project root
+# Unix/Mac:
+cp -r Antigravity-Workflow-System/.agent ./
+# Windows PowerShell:
+Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
+```
+
+### 2. Your First Project 🐣
+
+> **Example Prompt**: "I want to build a web-based macOS simulator, including Dock, top bar, and several system apps. Please start this new project from scratch according to the development process."
+
+**Deep Thinking & Architecture Design**: The AI will automatically execute the `/genesis` workflow, thinking deeply about project requirements and producing the PRD and architecture design.
+<img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis Workflow">
+
+**Interactive Requirement Alignment**: The AI will ask follow-up questions for ambiguous requirements to ensure the design matches your intuition.
+<img src="assets/与人类交互确认细节.jpg" width="800" alt="Human Interaction">
+
+**Autonomous Task Breakdown & Execution**: The AI will autonomously call necessary Skills (e.g., `spec-writer`, `task-planner`, etc.) to complete documentation and task decomposition.
+<img src="assets/自主调用skills.jpg" width="800" alt="Skills Execution">
+
+---
+
+## 🗺️ Decision Flowchart
+
+```
+                    ┌─────────────────┐
+                    │  Where are you? │
+                    └────────┬────────┘
+           ┌─────────────────┼─────────────────┐
+           ▼                 ▼                 ▼
+    ┌──────────┐      ┌──────────┐      ┌──────────┐
+    │   New    │      │  Legacy  │      │ Existing │
+    │ Project  │      │ Takeover │      │  Change  │
+    └────┬─────┘      └────┬─────┘      └────┬─────┘
+         │                 │                 │
+         ▼                 ▼                 ▼
+    /genesis          /scout            Big or Small?
+         │                 │              /     \
+         │                 │             /       \
+         └────────┬────────┘        /change   /genesis
+                  │                     │         │
+                  ▼                     └────┬────┘
+             /blueprint ◄────────────────────┘
+```
+
+---
+
+## 🔑 Core Principles
+
+### 1. Versioned Architecture
+> Don't "fix" architecture docs. **Evolve** them.
+
+- `genesis/v1` → `genesis/v2` on major changes
+- Full traceability of decisions
+- No "it was always like this" mystery
+
+### 2. Deep Thinking First
+> AI must think before it writes.
+
+- Workflows force multi-step reasoning via `sequentialthinking`
+- `[!IMPORTANT]` blocks as guardrails
+- No shallow, scan-and-output responses
+
+### 3. Filesystem as Memory
+> Chat is ephemeral. Files are eternal.
+
+- `AGENTS.md` = AI's anchor
+- Architecture docs = persistent decisions
+- New session recovery in 30 seconds
+
+---
+
+## 📋 Workflows
+
+| Command | Purpose | Input | Output |
+|---------|---------|-------|--------|
+| `/genesis` | Start from zero, create PRD & architecture | Vague idea | PRD, Architecture, ADRs |
+| `/scout` | Analyze legacy codebase risks | Existing code | Risk report, Gap analysis |
+| `/design-system` | Detailed design for a system | Architecture | System Design doc |
+| `/challenge` | Systemic 3-tier review & audit | Full Design Docs | Challenge Report (Graded) |
+| `/blueprint` | Break architecture into tasks | PRD + Arch | TASKS.md (WBS) |
+| `/change` | Handle lightweight changes | Small request | Updated TASKS |
+| `/explore` | Deep research & brainstorm | Topic/Question | Exploration report |
+
+---
+
 ## 🛠️ Compatibility & Prerequisites
 
 > ⚠️ **Important**: This framework requires **Antigravity** environment with `.agent/workflows/` support.
@@ -58,60 +152,7 @@ This framework uses `sequentialthinking` for deep reasoning. Install it via MCP 
 
 ---
 
-## � Choose Your Level
-
-| Level | Workflows | Best For |
-|-------|-----------|----------|
-| **🐣 Beginner** | `/genesis` → `/blueprint` + `/explore` | Most projects, learning the system |
-| **🦁 Advanced** | + `/scout` + `/design-system` + `/challenge` + `/change` | Large projects, legacy code, complex architecture |
-
-> 💡 **Start with Beginner level.** Master the core flow first, then explore advanced workflows when needed.
-
----
-
-## 📋 Workflows
-
-| Command | Purpose | Input | Output |
-|---------|---------|-------|--------|
-| `/genesis` | Start from zero, create PRD & architecture | Vague idea | PRD, Architecture, ADRs |
-| `/scout` | Analyze legacy codebase risks | Existing code | Risk report, Gap analysis |
-| `/design-system` | Detailed design for a system | Architecture | System Design doc |
-| `/challenge` | Systemic 3-tier review & audit | Full Design Docs | Challenge Report (Graded) |
-| `/blueprint` | Break architecture into tasks | PRD + Arch | TASKS.md (WBS) |
-| `/change` | Handle lightweight changes | Small request | Updated TASKS |
-| `/explore` | Deep research & brainstorm | Topic/Question | Exploration report |
-
----
-
-## 🚀 Quick Start
-
-### 1. Copy to Your Project
-
-```bash
-# Clone this repository
-git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
-
-# Copy .agent/ to your project root
-# Unix/Mac:
-cp -r Antigravity-Workflow-System/.agent ./
-# Windows PowerShell:
-Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
-```
-
-### 2. Your First Project 🐣
-
-> **Example Prompt**: "I want to build a web-based macOS simulator, including Dock, top bar, and several system apps. Please start this new project from scratch according to the development process."
-
-**Deep Thinking & Architecture Design**: The AI will automatically execute the `/genesis` workflow, thinking deeply about project requirements and producing the PRD and architecture design.
-<img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis Workflow">
-
-**Interactive Requirement Alignment**: The AI will ask follow-up questions for ambiguous requirements to ensure the design matches your intuition.
-<img src="assets/与人类交互确认细节.jpg" width="800" alt="Human Interaction">
-
-**Autonomous Task Breakdown & Execution**: The AI will autonomously call necessary Skills (e.g., `spec-writer`, `task-planner`, etc.) to complete documentation and task decomposition.
-<img src="assets/自主调用skills.jpg" width="800" alt="Skills Execution">
-
-### 3. Invoke Workflows
+## ⚡ Invoke Workflows
 
 Antigravity will automatically recognize the intent and trigger the appropriate workflow. You can use it in two ways:
 
@@ -128,31 +169,6 @@ Just speak naturally. Antigravity will automatically select and run the right wo
 - *"I think there are gaps in this design, challenge it"* → Triggers `/challenge`
 - *"The architecture is ready, let's plan the tasks"* → Triggers `/blueprint`
 - *"I need to add a back-to-top button"* → Triggers `/change`
-
----
-
-## 🗺️ Decision Flowchart
-
-```
-                    ┌─────────────────┐
-                    │  Where are you? │
-                    └────────┬────────┘
-           ┌─────────────────┼─────────────────┐
-           ▼                 ▼                 ▼
-    ┌──────────┐      ┌──────────┐      ┌──────────┐
-    │   New    │      │  Legacy  │      │ Existing │
-    │ Project  │      │ Takeover │      │  Change  │
-    └────┬─────┘      └────┬─────┘      └────┬─────┘
-         │                 │                 │
-         ▼                 ▼                 ▼
-    /genesis          /scout            Big or Small?
-         │                 │              /     \
-         │                 │             /       \
-         └────────┬────────┘        /change   /genesis
-                  │                     │         │
-                  ▼                     └────┬────┘
-             /blueprint ◄────────────────────┘
-```
 
 ---
 
@@ -187,31 +203,6 @@ your-project/
     │   └── 07_CHALLENGE_REPORT.md
     └── v2/                # New version on major changes
 ```
-
----
-
-## 🔑 Core Principles
-
-### 1. Versioned Architecture
-> Don't "fix" architecture docs. **Evolve** them.
-
-- `genesis/v1` → `genesis/v2` on major changes
-- Full traceability of decisions
-- No "it was always like this" mystery
-
-### 2. Deep Thinking First
-> AI must think before it writes.
-
-- Workflows force multi-step reasoning via `sequentialthinking`
-- `[!IMPORTANT]` blocks as guardrails
-- No shallow, scan-and-output responses
-
-### 3. Filesystem as Memory
-> Chat is ephemeral. Files are eternal.
-
-- `AGENTS.md` = AI's anchor
-- Architecture docs = persistent decisions
-- New session recovery in 30 seconds
 
 ---
 
