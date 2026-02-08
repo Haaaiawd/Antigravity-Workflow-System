@@ -29,7 +29,7 @@
 
 ---
 
-##  快速开始
+## 🚀 快速开始
 
 ### 1. 复制到你的项目
 
@@ -84,7 +84,7 @@ Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 
 ---
 
-## � 核心理念
+## 🔑 核心理念
 
 ### 1. 版本化架构 (Versioned Architecture)
 > 不要“修补”架构文档，要**演进**它们。
@@ -172,7 +172,7 @@ Antigravity 会自动识别你的意图并触发相应的工作流。你有两�
 
 ---
 
-## �📁 项目结构
+## 📁 项目结构
 
 ```
 your-project/
