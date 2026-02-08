@@ -100,23 +100,24 @@ Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 
 ### 2. Your First Project (5 Minutes) 🐣
 
-```
-You: "I want to build a todo app with React"
-     ↓
-AI runs /genesis
-     ↓
-📄 Outputs: PRD + Architecture
-     ↓
-You: "Let's plan the tasks"
-     ↓
-AI runs /blueprint  
-     ↓
-📋 Outputs: TASKS.md with clear task list
-     ↓
-🎉 Start coding with guidance!
-```
+> **Example Prompt**: "I want to build a web-based macOS simulator, including Dock, top bar, and several system apps. Please start this new project from scratch according to the development process."
 
-**That's the core flow.** Everything else is optional until you need it.
+#### Phase 1: Genesis
+The AI will automatically execute the `/genesis` workflow, thinking deeply about project requirements and producing the PRD and architecture design.
+
+<img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis Workflow">
+
+#### Phase 2: Interaction & Alignment
+The AI will ask follow-up questions for ambiguous requirements to ensure the design matches your intuition.
+
+<img src="assets/与人类交互确认细节.jpg" width="800" alt="Human Interaction">
+
+#### Phase 3: Autonomous Planning & Execution
+The AI will autonomously call necessary Skills (e.g., `spec-writer`, `task-planner`, etc.) to complete documentation and task decomposition.
+
+<img src="assets/自主调用skills.jpg" width="800" alt="Skills Execution">
+
+**That's the core flow.** From now on, your Vibe Coding will have an architect-level foundation.
 
 ### 3. Invoke Workflows
 
