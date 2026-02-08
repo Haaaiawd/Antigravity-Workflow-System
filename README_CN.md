@@ -102,22 +102,14 @@ Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 
 > **示例提示词**: "我想做一个 Web 版的 macOS 系统模拟器，包含 Dock、顶栏和几个系统应用，请你根据开发流程从0开启这个新项目吧"
 
-#### 阶段 1: 创世 (Genesis)
-AI 将会自动执行 `/genesis` 工作流，深度思考项目需求并产出 PRD 与架构设计。
-
+**深度思考与架构设计**：AI 将会自动执行 `/genesis` 工作流，深度思考项目需求并产出 PRD 与架构设计。
 <img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis Workflow">
 
-#### 阶段 2: 交互与对齐
-AI 会针对模糊需求进行追问，确保设计符合你的直觉。
-
+**交互式需求对齐**：AI 会针对模糊需求进行追问，确保设计符合你的直觉。
 <img src="assets/与人类交互确认细节.jpg" width="800" alt="Human Interaction">
 
-#### 阶段 3: 自主规划与执行
-AI 会自主调用必要的 Skills（如 `spec-writer`, `task-planner` 等）来完成文档建设与任务拆解。
-
+**自主任务拆解与执行**：AI 会自主调用必要的 Skills（如 `spec-writer`, `task-planner` 等）来完成文档建设与任务拆解。
 <img src="assets/自主调用skills.jpg" width="800" alt="Skills Execution">
-
-**这就是核心流程**。从此，你的 Vibe Coding 将拥有架构师级别的底座。
 
 ### 3. 调用工作流
 
