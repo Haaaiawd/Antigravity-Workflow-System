@@ -2,7 +2,7 @@
 
 **Project**: [Project Name]  
 **Blueprint Phase**: Approved  
-**RFC Reference**: `blueprint/02_RFC.md`
+**RFC Reference**: `genesis/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 
 ---
 

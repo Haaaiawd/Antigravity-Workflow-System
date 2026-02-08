@@ -207,6 +207,11 @@ description: 深度探索复杂问题，通过"向外搜索 + 向内发散"双�
 
 **目标**: 产出结构化的探索报告。
 
+**保存路径**:
+- 如果由 `/design-system` 调用: `genesis/v{N}/04_SYSTEM_DESIGN/_research/{system-id}-research.md`
+- 如果独立调用: `explore/reports/{YYYYMMDD}_{topic_slug}.md`
+- 确保对应目录存在
+
 将内容保存到报告文件。
 
 **报告模板**:

@@ -15,7 +15,7 @@ description: 分析 Git 历史，发现"逻辑耦合"（总一起改的文件）
 ## ⚠️ 强制深度思考
 
 > [!IMPORTANT]
-> 在执行任何分析之前，你**必须**调用 `mcp_sequential-thinking_sequentialthinking` 工具，视情况进行 **3 步——10 步，甚至更多步**推理。
+> 在执行任何分析之前，你**必须**调用 `sequential thinking` 工具，视情况进行 **2—3 步**推理。
 > 思考内容例如：
 > 1.  "这个项目的 Git 历史有多深？是否需要 `git fetch --unshallow`？"
 > 2.  "我应该关注哪个时间范围？（最近 3 个月？1 年？）"

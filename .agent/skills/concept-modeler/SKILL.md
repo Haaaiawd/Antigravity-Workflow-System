@@ -14,7 +14,7 @@ description: 从模糊的用户需求中提取领域概念——实体、流程�
 ## ⚠️ 强制深度思考
 
 > [!IMPORTANT]
-> 在执行任何分析之前，你**必须**调用 `mcp_sequential-thinking_sequentialthinking` 工具，视情况进行 **5 步——15 步，甚至更多步**推理。
+> 在执行任何分析之前，你**必须**调用 `sequential thinking` 工具，视情况进行 **3—5 步**推理。
 > 思考内容例如：
 > 1.  "用户说的'同步'是单向还是双向？实时还是批量？"
 > 2.  "这个'列表'在代码里对应什么？`Wishlist` 还是 `ShoppingCart`？"

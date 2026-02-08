@@ -11,15 +11,14 @@ description: 综合 Scout 阶段所有分析（build-inspector, runtime-inspecto
 
 ---
 
-## ⚠️ 强制深度思考
+## ⚠️ 强制自检 (Mandatory Self-Correction)
 
 > [!IMPORTANT]
-> 在生成报告之前，你**必须**调用 `mcp_sequential-thinking_sequentialthinking` 工具，视情况进行 **5 步——10 步**推理。
-> 思考内容例如：
+> 在生成报告之前，你**必须**进行自我检查：
 > 1.  "build-inspector 发现的构建边界和 runtime-inspector 发现的 IPC 边界是否一致？"
 > 2.  "git-forensics 发现的高耦合文件对是否跨越了构建边界？"
 > 3.  "concept-modeler 识别的缺失组件是否与已发现的风险相关？"
-> 4.  "所有发现中，哪些是 🔴 阻塞性风险，哪些是 🟡 需注意？"
+> 4.  "这份报告是否足够完整？"
 
 ---
 
@@ -31,15 +30,15 @@ description: 综合 Scout 阶段所有分析（build-inspector, runtime-inspecto
     *   `runtime-inspector` → IPC Surfaces, Contract Status
     *   `git-forensics` → Coupling Pairs, Hotspots
     *   `concept-modeler` → Entities, Missing Components
-3.  **起草报告**: 使用 `sequential-thinking` 组织逻辑连接。
-4.  **发布 (CRITICAL)**: 你**必须**使用 `write_to_file` 保存到 `scout/SCOUT_RISK_REPORT.md`。**禁止**仅打印到聊天。
+3.  **起草报告**: 按照模板组织逻辑连接。
+4.  **发布 (CRITICAL)**: 你**必须**使用 `write_to_file` 保存到 `genesis/v{N}/00_SCOUT_REPORT.md`。**禁止**仅打印到聊天。确保 `genesis/v{N}/` 目录存在。
 
 ---
 
 ## ✅ 完成检查清单
 
 在进入下一阶段之前，验证：
-- [ ] 输出文件已创建: `scout/SCOUT_RISK_REPORT.md`
+- [ ] 输出文件已创建: `genesis/v{N}/00_SCOUT_REPORT.md`
 - [ ] 包含: System Fingerprint, Component Map, Risk Matrix, Feature Landing Guide
 - [ ] 用户已确认发现
 

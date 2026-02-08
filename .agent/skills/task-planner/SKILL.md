@@ -291,6 +291,8 @@ graph TD
 
 ## 🧰 工具箱
 
+> **输出路径**: 任务清单应保存到 `genesis/v{N}/05_TASKS.md`，由调用方 (blueprint workflow) 指定具体的 `v{N}` 版本号。
+
 ### 工具1: Tasks模板
 使用WBS三级层次结构组织任务。
 

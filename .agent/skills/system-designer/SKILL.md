@@ -31,7 +31,7 @@ description: 为单个系统设计详细的技术文档。负责架构图、接�
 
 ✅ **正确做法**：
 - **调研驱动** - 先用 /explore 调研最佳实践
-- **深度思考** - 用 sequentialthinking 10-15步设计
+- **深度思考** - 用 sequential thinking 3-7 步设计
 - **Trade-offs讨论** - Google Design Docs风格，说明权衡
 - **可视化架构** - 使用Mermaid绘制架构图和数据流图
 - **追溯链** - 引用PRD需求 [REQ-XXX]
@@ -59,7 +59,7 @@ description: 为单个系统设计详细的技术文档。负责架构图、接�
 
 ### 3. **Decompose (分解)**
 - **输入**: 调研报告 + 系统理解
-- **行动**: 使用 sequentialthinking 分解系统
+- **行动**: 使用 sequential thinking 分解系统
 - **问题**:
   - "核心组件有哪些？各自职责？"
   - "组件之间如何通信？"
@@ -142,17 +142,17 @@ description: 为单个系统设计详细的技术文档。负责架构图、接�
 ---
 
 ### 守则2: 深度思考，不拍脑袋
-**规则**: 使用 `sequentialthinking` **5-10步**设计，不是凭直觉。
+**规则**: 使用 `sequential thinking` **3—7 步**设计，视复杂情况而定。
 
 **为什么？** 设计是复杂活动，需要系统性思考。
 
 **思考路径**:
 ```
-1-4步: 架构设计（模式、组件、通信）
-5-7步: 接口设计（API、数据格式）
-8-10步: 数据模型设计
-11-13步: Trade-offs讨论（为什么选A不选B）
-14-15步: 性能与安全（瓶颈、风险、优化）
+架构设计（模式、组件、通信）
+接口设计（API、数据格式）
+数据模型设计
+Trade-offs讨论（为什么选A不选B）
+性能与安全（瓶颈、风险、优化）
 ```
 
 ---
@@ -269,12 +269,12 @@ interface User {
 ## 🧰 工具箱
 
 ### 工具1: 系统设计模板
-- **路径**: `.agent/templates/system-design-template.md`
+- **路径**: `.agent/skills/system-designer/references/system-design-template.md`
 - **用途**: 14章节的标准模板，确保文档完整性
-- **使用**: `view_file .agent/templates/system-design-template.md`
+- **使用**: `view_file .agent/skills/system-designer/references/system-design-template.md`
 
 ### 工具2: 调研报告存储
-- **路径**: `genesis/04_SYSTEM_DESIGN/_research/{system-id}-research.md`
+- **路径**: `genesis/v{N}/04_SYSTEM_DESIGN/_research/{system-id}-research.md`
 - **用途**: 保存 /explore 的调研结果
 - **格式**: Exploration Report (由 /explore 生成)
 
@@ -413,7 +413,7 @@ interface User {
 
 **Step 3-5: 分解 + 设计 + 防御**
 ```
-使用 sequentialthinking 10-15步:
+使用 sequential thinking 3—7 步:
 1. 采用分层架构 (Presentation → Business → Data)
 2. 核心组件: AuthService, UserService, DatabaseManager
 3. API设计: POST /auth/login, GET /users/me
@@ -428,7 +428,7 @@ interface User {
 **Step 6: 文档化 (Document)**
 ```
 使用模板填充14章节 → 保存到:
-genesis/04_SYSTEM_DESIGN/backend-api-system.md
+genesis/v{N}/04_SYSTEM_DESIGN/backend-api-system.md
 ```
 
 ---

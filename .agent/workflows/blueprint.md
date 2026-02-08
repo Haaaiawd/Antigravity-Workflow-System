@@ -43,7 +43,11 @@ description: 将架构设计拆解为可执行的 WBS 任务清单，每个任�
     - [ ] `{TARGET_DIR}/01_PRD.md` 存在
     - [ ] `{TARGET_DIR}/02_ARCHITECTURE_OVERVIEW.md` 存在
 
-4.  **如果缺失**: 报错并提示运行 `/genesis` 更新该版本。
+4.  **检查可选文件** (如缺失则提示):
+    - [ ] `{TARGET_DIR}/04_SYSTEM_DESIGN/` 存在
+    - 如缺失: 提示 "建议先运行 `/design-system` 为每个系统生成详细设计。跳过此步可能导致任务粒度过粗。"
+
+5.  **如果必需文件缺失**: 报错并提示运行 `/genesis` 更新该版本。
 
 ---
 

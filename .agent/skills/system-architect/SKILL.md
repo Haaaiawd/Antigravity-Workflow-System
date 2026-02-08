@@ -12,6 +12,17 @@ description: 识别项目中的独立系统，定义系统边界。产出系统�
 你的目标是找到项目中的独立系统，定义清晰的边界。
 
 ---
+ 
+ ## ⚠️ 强制深度思考
+ 
+ > [!IMPORTANT]
+ > 在进行拆解之前，你**必须**调用 `sequential thinking` 工具，视复杂情况进行 **3—7 步**推理。
+ > 思考内容例如：
+ > 1.  "这个系统是否可以合并到另一个系统？"
+ > 2.  "拆分是否真正带来价值（独立部署、技术栈差异）？"
+ > 3.  "如果未来业务增长 10 倍，现在的边界是否还能维持？" (演进路线推演)
+ 
+ ---
 
 ## ⚠️ 核心原则
 
@@ -160,7 +171,7 @@ description: 识别项目中的独立系统，定义系统边界。产出系统�
 
 ## 📋 输出格式：Architecture Overview 模板
 
-使用以下结构产出 `02_ARCHITECTURE_OVERVIEW.md`：
+使用以下结构产出 `genesis/v{N}/02_ARCHITECTURE_OVERVIEW.md`：
 
 ```markdown
 # 系统架构总览 (Architecture Overview)
@@ -599,7 +610,7 @@ Frontend → Backend → Database
 ```
 
 **Step 5: 产出Architecture Overview**
-使用模板填充内容 → 保存到 `02_ARCHITECTURE_OVERVIEW.md`
+使用模板填充内容 → 保存到 `genesis/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 
 ---
 

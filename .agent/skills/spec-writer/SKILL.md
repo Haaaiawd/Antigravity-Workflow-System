@@ -12,7 +12,7 @@ Your job is to kill ambiguity.
 ## ⚡ Quick Start
 
 1.  **Read Request (MANDATORY)**: Use `view_file` or context to identify "Vibe Words" (Fast, Modern, Easy).
-2.  **Deep Think (CRITICAL)**: You MUST call `mcp_sequential-thinking_sequentialthinking` with at least 7 reasoning steps to:
+2.  **Deep Think (CRITICAL)**: You MUST call `sequential thinking` with 3-7 reasoning steps (depending on complexity) to:
     *   Extract User Stories (As a X, I want Y, so that Z)
     *   Identify ambiguities
     *   Draft clarifying questions

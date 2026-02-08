@@ -16,7 +16,7 @@ description: 分析运行时行为、进程边界和 IPC 机制，检测"协议�
 ## ⚠️ 强制深度思考
 
 > [!IMPORTANT]
-> 在执行任何分析之前，你**必须**调用 `mcp_sequential-thinking_sequentialthinking` 工具，视情况进行 **3 步——10 步，甚至更多步**推理。
+> 在执行任何分析之前，你**必须**调用 `sequential thinking` 工具，视情况进行 **3—5 步**推理。
 > 思考内容例如：
 > 1.  "这个项目有多少个入口点（`main` 函数）？它们是一个进程还是多个？"
 > 2.  "进程之间用什么通信？Pipe？HTTP？共享数据库？"
