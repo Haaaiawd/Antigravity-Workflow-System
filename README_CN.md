@@ -73,13 +73,13 @@ Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
     └────┬─────┘      └────┬─────┘      └────┬─────┘
          │                 │                 │
          ▼                 ▼                 ▼
-    /genesis          /scout           大还是小?
-         │                 │              /     \
-         │                 │             /       \
-         └────────┬────────┘        /change   /genesis
-                  │                     │         │
-                  ▼                     └────┬────┘
-             /blueprint ◄────────────────────┘
+    /genesis          /scout         微调已有任务?
+         │                 │            /       \
+         │                 │           /         \
+         └────────┬────────┘     /change      /genesis
+                  │            (仅修改)    (新任务/新功能)
+                  ▼                │            │
+             /blueprint ◄──────────┴────────────┘
 ```
 
 ---
@@ -118,8 +118,9 @@ Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 | `/design-system` | 单个系统的详细设计 | 架构概览 | System Design 文档 |
 | `/challenge` | 系统性三维度质疑审查 | 完整设计文档 | 质疑报告 (分级) |
 | `/blueprint` | 将架构拆解为任务清单 | PRD + 架构 | TASKS.md (WBS) |
-| `/change` | 处理轻量级变更 | 小需求 | 更新后的任务清单 |
+| `/change` | 微调已有任务（禁止新增） | 已有任务的微调需求 | 更新后的任务清单 + 设计文件 (仅修改) |
 | `/explore` | 深度调研与头脑风暴 | 话题/问题 | 探索报告 |
+| `/craft` | 创建工作流/技能/提示词 | 创建需求 | Workflow / Skill / Prompt 文档 |
 
 ---
 
@@ -168,7 +169,8 @@ Antigravity 会自动识别你的意图并触发相应的工作流。你有两�
 - *"帮我看看这段老代码有什么风险"* → 触发 `/scout`
 - *"我觉得这个设计有漏洞，帮我找找茬"* → 触发 `/challenge`
 - *"架构设计好了，我们来规划一下任务"* → 触发 `/blueprint`
-- *"我需要加一个返回顶部按钮"* → 触发 `/change`
+- *"把登录页的错误提示改一下"* → 触发 `/change` (微调已有任务)
+- *"我需要加一个返回顶部按钮"* → 触发 `/genesis` (需要新任务)
 
 ---
 

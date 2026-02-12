@@ -67,12 +67,13 @@
 | 工作流 | 触发时机 | 产出 |
 |--------|---------|------|
 | `/genesis` | 新项目 / 重大重构 | PRD, Architecture, ADRs |
-| `/scout` | 变更前 / 接手项目 | `scout/reports/{Date}_SCOUT_RISK_REPORT.md` |
+| `/scout` | 变更前 / 接手项目 | `genesis/v{N}/00_SCOUT_REPORT.md` |
 | `/design-system` | genesis 后 | 04_SYSTEM_DESIGN/*.md |
 | `/blueprint` | genesis 后 | 05_TASKS.md |
-| `/change` | 轻量变更 | 更新 TASKS + CHANGELOG |
+| `/change` | 微调已有任务 | 更新 TASKS + SYSTEM_DESIGN (仅修改) + CHANGELOG |
 | `/explore` | 调研时 | 探索报告 |
 | `/challenge` | 决策前质疑 | 07_CHALLENGE_REPORT.md |
+| `/craft` | 创建工作流/技能/提示词 | Workflow / Skill / Prompt 文档 |
 
 ---
 

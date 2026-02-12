@@ -73,13 +73,13 @@ Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
     └────┬─────┘      └────┬─────┘      └────┬─────┘
          │                 │                 │
          ▼                 ▼                 ▼
-    /genesis          /scout            Big or Small?
-         │                 │              /     \
-         │                 │             /       \
-         └────────┬────────┘        /change   /genesis
-                  │                     │         │
-                  ▼                     └────┬────┘
-             /blueprint ◄────────────────────┘
+    /genesis          /scout        Tweak existing task?
+         │                 │              /         \
+         │                 │             /           \
+         └────────┬────────┘     /change       /genesis
+                  │            (modify only)  (new tasks)
+                  ▼                │            │
+             /blueprint ◄──────────┴────────────┘
 ```
 
 ---
@@ -118,8 +118,9 @@ Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
 | `/design-system` | Detailed design for a system | Architecture | System Design doc |
 | `/challenge` | Systemic 3-tier review & audit | Full Design Docs | Challenge Report (Graded) |
 | `/blueprint` | Break architecture into tasks | PRD + Arch | TASKS.md (WBS) |
-| `/change` | Handle lightweight changes | Small request | Updated TASKS |
+| `/change` | Tweak existing tasks (no new tasks) | Minor tweak | Updated TASKS + Design files (modify only) |
 | `/explore` | Deep research & brainstorm | Topic/Question | Exploration report |
+| `/craft` | Create workflows/skills/prompts | Creation request | Workflow / Skill / Prompt docs |
 
 ---
 
@@ -168,7 +169,8 @@ Just speak naturally. Antigravity will automatically select and run the right wo
 - *"Help me understand this legacy code and its risks"* → Triggers `/scout`
 - *"I think there are gaps in this design, challenge it"* → Triggers `/challenge`
 - *"The architecture is ready, let's plan the tasks"* → Triggers `/blueprint`
-- *"I need to add a back-to-top button"* → Triggers `/change`
+- *"Change the error message on the login page"* → Triggers `/change` (tweak existing task)
+- *"I need to add a back-to-top button"* → Triggers `/genesis` (requires new task)
 
 ---
 
