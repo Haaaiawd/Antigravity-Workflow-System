@@ -93,7 +93,19 @@ Copy-Item -Recurse Antigravity-Workflow-System/.agent -Destination .
          └────────┬────────┘     /change       /genesis
                   │            (modify only)  (new tasks)
                   ▼                │            │
-             /blueprint ◄──────────┴────────────┘
+           /design-system <--------+-----------+
+          (optional, recommended)
+                  |
+                  v
+            /challenge
+          (audit & review)
+                  |
+                  v
+             /blueprint
+                  |
+                  v
+               /forge
+          (code delivery)
 ```
 
 ---
