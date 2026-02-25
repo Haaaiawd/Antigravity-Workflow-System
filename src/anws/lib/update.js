@@ -3,6 +3,7 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { MANAGED_FILES } = require('./manifest');
+const { success, warn, error, info, fileLine, blank } = require('./output');
 
 /**
  * anws update — 将当前项目的托管文件更新到最新版本
@@ -14,15 +15,16 @@ async function update() {
   // 检查 .agent/ 是否存在
   const agentExists = await fs.access(agentDir).then(() => true).catch(() => false);
   if (!agentExists) {
-    console.error('\n\u2716 No .agent/ found in current directory.');
-    console.error('  Run `anws init` first to set up the workflow system.');
+    error('No .agent/ found in current directory.');
+    info('Run `anws init` first to set up the workflow system.');
     process.exit(1);
   }
 
   // 询问确认
   const confirmed = await askUpdate();
   if (!confirmed) {
-    console.log('\nAborted. No files were changed.');
+    blank();
+    info('Aborted. No files were changed.');
     process.exit(0);
   }
 
@@ -43,20 +45,26 @@ async function update() {
   }
 
   // 打印摘要
-  console.log('\nUpdated files:\n');
+  blank();
+  info('Updated files:');
+  blank();
   for (const rel of updated) {
-    console.log(`  ${rel.replace(/\\/g, '/')}`);
+    fileLine(rel.replace(/\\/g, '/'));
   }
-  console.log(`\n\u2714 Done! ${updated.length} file(s) updated.`);
-  console.log('\n  Managed files have been updated to the latest version.');
-  console.log('  Your custom files in .agent/ were not touched.');
+  blank();
+  success(`Done! ${updated.length} file(s) updated.`);
+  info('Managed files have been updated to the latest version.');
+  info('Your custom files in .agent/ were not touched.');
 }
 
 /**
  * 交互式确认更新操作（默认 N）。
  */
 async function askUpdate() {
-  if (!process.stdin.isTTY) return false;
+  if (!process.stdin.isTTY) {
+    warn('Non-TTY environment detected. Skipping update to avoid accidental overwrites.');
+    return false;
+  }
 
   const readline = require('node:readline');
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });

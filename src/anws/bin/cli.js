@@ -3,6 +3,7 @@
 
 const { parseArgs } = require('node:util');
 const path = require('node:path');
+const { error, info } = require('../lib/output');
 
 // ─── 版本号从 package.json 读取 ─────────────────────────────────────────────
 const { version } = require(path.join(__dirname, '..', 'package.json'));
@@ -62,13 +63,13 @@ async function main() {
       break;
 
     default:
-      console.error(`\u2716 Unknown command: "${command}"`);
-      console.error('  Run `anws --help` to see available commands.');
+      error(`Unknown command: "${command}"`);
+      info('Run `anws --help` to see available commands.');
       process.exit(1);
   }
 }
 
 main().catch((err) => {
-  console.error(`\u2716 Unexpected error: ${err.message}`);
+  error(`Unexpected error: ${err.message}`);
   process.exit(1);
 });
