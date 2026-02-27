@@ -50,21 +50,32 @@
 
 ---
 
+## 📊 Sprint 路线图
+
+| Sprint | 代号 | 核心任务 | 退出标准 | 预估 |
+|--------|------|---------|---------|------|
+| S1 | Foundation | T001-T002 | DB 可连接 + 环境变量生效 | 1d |
+| S2 | Core Logic | T003-T005 | 完整认证流程可运行 | 2d |
+
+---
+
 ### Phase 3: Integration
 
 #### T005 - Login Endpoint
 - **User Story**: US01
 - **Description**: Implement `POST /api/login` that validates credentials and returns JWT.
 - **Dependencies**: T003 (User table populated), T004 (JWT generator ready)
+- **Input**: T003 产出的 `users` 表 + T004 产出的 `generate_token()` 函数
+- **Output**: `/api/login` 端点 (`src/routes/auth.js`)
 - **Done When**: 
   1. Valid login returns `{token: "..."}`.
   2. Invalid login returns 401.
 
-#### T005-CHK - [Verification] Verify US01 - User Authentication
+#### INT-S2 - [MILESTONE] S2 集成验证 — Core Logic
 - **User Story**: US01
-- **Type**: Checkpoint (Story Milestone)
-- **Description**: Validate entire authentication flow works end-to-end.
-- **Dependencies**: All US01 tasks (T001-T005)
+- **Type**: Integration Verification (Sprint Gate)
+- **Description**: 验证 S2 退出标准：完整认证流程可运行
+- **Dependencies**: All S2 tasks (T003-T005)
 - **Done When**:
   1. Run `npm run dev` or equivalent
   2. Register a new user via `/api/register`
