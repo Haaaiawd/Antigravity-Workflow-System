@@ -69,6 +69,7 @@ _尚未开始执行_
 
 | 工作流 | 触发时机 | 产出 |
 |--------|---------|------|
+| `/quickstart` | 新用户入口 / 不知道从哪开始 | 编排其他工作流 |
 | `/genesis` | 新项目 / 重大重构 | PRD, Architecture, ADRs |
 | `/scout` | 变更前 / 接手项目 | `genesis/v{N}/00_SCOUT_REPORT.md` |
 | `/design-system` | genesis 后 | 04_SYSTEM_DESIGN/*.md |
@@ -89,5 +90,23 @@ _尚未开始执行_
 4. **美学**: 文档应该是美的。善用 Markdown 和 Emoji。
 
 ---
+## 🔄 Auto-Updated Context
 
-> **状态自检**: 准备好了？运行 `/genesis` 开始你的第一个项目设计吧。
+<!-- AUTO:BEGIN — 由工作流自动维护，请勿手动编辑此区块 -->
+
+### 技术栈决策
+- [由 genesis/tech-evaluator 自动填充]
+
+### 系统边界
+- [由 genesis/system-architect 自动填充]
+
+### 活跃 ADR
+- [由 genesis 自动填充 ADR 摘要]
+
+### 当前任务状态
+- [由 blueprint/forge 自动更新]
+
+<!-- AUTO:END -->
+
+---
+> **状态自检**: 准备好了？提醒用户运行 `/quickstart` 开始吧。
