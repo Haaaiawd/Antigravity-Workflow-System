@@ -1,13 +1,17 @@
 {
   "name": "@haaaiawd/anws",
-  "version": "1.2.1",
-  "description": "Antigravity Workflow System CLI — one command to install AI collaboration workflows into your project",
+  "version": "1.2.2",
+  "description": "A spec-driven workflow framework for AI-assisted development. Empowers prompt engineers to build production-ready software through structured PRD → Architecture → Task decomposition. Designed for Antigravity to enforce design-first principles and prevent architectural drift in vibe coding.",
   "keywords": [
-    "ai",
-    "workflow",
-    "agent",
-    "cli",
-    "developer-tools"
+    "antigravity",
+    "agentic-ai",
+    "workflow-orchestration",
+    "spec-driven",
+    "system-architecture",
+    "vibe-coding",
+    "prompt-engineering",
+    "devops-for-ai",
+    "skills-framework"
   ],
   "homepage": "https://github.com/Haaaiawd/Antigravity-Workflow-System",
   "repository": {
@@ -30,6 +34,8 @@
   ],
   "main": "./lib/index.js",
   "scripts": {
+    "sync": "node scripts/sync-assets.js",
+    "prepublishOnly": "npm run sync",
     "test": "node --test test/**/*.test.js"
   },
   "dependencies": {}

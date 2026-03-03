@@ -161,7 +161,7 @@ function printNextSteps() {
   blank();
   info('Next steps:');
   info('  1. Read .agent/rules/agents.md to understand the system');
-  info('  2. Run /genesis in your AI assistant to start a new project');
+  info('  2. Run /quickstart in your AI assistant to analyze and start the workflow');
 }
 
 /**
