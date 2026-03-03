@@ -1,96 +1,262 @@
-# anws
+<div align="center">
 
-**Antigravity Workflow System** — 一条命令，将 AI 协作工作流体系注入任意项目。
+<img src="assets/logo.png" width="200" alt="Antigravity Workflow System">
 
-```
-npm install -g @haaaiawd/anws
-anws init
-```
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Target: Antigravity](https://img.shields.io/badge/Environment-Antigravity-blueviolet)](https://github.com/google-deepmind/antigravity)
+[![Vibe Coding](https://img.shields.io/badge/Vibe%20Coding-Enabled-ff69b4)](https://github.com/karpathy/vibe-coding)
 
----
+[English](./README.md) | [中文](./README_CN.md)
 
-## 安装
-
-```bash
-npm install -g @haaaiawd/anws
-```
-
-需要 **Node.js ≥ 18**。
+</div>
 
 ---
 
-## 命令
+## ⚡ What is this?
 
-### `anws init`
+A **structured workflow framework** for Agentic AI assistants, designed to solve the core pain points of the Vibe Coding era.
 
-将 `.agent/` 工作流体系复制到当前项目目录。
+> 💡 **TL;DR**: Stop letting AI write spaghetti code. Force it to think like an architect first.
+
+### 🎯 Problems We Solve
+
+| Pain Point             | The Problem                                                 | Our Solution                                                   |
+| ---------------------- | ----------------------------------------------------------- | -------------------------------------------------------------- |
+| **Architecture Drift** | AI generates inconsistent patterns across the same codebase | `/genesis` forces PRD & architecture design first              |
+| **Spaghetti Code**     | AI lacks project context, writes code that doesn't fit      | Tasks include constraints & acceptance criteria                |
+| **Context Amnesia**    | New session = AI forgets all previous decisions             | `.agent/rules/agents.md` + versioned docs as persistent memory |
+| **Lack of Planning**   | Vibe Coding skips design, creates tech debt                 | Mandatory design-first workflow                                |
+
+---
+
+## 🚀 Quick Start
+
+### Option A — npm CLI (Recommended)
 
 ```bash
-cd my-project
+npm install -g @haaaiawd/anws
+cd your-project
 anws init
 ```
 
-- **首次初始化**：直接写入所有文件，不覆盖任何已有文件。
-- **检测到冲突**：显示已存在的托管文件数量，询问是否覆盖（默认 **N**）。  
-  确认后只会覆盖 `anws` 管理的文件，你的自定义文件不受影响。
-- **非 TTY 环境（如 CI）**：检测到冲突时自动跳过，不挂起进程。
+> Requires Node.js ≥ 18.
 
-### `anws update`
+### Option B — GitHub Release
 
-将当前项目的 `.agent/` 托管文件更新到最新版本。
+Download the latest `.zip` from [Releases](https://github.com/Haaaiawd/Antigravity-Workflow-System/releases), then copy `.agent/` to your project root.
+
+### 📦 Update Existing Installation
 
 ```bash
+cd your-project
 anws update
 ```
 
-- 仅覆盖 `anws` 管理的文件，用户自定义文件完全保留。
-- 交互式确认（默认 **N**），防止误操作。
+> `anws update` overwrites all managed workflow/skill files to the latest version while **preserving** your `agents.md`.
+> If the `agents.md` template has new content, an `agents.md.new` file will be generated for you to merge manually.
 
-### 选项
+### Your First Project 🐣
 
-| 选项 | 说明 |
-|------|------|
-| `-v`, `--version` | 打印版本号 |
-| `-h`, `--help` | 显示帮助信息 |
+> **Example Prompt**: "I want to build a web-based macOS simulator, including Dock, top bar, and several system apps. Please start this new project from scratch according to the development process."
+
+### 🔁 Built with Itself (Dogfooding)
+
+Fun fact: **This very CLI tool (`anws`) was built using its own workflows!**
+We used the `/genesis` workflow to design the CLI's architecture, and the `/forge` workflow to implement the code. This project serves as a live demonstration of what Antigravity Workflow System can achieve.
+
+**Deep Thinking & Architecture Design**: The AI will automatically execute the `/genesis` workflow, thinking deeply about project requirements and producing the PRD and architecture design.
+<img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis Workflow">
+
+**Interactive Requirement Alignment**: The AI will ask follow-up questions for ambiguous requirements to ensure the design matches your intuition.
+<img src="assets/与人类交互确认细节.jpg" width="800" alt="Human Interaction">
+
+**Autonomous Task Breakdown & Execution**: The AI will autonomously call necessary Skills (e.g., `spec-writer`, `task-planner`, etc.) to complete documentation and task decomposition.
+<img src="assets/自主调用skills.jpg" width="800" alt="Skills Execution">
 
 ---
 
-## 无 npm 安装方式
+## 🗺️ Decision Flowchart
 
-如果你不想全局安装，也可以直接克隆仓库手动获取模板：
-
-```bash
-# 克隆仓库
-git clone https://github.com/Haaaiawd/Antigravity-Workflow-System.git
-
-# 将 templates/.agent/ 复制到你的项目
-cp -r Antigravity-Workflow-System/src/anws/templates/.agent/ my-project/
+```
+                    ┌─────────────────┐
+                    │  Where are you? │
+                    └────────┬────────┘
+           ┌─────────────────┼─────────────────┐
+           ▼                 ▼                 ▼
+    ┌──────────┐      ┌──────────┐      ┌──────────┐
+    │   New    │      │  Legacy  │      │ Existing │
+    │ Project  │      │ Takeover │      │  Change  │
+    └────┬─────┘      └────┬─────┘      └────┬─────┘
+         │                 │                 │
+         ▼                 ▼                 ▼
+    /genesis          /scout        Tweak existing task?
+         │                 │              /         \
+         │                 │             /           \
+         └────────┬────────┘     /change       /genesis
+                  │            (modify only)  (new tasks)
+                  ▼                │            │
+           /design-system <--------+------------+
+          (optional, recommended)
+                  |
+                  v
+            /challenge
+         (design review)
+                  |
+                  v
+             /blueprint
+                  |
+                  v
+            /challenge
+          (task review)
+                  |
+                  v
+               /forge
+          (code delivery)
 ```
 
 ---
 
-## 完成初始化后
+## 🔑 Core Principles
 
-1. 阅读 `.agent/rules/agents.md` — 了解系统的核心法则
-2. 在你的 AI 助手中执行 `/genesis` — 启动新项目的架构设计流程
+### 1. Versioned Architecture
+> Don't "fix" architecture docs. **Evolve** them.
+
+- `genesis/v1` → `genesis/v2` on major changes
+- Full traceability of decisions
+- No "it was always like this" mystery
+
+### 2. Deep Thinking First
+> AI must think before it writes.
+
+- Workflows force multi-step reasoning via `sequentialthinking`
+- `[!IMPORTANT]` blocks as guardrails
+- No shallow, scan-and-output responses
+
+### 3. Filesystem as Memory
+> Chat is ephemeral. Files are eternal.
+
+- `AGENTS.md` = AI's anchor
+- Architecture docs = persistent decisions
+- New session recovery in 30 seconds
 
 ---
 
-## 冲突处理机制
+## 📋 Workflows
 
-`anws` 维护一份静态的**托管文件清单**（34 个文件），只有清单内的文件才会被覆盖，清单外的文件永远不会被修改。
-
-这意味着你可以安全地在 `.agent/` 目录中添加自定义工作流或技能，`anws update` 不会碰它们。
+| Command          | Purpose                                       | Input             | Output                                     |
+| ---------------- | --------------------------------------------- | ----------------- | ------------------------------------------ |
+| `/genesis`       | Start from zero, create PRD & architecture    | Vague idea        | PRD, Architecture, ADRs                    |
+| `/scout`         | Analyze legacy codebase risks                 | Existing code     | Risk report, Gap analysis                  |
+| `/design-system` | Detailed design for a system                  | Architecture      | System Design doc                          |
+| `/challenge`     | Review Design & Tasks (intelligent detection) | Full Docs / TASKS | Challenge Report (Graded)                  |
+| `/blueprint`     | Break architecture into tasks                 | PRD + Arch        | TASKS.md (WBS)                             |
+| `/forge`         | Execute tasks — architecture to code          | TASKS.md          | Working code, verified                     |
+| `/change`        | Tweak existing tasks (no new tasks)           | Minor tweak       | Updated TASKS + Design files (modify only) |
+| `/explore`       | Deep research & brainstorm                    | Topic/Question    | Exploration report                         |
+| `/craft`         | Create workflows/skills/prompts               | Creation request  | Workflow / Skill / Prompt docs             |
 
 ---
 
-## 系统要求
+## 🛠️ Compatibility & Prerequisites
 
-- Node.js **≥ 18.0.0**
-- 无运行时依赖
+> ⚠️ **Important**: This framework requires **Antigravity** environment with `.agent/workflows/` support.
+
+| Environment     |            Status            | Notes                          |
+| --------------- | :--------------------------: | ------------------------------ |
+| **Antigravity** |         ✅ Supported          | Full workflow + skills support |
+| Claude Code     | ❌ No native workflow support |                                |
+| Cursor          |    ❌ No workflow support     |                                |
+| GitHub Copilot  |    ❌ No workflow support     |                                |
+
+**What is Antigravity?**
+
+Antigravity is an Agentic AI coding environment that natively recognizes `.agent/workflows/` directory and can execute slash commands like `/genesis`, `/blueprint`, etc.
+
+### 🔌 Required: Sequential Thinking MCP Server
+
+This framework uses `sequentialthinking` for deep reasoning. Install it via MCP Store:
+
+1. Open **Antigravity Editor**
+2. Click **"..."** (three dots) in the sidebar → **Additional Options**
+3. Select **MCP Servers**
+4. Open **MCP Store** and search for `sequential-thinking`
+5. Click **Add** to install
+
+> 💡 Without this, workflows still work, but deep thinking features will be limited.
 
 ---
 
-## License
+## ⚡ Invoke Workflows
 
-MIT
+Antigravity will automatically recognize the intent and trigger the appropriate workflow. You can use it in two ways:
+
+#### ⚡ Method A: Slash Protocol (Explicit)
+Directly type the command in the chat or editor to trigger the workflow.
+- `/genesis` - Start project creation
+- `/scout` - Analyze existing codebase
+- `/blueprint` - Break down architecture into tasks
+
+#### 🧠 Method B: Intent Protocol (Implicit)
+Just speak naturally. Antigravity will automatically select and run the right workflow.
+- *"I want to start a new project for a todo app"* → Triggers `/genesis`
+- *"Help me understand this legacy code and its risks"* → Triggers `/scout`
+- *"I think there are gaps in this design, challenge it"* → Triggers `/challenge`
+- *"The architecture is ready, let's plan the tasks"* → Triggers `/blueprint`
+- *"Change the error message on the login page"* → Triggers `/change` (tweak existing task)
+- *"I need to add a back-to-top button"* → Triggers `/genesis` (requires new task)
+
+---
+
+## 📁 Project Structure
+
+```
+your-project/
+├── .agent/
+│   ├── rules/
+│   │   └── agents.md          # 🧠 AI's anchor point
+│   ├── workflows/             # Workflow definitions
+│   │   ├── genesis.md
+│   │   ├── scout.md
+│   │   ├── design-system.md
+│   │   ├── challenge.md
+│   │   ├── blueprint.md
+│   │   ├── forge.md
+│   │   ├── change.md
+│   │   ├── explore.md
+│   │   └── craft.md
+│   │
+│   └── skills/            # Reusable skills
+│       ├── concept-modeler/
+│       ├── spec-writer/
+│       ├── task-planner/
+│       └── ...
+│
+└── genesis/               # Versioned architecture docs
+    ├── v1/
+    │   ├── 01_PRD.md
+    │   ├── 02_ARCHITECTURE.md
+    │   ├── 03_ADR/
+    │   ├── 05_TASKS.md
+    │   └── 07_CHALLENGE_REPORT.md
+    └── v2/                # New version on major changes
+```
+
+## 🙌 Contributing
+
+Contributions are welcome! Please read our contributing guidelines before submitting PRs.
+
+---
+
+## 📜 License
+
+[MIT](LICENSE) © 2026
+
+---
+
+<div align="center">
+
+**Made for architects who code, and AIs who think.**
+
+🧠 *"Good architecture isn't written. It's designed."*
+
+</div>

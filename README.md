@@ -100,10 +100,14 @@ We used the `/genesis` workflow to design the CLI's architecture, and the `/forg
                   |
                   v
             /challenge
-          (audit & review)
+         (design review)
                   |
                   v
              /blueprint
+                  |
+                  v
+            /challenge
+          (task review)
                   |
                   v
                /forge
@@ -139,17 +143,17 @@ We used the `/genesis` workflow to design the CLI's architecture, and the `/forg
 
 ## 📋 Workflows
 
-| Command          | Purpose                                    | Input            | Output                                     |
-| ---------------- | ------------------------------------------ | ---------------- | ------------------------------------------ |
-| `/genesis`       | Start from zero, create PRD & architecture | Vague idea       | PRD, Architecture, ADRs                    |
-| `/scout`         | Analyze legacy codebase risks              | Existing code    | Risk report, Gap analysis                  |
-| `/design-system` | Detailed design for a system               | Architecture     | System Design doc                          |
-| `/challenge`     | Systemic 3-tier review & audit             | Full Design Docs | Challenge Report (Graded)                  |
-| `/blueprint`     | Break architecture into tasks              | PRD + Arch       | TASKS.md (WBS)                             |
-| `/forge`         | Execute tasks — architecture to code       | TASKS.md         | Working code, verified                     |
-| `/change`        | Tweak existing tasks (no new tasks)        | Minor tweak      | Updated TASKS + Design files (modify only) |
-| `/explore`       | Deep research & brainstorm                 | Topic/Question   | Exploration report                         |
-| `/craft`         | Create workflows/skills/prompts            | Creation request | Workflow / Skill / Prompt docs             |
+| Command          | Purpose                                       | Input             | Output                                     |
+| ---------------- | --------------------------------------------- | ----------------- | ------------------------------------------ |
+| `/genesis`       | Start from zero, create PRD & architecture    | Vague idea        | PRD, Architecture, ADRs                    |
+| `/scout`         | Analyze legacy codebase risks                 | Existing code     | Risk report, Gap analysis                  |
+| `/design-system` | Detailed design for a system                  | Architecture      | System Design doc                          |
+| `/challenge`     | Review Design & Tasks (intelligent detection) | Full Docs / TASKS | Challenge Report (Graded)                  |
+| `/blueprint`     | Break architecture into tasks                 | PRD + Arch        | TASKS.md (WBS)                             |
+| `/forge`         | Execute tasks — architecture to code          | TASKS.md          | Working code, verified                     |
+| `/change`        | Tweak existing tasks (no new tasks)           | Minor tweak       | Updated TASKS + Design files (modify only) |
+| `/explore`       | Deep research & brainstorm                    | Topic/Question    | Exploration report                         |
+| `/craft`         | Create workflows/skills/prompts               | Creation request  | Workflow / Skill / Prompt docs             |
 
 ---
 
