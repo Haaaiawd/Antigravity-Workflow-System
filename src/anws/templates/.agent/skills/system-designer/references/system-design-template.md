@@ -1,16 +1,44 @@
 # {System Name} 系统设计文档 (L0 — 导航层)
 
-**System ID**: {system-id} (如: frontend-system, backend-api-system)
-**Project**: [Project Name]
-**Version**: 1.0
-**Status**: Draft | Review | Approved
-**Author**: [Author Name or Agent]
-**Date**: [YYYY-MM-DD]
+| 字段          | 值                                                                    |
+| ------------- | --------------------------------------------------------------------- |
+| **System ID** | `{system-id}`                                                         |
+| **Project**   | {Project Name}                                                        |
+| **Version**   | 1.0                                                                   |
+| **Status**    | `Draft` / `Review` / `Approved`                                       |
+| **Author**    | {Author Name or Agent}                                                |
+| **Date**      | {YYYY-MM-DD}                                                          |
+| **L1 Detail** | [{system-id}.detail.md](./{system-id}.detail.md) — 仅 `/forge` 时加载 |
 
-> **📖 文档层级说明**
-> - **本文件 (L0)**: 导航层。包含架构图、操作契约表、设计决策。面向快速理解与任务规划。
-> - **[{system}-detail.md](./{system-id}.detail.md) (L1)**: 实现层。包含完整伪代码、配置常量、边缘情况。仅在 `/forge` 任务明确引用时加载。
-> - **L1 文件按需创建**：触发拆分规则 R1-R5 任意一条时，才需要创建对应的 `.detail.md`。
+> [!IMPORTANT]
+> **文档分层说明**
+> - **本文件 (L0 导航层)**: 架构图、操作契约、设计决策。面向快速理解与任务规划。禁止放配置字典、算法伪代码和方法体。
+> - **[{system-id}.detail.md](./{system-id}.detail.md) (L1 实现层)**: 完整伪代码、配置常量、边缘情况。仅 `/forge` 任务明确引用时加载。
+> - **L1 锚点原则 ⚠️**: L1 中的每一节都必须在本文件有对应超链接入口。严禁 L1 出现 L0 完全未提及的"孤岛内容"。
+
+---
+
+## 📋 目录 (Table of Contents)
+
+|   §   | 章节                                                         | 关键内容                                                 |
+| :---: | ------------------------------------------------------------ | -------------------------------------------------------- |
+|   1   | [概览](#1-概览-overview)                                     | 系统目的、边界、职责                                     |
+|   2   | [目标与非目标](#2-目标与非目标-goals--non-goals)             | Goals / Non-Goals                                        |
+|   3   | [背景与上下文](#3-背景与上下文-background--context)          | 为什么需要这个系统、约束                                 |
+|   4   | [系统架构](#4-系统架构-architecture)                         | Mermaid 架构图、组件职责、数据流                         |
+|   5   | [接口设计](#5-接口设计-interface-design)                     | 操作契约表、跨系统协议、HTTP API                         |
+|   6   | [数据模型](#6-数据模型-data-model)                           | 实体字段声明、ER 图 → [L1 §1-2](./{system-id}.detail.md) |
+|   7   | [技术选型](#7-技术选型-technology-stack)                     | 核心技术、关键依赖                                       |
+|   8   | [Trade-offs](#8-trade-offs--alternatives-权衡与备选方案)     | 决策理由、备选方案对比                                   |
+|   9   | [安全性考虑](#9-安全性考虑-security-considerations)          | 认证授权、风险与缓解                                     |
+|  10   | [性能考虑](#10-性能考虑-performance-considerations)          | 性能目标、优化策略                                       |
+|  11   | [测试策略](#11-测试策略-testing-strategy)                    | 单测、集成、性能测试                                     |
+|  12   | [部署与运维](#12-部署与运维-deployment--operations) *(可选)* | 流程、监控、可观测性                                     |
+|  13   | [未来考虑](#13-未来考虑-future-considerations) *(可选)*      | 扩展性、技术债                                           |
+|  14   | [附录](#14-appendix-附录) *(可选)*                           | 术语表、参考资料、变更日志                               |
+
+**L1 实现层** → [{system-id}.detail.md](./{system-id}.detail.md)（仅 `/forge` 时加载）
+> [§1 配置常量](./{system-id}.detail.md) · [§2 数据结构](./{system-id}.detail.md) · [§3 算法](./{system-id}.detail.md) · [§4 决策树](./{system-id}.detail.md) · [§5 边缘情况](./{system-id}.detail.md)
 
 ---
 
@@ -177,25 +205,25 @@ class ISystemName(Protocol):
   ❌ 禁止: 任何方法体 (哪怕只有 2 行)
   ❌ 禁止: 注释风格的方法列表 (# def foo... 这种)
   ❌ 禁止: 配置常量字典 (UNIT_CONFIG = {...})
-  → 以上内容全部放入 {system}.detail.md §1 和 §2
+  → 以上内容全部放入 {system}.detail.md §1 和 §2。并且依据「L1 锚点原则」，你必须在此处用 Markdown 超链接指明它们在 L1 的下落，例如：
+  *(完整的配置常量字典详见 [{system}.detail.md §1](./{system}.detail.md))*
 -->
 
 ### 6.1 核心实体 (Core Entities)
 
 ```python
-# ── 示例: 只放属性字段 + 签名 ──
+# ── 只放属性字段 + 方法签名，禁止方法体 ──
 @dataclass
 class EntityName:
-    # 属性字段
     id: str
     field_a: TypeA
     field_b: TypeB = default_value
 
-    # 方法签名 (不写方法体, 只写到 ...)
     def some_method(self, param: Type) -> ReturnType: ...
     def another_method(self) -> bool: ...
-    # 完整方法实现见 {system}.detail.md §2.1
 ```
+
+> *(完整方法实现 → [L1 §2](./{system-id}.detail.md) · 配置常量字典 → [L1 §1](./{system-id}.detail.md))*
 
 ### 6.2 实体关系图 (Entity Relationship)
 
@@ -474,33 +502,25 @@ classDiagram
 
 ---
 
-<!-- ⚠️ CRITICAL 使用指南 -->
-<!--
-**L0 文档撰写原则 (本文件)**:
-1. **导航层定位**: 面向快速理解和任务规划，不展示实现细节
-2. **操作契约表格**: §5.1 用表格代替函数伪代码，每行对应一个原子操作
-3. **属性声明优先**: §6 只放字段声明，不放方法体
-4. **追溯链**: 通过 [REQ-XXX] 引用PRD需求，不复制内容
-5. **约束继承**: 从PRD和ADR继承约束和决策，不能放松
-6. **Trade-offs说明**: 每个重要技术选型都说明「为什么选A不选B」
-7. **Mermaid优先**: 架构图、数据流、决策树 → 用图
+<!-- ⚠️ AGENT 使用指南
 
-**L1 文件拆分规则 (触发任意一条即创建 .detail.md)**:
-- R1: 单个代码块 > 30 行
-- R2: 文档代码块总行数 > 200 行
-- R3: 配置常量字典条目 > 5 个
-- R4: 版本内联注释 (# vX.X 变更) 出现 > 5 处
-- R5: 文档总行数 > 500 行
+L0 撰写九律:
+1. 导航层定位 — 不展示实现细节，面向快速理解与任务规划
+2. TOC 同步     — 新增章节必须同步更新文件头部目录表格
+3. 操作契约表  — §5.1 每行一个原子操作，「实现细节」列必须链接 L1
+4. 属性声明    — §6 只放字段 + 方法签名（def foo(): ...），禁止方法体
+5. L1 锚点     — 抽入 L1 的任何内容必须在 L0 对应位置留超链接，禁止孤岛
+6. 追溯链      — [REQ-XXX] 引用 PRD，不复制原文
+7. 约束继承    — 从 PRD / ADR 继承，不能放松
+8. Trade-offs  — 每个选型说明「选 A 不选 B 的理由」
+9. Mermaid 优先 — 架构图 / 数据流 / 决策树，用图不用文字列表
 
-**章节使用指南**:
-- **必需章节**: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
-- **可选章节**: 12 (部署，小项目可简化), 13 (未来，可简化), 14 (附录)
+L1 拆分规则（触发任意一条即创建 .detail.md）:
+  R1 单个代码块 > 30 行
+  R2 代码块总行数 > 200 行
+  R3 配置常量字典条目 > 5 个
+  R4 版本内联注释 > 5 处
+  R5 文档总行数 > 500 行
 
-**L1 文件 ({system}.detail.md) 内容**:
-- §1 配置常量 (UNIT_CONFIG 等)
-- §2 完整类定义 (含方法体)
-- §3 算法伪代码 (完整函数体)
-- §4 决策树展开
-- §5 边缘情况
-- §6 测试辅助
+必需章节: 1-11  |  可选章节: 12 (部署) · 13 (未来) · 14 (附录)
 -->
