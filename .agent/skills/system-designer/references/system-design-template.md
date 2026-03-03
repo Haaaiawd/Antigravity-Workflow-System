@@ -1,4 +1,4 @@
-# {System Name} 系统设计文档
+# {System Name} 系统设计文档 (L0 — 导航层)
 
 **System ID**: {system-id} (如: frontend-system, backend-api-system)
 **Project**: [Project Name]
@@ -6,6 +6,11 @@
 **Status**: Draft | Review | Approved
 **Author**: [Author Name or Agent]
 **Date**: [YYYY-MM-DD]
+
+> **📖 文档层级说明**
+> - **本文件 (L0)**: 导航层。包含架构图、操作契约表、设计决策。面向快速理解与任务规划。
+> - **[{system}-detail.md](./{system-id}.detail.md) (L1)**: 实现层。包含完整伪代码、配置常量、边缘情况。仅在 `/forge` 任务明确引用时加载。
+> - **L1 文件按需创建**：触发拆分规则 R1-R5 任意一条时，才需要创建对应的 `.detail.md`。
 
 ---
 
@@ -88,10 +93,10 @@ graph TD
 ### 4.2 Core Components (核心组件)
 <!-- 每个组件的职责和技术栈 -->
 
-| Component Name | Responsibility | Tech Stack | Notes |
-|---------------|----------------|------------|-------|
-| [Component 1] | [职责描述] | [技术] | [备注] |
-| [Component 2] | [职责描述] | [技术] | [备注] |
+| Component Name | Responsibility | Tech Stack | Notes  |
+| -------------- | -------------- | ---------- | ------ |
+| [Component 1]  | [职责描述]     | [技术]     | [备注] |
+| [Component 2]  | [职责描述]     | [技术]     | [备注] |
 
 ### 4.3 Data Flow (数据流)
 <!-- 描述数据如何在组件间流动 -->
@@ -119,135 +124,95 @@ sequenceDiagram
 
 ## 5. 接口设计 (Interface Design)
 
-<!-- ⚠️ CRITICAL: 根据系统类型选择合适的小节 -->
+<!-- ⚠️ L0 写法原则:
+  - 后端 API: 只放 endpoint 路径 + 请求/响应结构摘要（无需完整 JSON 示例）
+  - Agent/游戏系统: 使用「操作契约表格」代替函数伪代码
+  - 完整参数细节、错误码列表 → {system}.detail.md §3
+-->
 
-### 5.1 API Design (如果是后端系统)
+### 5.1 操作契约表 (Operation Contracts)
 
-#### 5.1.1 POST /auth/login [REQ-001]
-**Purpose**: 用户登录认证
+<!-- ⭐ 核心格式：用表格代替函数伪代码。每行覆盖一个原子操作。 -->
+<!-- 「detail 链接」填写 {system}.detail.md 的对应 §章节号 -->
 
-**Request**:
-```json
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
+| 操作                 | [REQ-XXX] | 前置条件     | 消耗/输入 | 产出/副作用  |      实现细节       |
+| -------------------- | :-------: | ------------ | --------- | ------------ | :-----------------: |
+| `operation_a(param)` | [REQ-001] | 条件1; 条件2 | cost★     | 状态变化描述 | [§3.1](./detail.md) |
+| `operation_b(param)` | [REQ-002] | 条件1        | cost★     | 状态变化描述 | [§3.2](./detail.md) |
+
+> **填写说明**:
+> - **操作**: 使用函数签名风格 `func_name(key_params)`，参数只写关键入参类型，不写类型注解
+> - **前置条件**: 简洁列举，以「;」分隔，不超过 3 个
+> - **产出/副作用**: 描述状态变化，如「生成 Boat，承载 unit；原 unit 消失」
+> - **实现细节**: 链接到 `.detail.md` 对应章节（如尚未创建，填「待补充」）
+
+### 5.2 跨系统接口协议 (Cross-System Interface)
+
+<!-- 与其他系统的边界协议：Protocol / ABC 接口签名，不含方法体 -->
+
+```python
+# 示例：本系统暴露给其他系统调用的接口协议（Protocol/ABC）
+class ISystemName(Protocol):
+    def method_a(self, param: Type) -> ReturnType: ...
+    def method_b(self, param: Type) -> ReturnType: ...
 ```
 
-**Response (Success - 200)**:
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "id": "550e8400-e29b-41d4-a716-446655440000",
-    "email": "user@example.com",
-    "name": "John Doe"
-  }
-}
-```
+### 5.3 HTTP API 端点摘要 (如适用)
 
-**Response (Error - 401)**:
-```json
-{
-  "error": {
-    "code": "INVALID_CREDENTIALS",
-    "message": "Invalid email or password"
-  }
-}
-```
+<!-- 仅后端服务系统才需要此节，Agent/游戏核心系统跳过 -->
+<!-- 只列 endpoint 清单，不写完整 JSON 示例（JSON 示例 → detail.md） -->
 
-**Rate Limit**: 5 requests/minute/IP
-**Authentication**: None (public endpoint)
-
----
-
-### 5.2 Component Interface (如果是前端系统)
-
-#### 5.2.1 LoginForm Component [REQ-001]
-
-**Props**:
-```typescript
-interface LoginFormProps {
-  onSuccess: (token: string) => void;
-  onError: (error: Error) => void;
-  isLoading?: boolean;
-}
-```
-
-**Events**:
-- `onSuccess(token: string)`: 登录成功时触发
-- `onError(error: Error)`: 登录失败时触发
-
-**Usage**:
-```jsx
-<LoginForm
-  onSuccess={(token) => saveToken(token)}
-  onError={(error) => showError(error.message)}
-/>
-```
-
----
-
-### 5.3 Message Format (如果是Agent/消息系统)
-
-#### 5.3.1 Tool Call Message [REQ-XXX]
-
-**Format**:
-```json
-{
-  "tool": "search_code",
-  "parameters": {
-    "query": "function authenticate",
-    "scope": "src/"
-  }
-}
-```
-
-**Response**:
-```json
-{
-  "status": "success",
-  "results": [...]
-}
-```
+| Method | Path          | Auth  | 用途               | [REQ-XXX] |
+| ------ | ------------- | :---: | ------------------ | :-------: |
+| POST   | `/auth/login` |  否   | 用户登录，返回 JWT | [REQ-001] |
+| GET    | `/users/me`   |  JWT  | 获取当前用户信息   | [REQ-002] |
 
 ---
 
 ## 6. 数据模型 (Data Model)
 
-### 6.1 Data Structures (数据结构)
+<!-- ⚠️ L0 写法原则 — 请严格遵守:
+  ✅ 允许: @dataclass 属性字段声明
+  ✅ 允许: Protocol 风格的方法签名 (def foo(self, x: T) -> R: ...)
+  ❌ 禁止: 任何方法体 (哪怕只有 2 行)
+  ❌ 禁止: 注释风格的方法列表 (# def foo... 这种)
+  ❌ 禁止: 配置常量字典 (UNIT_CONFIG = {...})
+  → 以上内容全部放入 {system}.detail.md §1 和 §2
+-->
 
-#### User Entity
-```typescript
-interface User {
-  id: string;           // UUID v4
-  email: string;        // Unique, RFC 5322 compliant
-  passwordHash: string; // bcrypt hash (rounds=10)
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+### 6.1 核心实体 (Core Entities)
+
+```python
+# ── 示例: 只放属性字段 + 签名 ──
+@dataclass
+class EntityName:
+    # 属性字段
+    id: str
+    field_a: TypeA
+    field_b: TypeB = default_value
+
+    # 方法签名 (不写方法体, 只写到 ...)
+    def some_method(self, param: Type) -> ReturnType: ...
+    def another_method(self) -> bool: ...
+    # 完整方法实现见 {system}.detail.md §2.1
 ```
 
-### 6.2 Database Schema (如适用)
+### 6.2 实体关系图 (Entity Relationship)
 
-#### Users Table
-```sql
-CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  name VARCHAR(255),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Indexes
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_created_at ON users(created_at DESC);
+```mermaid
+classDiagram
+    class EntityA {
+        +id: str
+        +field_a: TypeA
+    }
+    class EntityB {
+        +id: str
+        +entity_a_id: str
+    }
+    EntityA "1" --> "0..*" EntityB : has
 ```
 
-### 6.3 Data Flow Direction (数据流向)
+### 6.3 数据流向 (Data Flow Direction)
 [数据如何在系统间流动？存储在哪里？]
 
 ---
@@ -257,12 +222,12 @@ CREATE INDEX idx_users_created_at ON users(created_at DESC);
 ### 7.1 Core Technologies (核心技术)
 <!-- 从ADR继承，或新增系统级技术决策 -->
 
-| Domain | Choice | Rationale |
-|--------|--------|-----------|
-| Framework | FastAPI | 高性能、异步、类型安全、OpenAPI自动生成 |
-| Database | PostgreSQL | ACID、JSON支持、成熟生态、团队熟悉 |
-| Cache | Redis | 高性能、丰富数据结构、持久化选项 |
-| ORM | SQLAlchemy | 类型安全、灵活、异步支持 |
+| Domain    | Choice     | Rationale                               |
+| --------- | ---------- | --------------------------------------- |
+| Framework | FastAPI    | 高性能、异步、类型安全、OpenAPI自动生成 |
+| Database  | PostgreSQL | ACID、JSON支持、成熟生态、团队熟悉      |
+| Cache     | Redis      | 高性能、丰富数据结构、持久化选项        |
+| ORM       | SQLAlchemy | 类型安全、灵活、异步支持                |
 
 ### 7.2 Key Libraries/Dependencies (关键依赖)
 - `pydantic ^2.0`: 数据验证、序列化
@@ -327,13 +292,13 @@ CREATE INDEX idx_users_created_at ON users(created_at DESC);
 
 ### 9.3 Security Risks & Mitigations (安全风险与缓解)
 
-| Risk | Severity | Mitigation |
-|------|:--------:|-----------|
-| SQL注入 | 高 | 使用ORM参数化查询，禁止拼接SQL |
-| XSS | 中 | 输入验证、输出转义、CSP头 |
-| CSRF | 中 | CSRF Token（如适用） |
-| 密码暴力破解 | 高 | Rate limiting (5次/分钟/IP) |
-| JWT伪造 | 高 | 使用强密钥（HS256, 256-bit），定期轮换 |
+| Risk         | Severity | Mitigation                             |
+| ------------ | :------: | -------------------------------------- |
+| SQL注入      |    高    | 使用ORM参数化查询，禁止拼接SQL         |
+| XSS          |    中    | 输入验证、输出转义、CSP头              |
+| CSRF         |    中    | CSRF Token（如适用）                   |
+| 密码暴力破解 |    高    | Rate limiting (5次/分钟/IP)            |
+| JWT伪造      |    高    | 使用强密钥（HS256, 256-bit），定期轮换 |
 
 ---
 
@@ -503,31 +468,39 @@ CREATE INDEX idx_users_created_at ON users(created_at DESC);
 
 ### 14.3 Change Log (变更日志)
 
-| Version | Date | Changes | Author |
-|---------|------|---------|--------|
-| 1.0 | 2026-01-08 | 初始版本 | XXX |
+| Version | Date       | Changes  | Author |
+| ------- | ---------- | -------- | ------ |
+| 1.0     | 2026-01-08 | 初始版本 | XXX    |
 
 ---
 
 <!-- ⚠️ CRITICAL 使用指南 -->
 <!--
-**系统设计文档撰写原则**:
-1. **自包含**: 文档应自包含，减少对外部上下文的依赖
-2. **追溯链**: 通过[REQ-XXX]引用PRD需求，而不是复制内容
-3. **约束继承**: 从PRD和ADR继承约束和决策
-4. **Trade-offs说明**: 每个重要技术选型都要说明"为什么选A不选B"
-5. **可视化**: 使用Mermaid图表，一图胜千言
+**L0 文档撰写原则 (本文件)**:
+1. **导航层定位**: 面向快速理解和任务规划，不展示实现细节
+2. **操作契约表格**: §5.1 用表格代替函数伪代码，每行对应一个原子操作
+3. **属性声明优先**: §6 只放字段声明，不放方法体
+4. **追溯链**: 通过 [REQ-XXX] 引用PRD需求，不复制内容
+5. **约束继承**: 从PRD和ADR继承约束和决策，不能放松
+6. **Trade-offs说明**: 每个重要技术选型都说明「为什么选A不选B」
+7. **Mermaid优先**: 架构图、数据流、决策树 → 用图
+
+**L1 文件拆分规则 (触发任意一条即创建 .detail.md)**:
+- R1: 单个代码块 > 30 行
+- R2: 文档代码块总行数 > 200 行
+- R3: 配置常量字典条目 > 5 个
+- R4: 版本内联注释 (# vX.X 变更) 出现 > 5 处
+- R5: 文档总行数 > 500 行
 
 **章节使用指南**:
 - **必需章节**: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 - **可选章节**: 12 (部署，小项目可简化), 13 (未来，可简化), 14 (附录)
-- **根据系统类型选择Interface Design小节**:
-  - 后端系统 → 5.1 API Design
-  - 前端系统 → 5.2 Component Interface
-  - Agent系统 → 5.3 Message Format
 
-**小项目简化策略**:
-- 可省略: 13 (未来考虑), 14 (附录)
-- 可简化: 8 (Trade-offs, 只保留关键决策), 12 (部署, 简化为部署命令)
-- 但必须保留: 4 (架构), 5 (接口), 6 (数据模型), 11 (测试)
+**L1 文件 ({system}.detail.md) 内容**:
+- §1 配置常量 (UNIT_CONFIG 等)
+- §2 完整类定义 (含方法体)
+- §3 算法伪代码 (完整函数体)
+- §4 决策树展开
+- §5 边缘情况
+- §6 测试辅助
 -->
