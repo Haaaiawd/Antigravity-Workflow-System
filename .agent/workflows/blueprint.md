@@ -232,11 +232,11 @@ graph TD
 
 ## Step 6: 生成文档
 
-**目标**: 保存最终的任务清单，并**更新 .agent/rules/agents.md**。
+**目标**: 保存最终的任务清单，并**更新 AGENTS.md**。
 
 1.  **保存**: 将内容保存到 `genesis/v{N}/05_TASKS.md`
 2.  **验证**: 确保文件包含所有任务、验收标准和依赖图。
-3.  **更新 .agent/rules/agents.md "当前状态"**:
+3.  **更新 AGENTS.md "当前状态"**:
     - 活动任务清单: `genesis/v{N}/05_TASKS.md`
     - 最近一次更新: `{Today}`
     - 写入初始波次建议，让 `/forge` 可以直接启动：
@@ -254,7 +254,7 @@ graph TD
 - ✅ 任务间的输入/输出是否对齐（接口追溯）？
 - ✅ 是否生成了 Mermaid 依赖图？
 - ✅ User Story Overlay 已生成，覆盖 GAP 已补充？
-- ✅ 已更新 .agent/rules/agents.md（含初始波次建议）？
+- ✅ 已更新 AGENTS.md（含初始波次建议）？
 
 ---
 
@@ -282,7 +282,7 @@ graph TD
 
 ### Agent Context 自更新
 
-**更新 `.agent/rules/agents.md` 的 `AUTO:BEGIN` ~ `AUTO:END` 区块**:
+**更新 `AGENTS.md` 的 `AUTO:BEGIN` ~ `AUTO:END` 区块**:
 
 在 `### 当前任务状态` 下写入：
 
@@ -305,8 +305,8 @@ graph TD
 - ✅ 每个 Sprint 有退出标准和 INT 集成验证任务
 - ✅ 生成了 Mermaid 依赖图
 - ✅ User Story Overlay 已生成并验证覆盖完整性
-- ✅ 已更新 .agent/rules/agents.md（含初始波次建议）
-- ✅ 更新了 agents.md AUTO:BEGIN 区块 (当前任务状态)
+- ✅ 已更新 AGENTS.md（含初始波次建议）
+- ✅ 更新了 AGENTS.md AUTO:BEGIN 区块 (当前任务状态)
 - ✅ 用户已确认
 </completion_criteria>
 

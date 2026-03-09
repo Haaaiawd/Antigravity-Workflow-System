@@ -24,7 +24,7 @@ A **structured workflow framework** for Agentic AI assistants, designed to solve
 | ---------------------- | ----------------------------------------------------------- | -------------------------------------------------------------- |
 | **Architecture Drift** | AI generates inconsistent patterns across the same codebase | `/genesis` forces PRD & architecture design first              |
 | **Spaghetti Code**     | AI lacks project context, writes code that doesn't fit      | Tasks include constraints & acceptance criteria                |
-| **Context Amnesia**    | New session = AI forgets all previous decisions             | `.agent/rules/agents.md` + versioned docs as persistent memory |
+| **Context Amnesia**    | New session = AI forgets all previous decisions             | `AGENTS.md` + versioned docs as persistent memory |
 | **Lack of Planning**   | Vibe Coding skips design, creates tech debt                 | Mandatory design-first workflow                                |
 
 ---
@@ -52,8 +52,8 @@ cd your-project
 anws update
 ```
 
-> `anws update` overwrites all managed workflow/skill files to the latest version while **preserving** your `agents.md`.
-> If the `agents.md` template has new content, an `agents.md.new` file will be generated for you to merge manually.
+> `anws update` overwrites all managed workflow/skill files to the latest version while **preserving** your `AGENTS.md`.
+> If the `AGENTS.md` template has new content, an `AGENTS.md.new` file will be generated for you to merge manually.
 
 ### Your First Project 🐣
 
@@ -214,9 +214,8 @@ Just speak naturally. Antigravity will automatically select and run the right wo
 
 ```
 your-project/
+├── AGENTS.md          # 🧠 AI's anchor point
 ├── .agent/
-│   ├── rules/
-│   │   └── agents.md          # 🧠 AI's anchor point
 │   ├── workflows/             # Workflow definitions
 │   │   ├── genesis.md
 │   │   ├── scout.md
