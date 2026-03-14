@@ -49,10 +49,11 @@ anws init
 ```
 
 > Requires Node.js ≥ 18.
+> `anws init` will ask you to choose a target AI IDE, then install only the managed files required by that target.
 
 ### Option B — GitHub Release
 
-Download the latest `.zip` from [Releases](https://github.com/Haaaiawd/Anws/releases), then copy `.agents/` to your project root.
+Download the latest `.zip` from [Releases](https://github.com/Haaaiawd/Anws/releases), then copy the target-specific folders you need into your project root. The npm CLI remains the recommended path because it can choose the correct target layout for you.
 
 ### 📦 Update Existing Installation
 
@@ -62,7 +63,7 @@ anws update
 ```
 
 > `anws update --check` prints file-level and content-level diff previews without writing files.
-> `anws update` overwrites managed workflow/skill files to the latest version, and handles `AGENTS.md` via merge / migrate / skip rules:
+> `anws update` detects the currently installed target IDE projection, updates only its managed files, and handles `AGENTS.md` via merge / migrate / skip rules when the installed target is `Antigravity`:
 > - marker-based `AGENTS.md` → update stable sections while preserving the `AUTO` block
 > - recognized legacy `AGENTS.md` → migrate into the new marker-based structure
 > - unrecognized legacy `AGENTS.md` → warn and preserve unchanged
@@ -176,17 +177,18 @@ We used the `/genesis` workflow to design the CLI's architecture, and the `/forg
 
 ## 🛠️ Compatibility & Prerequisites
 
-> ⚠️ **Important**: This framework works with any AI coding tool that reads `AGENTS.md` and supports `.agents/` directory structure.
+> ⚠️ **Important**: This framework works with AI coding tools that can consume `anws` target layouts such as `.windsurf/`, `.agents/`, `.cursor/`, `.claude/`, `.github/`, or `.codex/`.
 
 | Environment     |            Status            | Notes                          |
 | --------------- | :--------------------------: | ------------------------------ |
-| **Windsurf**       |     ✅ Full Support      | Native `.agents/workflows/` + slash commands |
-| **Claude Code**    |     ✅ Full Support      | Reads `AGENTS.md` + workflows via instructions |
-| **GitHub Copilot** |     ✅ Full Support      | `AGENTS.md` + `.github/instructions/` + skills |
-| **Cursor**         |     ✅ Supported        | Via `.cursor/rules/` + `AGENTS.md` |
-| **Others**         |     ✅ Compatible       | Any tool that reads `AGENTS.md` |
+| **Windsurf**       |     ✅ Full Support      | `.windsurf/workflows/` + `.windsurf/skills/` |
+| **Antigravity**    |     ✅ Full Support      | `.agents/workflows/` + `.agents/skills/` + `AGENTS.md` |
+| **Claude Code**    |     ✅ Full Support      | `.claude/commands/` |
+| **GitHub Copilot** |     ✅ Full Support      | `.github/agents/` + `.github/prompts/` |
+| **Cursor**         |     ✅ Supported        | `.cursor/commands/` |
+| **Codex**          |     ✅ Supported        | `.codex/prompts/` + `.codex/skills/` |
 
-**How it works**: Anws uses `AGENTS.md` as the universal anchor point. Each tool reads this file to understand project context and workflow locations. The `.agents/` directory contains workflows and skills that can be discovered and executed.
+**How it works**: Anws keeps one canonical workflow / skill source, then projects it into the folder layout required by your selected target IDE. `AGENTS.md` remains the root anchor for the Antigravity-compatible target, while other targets receive their own native folder layout.
 
 ### ✅ Built-in Deep Reasoning Support
 
@@ -223,36 +225,33 @@ Just speak naturally. Your AI tool will automatically select and run the right w
 
 ## 📁 Project Structure
 
-```
+```bash
 your-project/
-├── AGENTS.md          # 🧠 AI's anchor point (universal)
-├── .agents/
-│   ├── workflows/             # Workflow definitions
-│   │   ├── genesis.md
-│   │   ├── probe.md
-│   │   ├── design-system.md
-│   │   ├── challenge.md
-│   │   ├── blueprint.md
-│   │   ├── forge.md
-│   │   ├── change.md
-│   │   ├── explore.md
-│   │   └── craft.md
-│   │
-│   └── skills/            # Reusable skills
-│       ├── concept-modeler/
-│       ├── spec-writer/
-│       ├── task-planner/
-│       ├── nexus-mapper/     # Codebase knowledge mapping
-│       └── ...
+├── .anws/                 # Versioned architecture docs
+│   ├── v1/
+│   │   ├── 01_PRD.md
+│   │   ├── 02_ARCHITECTURE.md
+│   │   ├── 03_ADR/
+│   │   ├── 05_TASKS.md
+│   │   └── 07_CHALLENGE_REPORT.md
+│   └── v2/                # New version on major changes
 │
-└── .anws/                 # Versioned architecture docs
-    ├── v1/
-    │   ├── 01_PRD.md
-    │   ├── 02_ARCHITECTURE.md
-    │   ├── 03_ADR/
-    │   ├── 05_TASKS.md
-    │   └── 07_CHALLENGE_REPORT.md
-    └── v2/                # New version on major changes
+├── .windsurf/             # Example target: Windsurf
+│   ├── workflows/
+│   └── skills/
+│
+├── .agents/               # Example target: Antigravity
+│   ├── workflows/
+│   └── skills/
+├── AGENTS.md              # Root anchor for Antigravity target
+├── .cursor/commands/      # Example target: Cursor
+├── .claude/commands/      # Example target: Claude Code
+├── .github/
+│   ├── agents/            # Example target: GitHub Copilot
+│   └── prompts/
+└── .codex/
+    ├── prompts/           # Example target: Codex
+    └── skills/
 ```
 
 ## 🙌 Contributing

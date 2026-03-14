@@ -14,8 +14,8 @@ USAGE
   anws <command> [options]
 
 COMMANDS
-  init      Copy .agents/ workflow system into the current project
-  update    Update managed .agents/ files to the latest version
+  init      Choose a target AI IDE and install its managed workflow projection
+  update    Update the managed files for the currently installed target IDE
 
 OPTIONS
   -v, --version   Print version number
@@ -23,8 +23,8 @@ OPTIONS
   --check         Preview update diff without writing files
 
 EXAMPLES
-  anws init          # Set up workflow system in current directory
-  anws update        # Update existing workflow files to latest
+  anws init          # Choose a target IDE and set up its workflow system
+  anws update        # Update the currently installed target projection
   anws update --check
 `.trimStart();
 

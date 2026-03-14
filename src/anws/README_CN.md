@@ -49,10 +49,11 @@ anws init
 ```
 
 > 需要 Node.js ≥ 18。
+> `anws init` 会先让你选择目标 AI IDE，然后只安装该目标所需的托管文件。
 
 ### 方式 B — GitHub Release
 
-从 [Releases](https://github.com/Haaaiawd/Anws/releases) 下载最新 `.zip`，将其中的 `.agents/` 目录复制到你的项目根目录。
+从 [Releases](https://github.com/Haaaiawd/Anws/releases) 下载最新 `.zip`，再按你的目标 AI IDE 复制对应目录。更推荐使用 npm CLI，因为它会自动选择正确的目标布局。
 
 ### 📦 更新已有安装
 
@@ -62,7 +63,7 @@ anws update
 ```
 
 > `anws update --check` 会先输出文件级和内容级 diff 预览，**不会写入任何文件**。
-> `anws update` 会把托管的工作流/技能文件更新到最新版本，并按规则处理 `AGENTS.md`：
+> `anws update` 会先识别当前项目已安装的目标 IDE 投影，只更新该目标的托管文件；当目标为 `Antigravity` 时，仍会按规则处理 `AGENTS.md`：
 > - 带标识的 `AGENTS.md` → 更新稳定区，保留 `AUTO` 运行态区块
 > - 可识别的 legacy `AGENTS.md` → 迁移到新的带标识结构
 > - 不可识别的 legacy `AGENTS.md` → 警告并原样保留
@@ -176,17 +177,18 @@ anws update
 
 ## 🛠️ 兼容性与前置要求
 
-> ⚠️ **重要**: 本框架支持任何读取 `AGENTS.md` 并支持 `.agents/` 目录结构的 AI 编程工具。
+> ⚠️ **重要**: 本框架支持能消费 `anws` 目标目录投放的 AI 编程工具，例如 `.windsurf/`、`.agents/`、`.cursor/`、`.claude/`、`.github/`、`.codex/`。
 
 | 环境            |        状态        | 说明                  |
 | --------------- | :----------------: | --------------------- |
-| **Windsurf**       |     ✅ 完美支持     | 原生 `.agents/workflows/` + 斜杠命令 |
-| **Claude Code**    |     ✅ 完美支持     | 读取 `AGENTS.md` + 通过 instructions 执行工作流 |
-| **GitHub Copilot** |     ✅ 完美支持     | `AGENTS.md` + `.github/instructions/` + skills |
-| **Cursor**         |     ✅ 支持        | 通过 `.cursor/rules/` + `AGENTS.md` |
-| **其他工具**       |     ✅ 兼容       | 任何读取 `AGENTS.md` 的工具 |
+| **Windsurf**       |     ✅ 完美支持     | `.windsurf/workflows/` + `.windsurf/skills/` |
+| **Antigravity**    |     ✅ 完美支持     | `.agents/workflows/` + `.agents/skills/` + `AGENTS.md` |
+| **Claude Code**    |     ✅ 完美支持     | `.claude/commands/` |
+| **GitHub Copilot** |     ✅ 完美支持     | `.github/agents/` + `.github/prompts/` |
+| **Cursor**         |     ✅ 支持        | `.cursor/commands/` |
+| **Codex**          |     ✅ 支持        | `.codex/prompts/` + `.codex/skills/` |
 
-**工作原理**: Anws 使用 `AGENTS.md` 作为通用锚点。各工具读取此文件来理解项目上下文和工作流位置。`.agents/` 目录包含可被发现和执行的工作流与技能。
+**工作原理**: Anws 维护一套统一的工作流 / 技能源，再把它投影到你选择的目标 IDE 所需目录中。`AGENTS.md` 仍是 Antigravity 兼容目标的根锚点，其他目标则使用各自的原生目录布局。
 
 ### ✅ 内置深度推理支持
 
