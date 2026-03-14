@@ -2,37 +2,52 @@
 
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const { MANAGED_FILES, USER_PROTECTED_FILES } = require('./manifest');
+const {
+  buildManagedFiles,
+  buildProjectionEntries,
+  buildUserProtectedFiles
+} = require('./manifest');
+const { detectInstalledTarget } = require('./adapters');
 const { planAgentsUpdate, resolveAgentsInstall, printLegacyMigrationWarning, pathExists } = require('./agents');
 const { collectManagedFileDiffs, printPreview } = require('./diff');
 const { detectUpgrade, generateChangelog } = require('./changelog');
+const { ROOT_AGENTS_FILE, resolveCanonicalSource } = require('./resources');
 const { success, warn, error, info, fileLine, skippedLine, blank, logo } = require('./output');
 
 async function update(options = {}) {
   const cwd = process.cwd();
   const check = !!options.check;
-  const agentDir = path.join(cwd, '.agents');
   const legacyAgentDir = path.join(cwd, '.agent');
   const { version } = require(path.join(__dirname, '..', 'package.json'));
+  const installedTarget = await detectInstalledTarget(cwd);
 
-  const agentExists = await pathExists(agentDir);
   const legacyAgentExists = await pathExists(legacyAgentDir);
-  const isLegacyMigration = !agentExists && legacyAgentExists;
+  const isLegacyMigration = !installedTarget && legacyAgentExists;
 
-  if (!agentExists && !legacyAgentExists) {
+  if (!installedTarget && !legacyAgentExists) {
     logo();
-    error('No .agents/ found in current directory.');
+    error('No supported Anws target layout found in current directory.');
     info('Run `anws init` first to set up the workflow system.');
     process.exit(1);
   }
 
-  const srcRoot = path.join(__dirname, '..', 'templates', '.agents');
-  const srcAgents = path.join(__dirname, '..', 'templates', 'AGENTS.md');
-  const agentsDecision = await resolveAgentsInstall({
-    cwd,
-    askMigrate,
-    forceYes: !!global.__ANWS_FORCE_YES
-  });
+  const target = installedTarget || { id: 'antigravity', label: 'Antigravity', rootAgentFile: true };
+  const managedFiles = buildManagedFiles(target.id);
+  const userProtectedFiles = buildUserProtectedFiles(target.id);
+  const projectionEntries = buildProjectionEntries(target.id);
+  const srcAgents = ROOT_AGENTS_FILE;
+  const agentsDecision = target.id === 'antigravity'
+    ? await resolveAgentsInstall({
+      cwd,
+      askMigrate,
+      forceYes: !!global.__ANWS_FORCE_YES
+    })
+    : {
+      shouldWriteRootAgents: false,
+      shouldWarnMigration: false,
+      rootExists: false,
+      legacyExists: false
+    };
 
   if (!agentsDecision.shouldWriteRootAgents && agentsDecision.legacyExists) {
     info('Keeping legacy .agent/rules/agents.md. Will not pull root AGENTS.md.');
@@ -44,7 +59,7 @@ async function update(options = {}) {
     logo();
     blank();
     info('Legacy .agent/ directory detected.');
-    info('anws update will migrate managed files into the new .agents/ structure.');
+    info('anws update will migrate managed files into the Antigravity target structure.');
     info('Your old .agent/ directory will be preserved for manual review.');
     blank();
   }
@@ -63,7 +78,8 @@ async function update(options = {}) {
   const versionState = await detectUpgrade({ cwd, version });
   const rawChanges = await collectManagedFileDiffs({
     cwd,
-    managedFiles: MANAGED_FILES,
+    managedFiles,
+    projectionEntries,
     srcAgents,
     shouldWriteRootAgents: agentsDecision.shouldWriteRootAgents,
     agentsUpdatePlan
@@ -104,7 +120,7 @@ async function update(options = {}) {
     return;
   }
 
-  const confirmed = await askUpdate();
+  const confirmed = await askUpdate(target);
   if (!confirmed) {
     blank();
     info('Aborted. No files were changed.');
@@ -114,10 +130,13 @@ async function update(options = {}) {
   if (!isLegacyMigration) {
     logo();
   }
+  info(`Target IDE: ${target.label}`);
   const updated = [];
   const skipped = [];
 
-  for (const rel of MANAGED_FILES) {
+  const projectionMap = new Map(projectionEntries.map((item) => [item.outputPath, item]));
+
+  for (const rel of managedFiles) {
     if (rel === 'AGENTS.md' && !agentsDecision.shouldWriteRootAgents) {
       skipped.push(rel);
       continue;
@@ -128,14 +147,15 @@ async function update(options = {}) {
       continue;
     }
 
-    if (USER_PROTECTED_FILES.includes(rel) && rel !== 'AGENTS.md') {
+    if (userProtectedFiles.includes(rel) && rel !== 'AGENTS.md') {
       if (!(rel === 'AGENTS.md' && agentsDecision.shouldWriteRootAgents)) {
         skipped.push(rel);
         continue;
       }
     }
 
-    const srcPath = rel === 'AGENTS.md' ? srcAgents : path.join(path.dirname(srcRoot), rel);
+    const entry = projectionMap.get(rel);
+    const srcPath = rel === 'AGENTS.md' ? srcAgents : resolveCanonicalSource(entry.source);
     const destPath = path.join(cwd, rel);
     const srcExists = await pathExists(srcPath);
     if (!srcExists) continue;
@@ -173,7 +193,7 @@ async function update(options = {}) {
   blank();
   success(`Done! ${updated.length} file(s) updated${skipped.length > 0 ? `, ${skipped.length} skipped` : ''}.`);
   info('Managed files have been updated to the latest version.');
-  info('Your custom files in .agents/ were not touched.');
+  info(`Your custom files outside the ${target.label} managed projection were not touched.`);
   if (isLegacyMigration) {
     info('Legacy .agent/ was preserved. You can review and delete it manually after migration.');
     const deleted = await maybeDeleteLegacyDir(legacyAgentDir);
@@ -185,7 +205,7 @@ async function update(options = {}) {
   info('Run `/upgrade` in your AI IDE to update your architecture docs.');
 }
 
-async function askUpdate() {
+async function askUpdate(target) {
   if (global.__ANWS_FORCE_YES) return true;
 
   if (!process.stdin.isTTY) {
@@ -198,7 +218,7 @@ async function askUpdate() {
 
   return new Promise((resolve) => {
     rl.question(
-      '\n⚠ This will overwrite all managed .agents/ files. Continue? [y/N] ',
+      `\n⚠ This will overwrite all managed ${target.label} files. Continue? [y/N] `,
       (answer) => {
         rl.close();
         resolve(answer.trim().toLowerCase() === 'y');

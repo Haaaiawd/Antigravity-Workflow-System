@@ -1,5 +1,8 @@
 'use strict';
 
+const fs = require('node:fs/promises');
+const path = require('node:path');
+
 const TARGETS = {
   windsurf: {
     id: 'windsurf',
@@ -78,8 +81,25 @@ function getTarget(targetId) {
   return target;
 }
 
+async function pathExists(targetPath) {
+  return fs.access(targetPath).then(() => true).catch(() => false);
+}
+
+async function detectInstalledTarget(cwd) {
+  for (const target of listTargets()) {
+    for (const relPath of target.detect) {
+      if (await pathExists(path.join(cwd, relPath))) {
+        return target;
+      }
+    }
+  }
+
+  return null;
+}
+
 module.exports = {
   TARGETS,
+  detectInstalledTarget,
   getTarget,
   listTargets
 };

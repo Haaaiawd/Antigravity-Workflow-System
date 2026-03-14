@@ -120,16 +120,26 @@ async function resolveExistingManagedPath(cwd, rel) {
   return { file: rel, absolutePath: primaryPath, sourceKind: 'missing' };
 }
 
-async function collectManagedFileDiffs({ cwd, managedFiles, srcAgents, shouldWriteRootAgents, agentsUpdatePlan = null }) {
+async function collectManagedFileDiffs({
+  cwd,
+  managedFiles,
+  projectionEntries = [],
+  srcAgents,
+  shouldWriteRootAgents,
+  agentsUpdatePlan = null
+}) {
   const results = [];
-  const srcBase = path.dirname(path.join(__dirname, '..', 'templates', '.agents'));
+  const projectionMap = new Map(projectionEntries.map((item) => [item.outputPath, item]));
 
   for (const rel of managedFiles) {
     if (rel === 'AGENTS.md' && !shouldWriteRootAgents) {
       continue;
     }
 
-    const srcPath = rel === 'AGENTS.md' ? srcAgents : path.join(srcBase, rel);
+    const entry = projectionMap.get(rel);
+    const srcPath = rel === 'AGENTS.md'
+      ? srcAgents
+      : path.join(path.join(__dirname, '..', 'templates'), entry.source);
     const existing = rel === 'AGENTS.md'
       ? { file: rel, absolutePath: path.join(cwd, rel), sourceKind: 'current' }
       : await resolveExistingManagedPath(cwd, rel);

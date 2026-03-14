@@ -2,10 +2,11 @@
 
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const { copyDir } = require('./copy');
-const { MANAGED_FILES, USER_PROTECTED_FILES } = require('./manifest');
+const { buildManagedFiles, buildProjectionEntries, buildUserProtectedFiles } = require('./manifest');
+const { getTarget, listTargets } = require('./adapters');
 const { resolveAgentsInstall, printLegacyMigrationWarning, pathExists } = require('./agents');
 const { ensureChangelogDir } = require('./changelog');
+const { ROOT_AGENTS_FILE, resolveCanonicalSource } = require('./resources');
 const { success, warn, info, fileLine, skippedLine, blank, logo } = require('./output');
 
 /**
@@ -13,18 +14,24 @@ const { success, warn, info, fileLine, skippedLine, blank, logo } = require('./o
  */
 async function init() {
   const cwd = process.cwd();
-  const srcRoot = path.join(__dirname, '..', 'templates', '.agents');
-  const destRoot = path.join(cwd, '.agents');
-  const srcAgents = path.join(__dirname, '..', 'templates', 'AGENTS.md');
+  const target = await selectTarget();
+  const managedFiles = buildManagedFiles(target.id);
+  const protectedFiles = buildUserProtectedFiles(target.id);
+  const projectionEntries = buildProjectionEntries(target.id);
+  const srcAgents = ROOT_AGENTS_FILE;
 
-  const agentsDecision = await resolveAgentsInstall({
-    cwd,
-    askMigrate,
-    forceYes: !!global.__ANWS_FORCE_YES
-  });
+  const agentsDecision = target.id === 'antigravity'
+    ? await resolveAgentsInstall({
+      cwd,
+      askMigrate,
+      forceYes: !!global.__ANWS_FORCE_YES
+    })
+    : {
+      shouldWriteRootAgents: false,
+      shouldWarnMigration: false
+    };
 
-  // ── 冲突检测（T1.2.3 在此处插入冲突分支）──────────────────────────────────
-  const conflicting = await findConflicts(cwd);
+  const conflicting = await findConflicts(cwd, managedFiles);
   if (conflicting.length > 0) {
     const confirmed = await askOverwrite(conflicting.length);
     if (!confirmed) {
@@ -32,8 +39,10 @@ async function init() {
       info('Aborted. No files were changed.');
       process.exit(0);
     }
-    // 仅覆盖托管文件（用户自有文件不受影响）
-    const { written: updated, skipped } = await overwriteManaged(srcRoot, cwd, {
+    const { written: updated, skipped } = await overwriteManaged(cwd, {
+      managedFiles,
+      protectedFiles,
+      projectionEntries,
       srcAgents,
       shouldWriteRootAgents: agentsDecision.shouldWriteRootAgents
     });
@@ -48,21 +57,17 @@ async function init() {
 
   logo();
   info('Initializing Anws...');
+  info(`Target IDE: ${target.label}`);
   blank();
 
-  const writtenFiles = await copyDir(srcRoot, destRoot);
-  const written = Array.isArray(writtenFiles) ? writtenFiles : [];
+  const { written, skipped } = await overwriteManaged(cwd, {
+    managedFiles,
+    protectedFiles,
+    projectionEntries,
+    srcAgents,
+    shouldWriteRootAgents: agentsDecision.shouldWriteRootAgents
+  });
   await ensureChangelogDir(cwd);
-
-  if (agentsDecision.shouldWriteRootAgents) {
-    const destAgents = path.join(cwd, 'AGENTS.md');
-    try {
-      await fs.copyFile(srcAgents, destAgents);
-      written.push(destAgents);
-    } catch (e) {
-      // 忽略
-    }
-  }
 
   if (agentsDecision.shouldWarnMigration) {
     printLegacyMigrationWarning();
@@ -74,9 +79,17 @@ async function init() {
     fileLine(rel);
   }
 
+  if (skipped.length > 0) {
+    blank();
+    info('Skipped (project-specific, preserved):');
+    for (const rel of skipped) {
+      skippedLine(rel.replace(/\\/g, '/'));
+    }
+  }
+
   blank();
-  success(`Done! ${written.length} files written to .agents/`);
-  printNextSteps();
+  success(`Done! ${written.length} files written for ${target.label}.`);
+  printNextSteps(target);
 }
 
 // ─── 辅助函数 ──────────────────────────────────────────────────────────────────
@@ -85,9 +98,9 @@ async function init() {
  * 找出 cwd 中已存在的托管文件列表。
  * @returns {Promise<string[]>} 已存在的托管文件相对路径数组
  */
-async function findConflicts(cwd) {
+async function findConflicts(cwd, managedFiles) {
   const conflicts = [];
-  for (const rel of MANAGED_FILES) {
+  for (const rel of managedFiles) {
     const abs = path.join(cwd, rel);
     const exists = await pathExists(abs);
     if (exists) conflicts.push(rel);
@@ -145,25 +158,26 @@ async function askMigrate() {
 }
 
 /**
- * 仅覆盖 MANAGED_FILES 清单内的文件，用户自有文件不受影响。
- * USER_PROTECTED_FILES 中的文件即便冲突也跳过，保留用户修改。
+ * 仅覆盖托管清单内的文件，用户自有文件不受影响。
  * @returns {{ written: string[], skipped: string[] }}
  */
-async function overwriteManaged(srcRoot, cwd, options = {}) {
-  const srcBase = path.dirname(srcRoot); // templates/
+async function overwriteManaged(cwd, options = {}) {
   const written = [];
   const skipped = [];
+  const managedFiles = options.managedFiles || [];
+  const protectedFiles = options.protectedFiles || [];
+  const projectionEntries = options.projectionEntries || [];
   const shouldWriteRootAgents = options.shouldWriteRootAgents !== false;
-  const srcAgents = options.srcAgents || path.join(srcBase, 'AGENTS.md');
+  const srcAgents = options.srcAgents || ROOT_AGENTS_FILE;
+  const projectionMap = new Map(projectionEntries.map((item) => [item.outputPath, item]));
 
-  for (const rel of MANAGED_FILES) {
+  for (const rel of managedFiles) {
     if (rel === 'AGENTS.md' && !shouldWriteRootAgents) {
       skipped.push(rel);
       continue;
     }
 
-    // 受保护文件：文件已存在时跳过，交给用户自行维护
-    if (USER_PROTECTED_FILES.includes(rel)) {
+    if (protectedFiles.includes(rel)) {
       const destPath = path.join(cwd, rel);
       const exists = await pathExists(destPath);
       if (exists) {
@@ -172,7 +186,8 @@ async function overwriteManaged(srcRoot, cwd, options = {}) {
       }
     }
 
-    const srcPath = rel === 'AGENTS.md' ? srcAgents : path.join(srcBase, rel);
+    const entry = projectionMap.get(rel);
+    const srcPath = rel === 'AGENTS.md' ? srcAgents : resolveCanonicalSource(entry.source);
     const destPath = path.join(cwd, rel);
 
     await fs.mkdir(path.dirname(destPath), { recursive: true });
@@ -214,10 +229,53 @@ function printSummary(files, skipped = [], action) {
   }
 }
 
-function printNextSteps() {
+async function selectTarget() {
+  if (global.__ANWS_TARGET_ID) {
+    return getTarget(global.__ANWS_TARGET_ID);
+  }
+
+  if (!process.stdin.isTTY) {
+    return getTarget('antigravity');
+  }
+
+  const targets = listTargets();
+  const readline = require('node:readline');
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
+  blank();
+  info('Choose your target AI IDE:');
+  targets.forEach((target, index) => {
+    info(`  ${index + 1}. ${target.label}`);
+  });
+
+  const selectedIndex = await new Promise((resolve) => {
+    rl.question('\nSelect target [1-6] (default 2): ', (answer) => {
+      rl.close();
+      const normalized = answer.trim();
+      if (!normalized) {
+        resolve(1);
+        return;
+      }
+      const parsed = Number.parseInt(normalized, 10);
+      if (Number.isNaN(parsed) || parsed < 1 || parsed > targets.length) {
+        resolve(1);
+        return;
+      }
+      resolve(parsed - 1);
+    });
+  });
+
+  return targets[selectedIndex];
+}
+
+function printNextSteps(target) {
   blank();
   info('Next steps:');
-  info('  1. Read AGENTS.md to understand the system');
+  if (target.rootAgentFile) {
+    info('  1. Read AGENTS.md to understand the system');
+  } else {
+    info(`  1. Review files written under the ${target.label} target directories`);
+  }
   info('  2. Run /quickstart in your AI assistant to analyze and start the workflow');
 }
 
