@@ -8,6 +8,10 @@ const TARGETS = {
     id: 'windsurf',
     label: 'Windsurf',
     rootAgentFile: false,
+    projectionTypes: {
+      workflow: ['workflows'],
+      skill: ['skills']
+    },
     projections: {
       workflows: '.windsurf/workflows',
       skills: '.windsurf/skills'
@@ -18,6 +22,10 @@ const TARGETS = {
     id: 'antigravity',
     label: 'Antigravity',
     rootAgentFile: true,
+    projectionTypes: {
+      workflow: ['workflows'],
+      skill: ['skills']
+    },
     projections: {
       workflows: '.agents/workflows',
       skills: '.agents/skills'
@@ -28,6 +36,10 @@ const TARGETS = {
     id: 'cursor',
     label: 'Cursor',
     rootAgentFile: false,
+    projectionTypes: {
+      workflow: ['commands'],
+      skill: ['commands']
+    },
     projections: {
       commands: '.cursor/commands'
     },
@@ -37,6 +49,10 @@ const TARGETS = {
     id: 'claude',
     label: 'Claude',
     rootAgentFile: false,
+    projectionTypes: {
+      workflow: ['commands'],
+      skill: ['commands']
+    },
     projections: {
       commands: '.claude/commands'
     },
@@ -46,6 +62,10 @@ const TARGETS = {
     id: 'copilot',
     label: 'GitHub Copilot',
     rootAgentFile: false,
+    projectionTypes: {
+      workflow: ['agents', 'prompts'],
+      skill: ['prompts']
+    },
     projections: {
       agents: '.github/agents',
       prompts: '.github/prompts'
@@ -56,6 +76,10 @@ const TARGETS = {
     id: 'codex',
     label: 'Codex',
     rootAgentFile: false,
+    projectionTypes: {
+      workflow: ['prompts'],
+      skill: ['skills']
+    },
     projections: {
       prompts: '.codex/prompts',
       skills: '.codex/skills'
@@ -75,7 +99,7 @@ function getTarget(targetId) {
 
   const target = TARGETS[targetId];
   if (!target) {
-    throw new Error(`Unsupported target: ${targetId}`);
+    throw new Error(`Unsupported target: ${targetId}. Supported targets: ${listTargets().map((item) => item.id).join(', ')}`);
   }
 
   return target;

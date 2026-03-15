@@ -6,6 +6,8 @@ const assert = require('node:assert/strict');
 const {
   MANAGED_FILES,
   USER_PROTECTED_FILES,
+  buildManagedManifest,
+  buildProjectionEntries,
   buildManagedFiles,
   findByType
 } = require('../lib/manifest');
@@ -34,6 +36,28 @@ test('copilot managed files include prompts and agents', () => {
 
   assert(files.includes('.github/prompts/genesis.md'));
   assert(files.includes('.github/agents/genesis.md'));
+});
+
+test('buildProjectionEntries uses target projection metadata for cursor commands', () => {
+  const entries = buildProjectionEntries('cursor');
+
+  assert(entries.some((item) => item.outputPath === '.cursor/commands/genesis.md'));
+  assert(entries.some((item) => item.outputPath === '.cursor/commands/spec-writer.md'));
+});
+
+test('buildManagedManifest groups ownership by target and preserves antigravity root agent file', () => {
+  const manifest = buildManagedManifest(['antigravity', 'codex']);
+
+  assert(manifest.some((item) => item.targetId === 'antigravity' && item.outputPath === 'AGENTS.md'));
+  assert(manifest.some((item) => item.targetId === 'codex' && item.outputPath === '.codex/prompts/genesis.md'));
+  assert(manifest.every((item) => typeof item.ownershipKey === 'string' && item.ownershipKey.length > 0));
+});
+
+test('buildManagedManifest rejects unsupported targets with supported list', () => {
+  assert.throws(
+    () => buildManagedManifest('unknown'),
+    /Unsupported target: unknown\. Supported targets:/
+  );
 });
 
 test('user protected files are target-aware', () => {

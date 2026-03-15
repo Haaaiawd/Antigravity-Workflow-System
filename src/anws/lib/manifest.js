@@ -48,33 +48,6 @@ const RESOURCE_REGISTRY = [
   { id: 'tech-evaluator-adr-template', type: 'skill', source: '.agents/skills/tech-evaluator/references/ADR_TEMPLATE.md', fileName: 'tech-evaluator/references/ADR_TEMPLATE.md' }
 ];
 
-const TARGET_TYPE_TO_PROJECTION = {
-  antigravity: {
-    workflow: 'workflows',
-    skill: 'skills'
-  },
-  windsurf: {
-    workflow: 'workflows',
-    skill: 'skills'
-  },
-  cursor: {
-    workflow: 'commands',
-    skill: 'commands'
-  },
-  claude: {
-    workflow: 'commands',
-    skill: 'commands'
-  },
-  copilot: {
-    workflow: ['agents', 'prompts'],
-    skill: ['prompts']
-  },
-  codex: {
-    workflow: 'prompts',
-    skill: 'skills'
-  }
-};
-
 function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
@@ -88,7 +61,7 @@ function toProjectionFileName(resource, projectionType) {
 
 function buildProjectionEntries(targetId) {
   const target = getTarget(targetId);
-  const typeMap = TARGET_TYPE_TO_PROJECTION[target.id];
+  const typeMap = target.projectionTypes;
 
   return RESOURCE_REGISTRY.flatMap((resource) => {
     const projectionTypes = typeMap[resource.type];
@@ -105,16 +78,40 @@ function buildProjectionEntries(targetId) {
   });
 }
 
+function buildManagedManifest(targetIds = ['antigravity']) {
+  return toArray(targetIds).flatMap((targetId) => {
+    const target = getTarget(targetId);
+    const entries = buildProjectionEntries(target.id).map((entry) => ({
+      ...entry,
+      targetId: target.id,
+      targetLabel: target.label,
+      ownershipKey: `${target.id}:${entry.outputPath}`
+    }));
+
+    if (!target.rootAgentFile) {
+      return entries;
+    }
+
+    return [
+      {
+        id: 'root-agents',
+        type: 'root',
+        source: 'AGENTS.md',
+        fileName: 'AGENTS.md',
+        projectionType: 'rootAgentFile',
+        outputRoot: '.',
+        outputPath: 'AGENTS.md',
+        targetId: target.id,
+        targetLabel: target.label,
+        ownershipKey: `${target.id}:AGENTS.md`
+      },
+      ...entries
+    ];
+  });
+}
+
 function buildManagedFiles(targetId = 'antigravity') {
-  const target = getTarget(targetId);
-  const entries = buildProjectionEntries(target.id);
-  const files = entries.map((item) => item.outputPath);
-
-  if (target.rootAgentFile) {
-    files.unshift('AGENTS.md');
-  }
-
-  return files;
+  return buildManagedManifest(targetId).map((item) => item.outputPath);
 }
 
 function buildUserProtectedFiles(targetId = 'antigravity') {
@@ -138,6 +135,7 @@ const USER_PROTECTED_FILES = buildUserProtectedFiles('antigravity');
 
 module.exports = {
   RESOURCE_REGISTRY,
+  buildManagedManifest,
   buildManagedFiles,
   buildProjectionEntries,
   buildUserProtectedFiles,
