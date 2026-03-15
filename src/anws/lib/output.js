@@ -29,6 +29,7 @@ const c = {
   brand:  useColor ? '\x1b[38;2;127;181;182m' : '',
   ink:    useColor ? '\x1b[38;2;242;244;246m' : '',
   muted:  useColor ? '\x1b[38;2;159;166;174m' : '',
+  deep:   useColor ? '\x1b[38;2;31;34;38m' : '',
   green:  useColor ? '\x1b[32m' : '',
   yellow: useColor ? '\x1b[33m' : '',
   red:    useColor ? '\x1b[31m' : '',
@@ -46,6 +47,12 @@ function mixRgb(start, end, ratio) {
 
 function colorRgb(rgb) {
   return useColor ? `\x1b[38;2;${rgb[0]};${rgb[1]};${rgb[2]}m` : '';
+}
+
+function colorize(text, tone) {
+  if (!useColor || !tone) return text;
+  const color = Array.isArray(tone) ? colorRgb(tone) : tone;
+  return `${color}${text}${c.reset}`;
 }
 
 function visibleLength(text) {
@@ -132,6 +139,49 @@ function stylizeTagline(text) {
   return output + c.reset;
 }
 
+function padText(text, width) {
+  const padding = Math.max(0, width - visibleLength(text));
+  return `${text}${' '.repeat(padding)}`;
+}
+
+function drawBox(options = {}) {
+  const title = options.title || '';
+  const lines = Array.isArray(options.lines) ? options.lines : [];
+  const accent = options.accent || PALETTE.brand;
+  const borderTone = options.borderTone || PALETTE.muted;
+  const textTone = options.textTone || c.ink;
+  const minWidth = Number.isInteger(options.minWidth) ? options.minWidth : 20;
+  const innerWidth = Math.max(minWidth, visibleLength(title), ...lines.map((line) => visibleLength(line)));
+  const titleText = title ? ` ${title} ` : '';
+  const top = `╭${titleText}${'─'.repeat(Math.max(0, innerWidth + 2 - visibleLength(titleText)))}╮`;
+  const bottom = `╰${'─'.repeat(innerWidth + 2)}╯`;
+  const body = lines.map((line) => {
+    // 支持分隔线：以 '---' 开头的行渲染为水平分隔线
+    if (line.startsWith('---')) {
+      const sepInner = '─'.repeat(innerWidth);
+      return `${colorize('│', borderTone)}${colorize(sepInner, borderTone)}${colorize('│', borderTone)}`;
+    }
+    const padded = padText(line, innerWidth);
+    return `${colorize('│', borderTone)} ${colorize(padded, textTone)} ${colorize('│', borderTone)}`;
+  });
+
+  return [
+    colorize(top, accent),
+    ...body,
+    colorize(bottom, borderTone)
+  ].join('\n');
+}
+
+function section(title, lines = [], options = {}) {
+  console.log(drawBox({
+    title,
+    lines,
+    accent: options.accent || PALETTE.brand,
+    borderTone: options.borderTone || PALETTE.muted,
+    textTone: options.textTone || c.ink,
+    minWidth: options.minWidth
+  }));
+}
 // ─── 公共输出函数 ─────────────────────────────────────────────────────────────
 
 /** 成功消息（绿色 ✔）*/
@@ -193,4 +243,9 @@ function logo() {
   console.log(tagline);
 }
 
-module.exports = { success, warn, error, info, fileLine, skippedLine, blank, logo, c };
+module.exports = { success, warn, error, info, fileLine, skippedLine, blank, logo, c, PALETTE, colorRgb, colorize, visibleLength, drawBox, section };
+
+
+
+
+

@@ -28,8 +28,8 @@
 | `.anws/` | **统一架构根目录**。包含版本化架构状态与升级记录。 | **只读**(旧版) / **写一次**(新版) / `changelog` 由 CLI 维护。 |
 | `.anws/v{N}/` | **当前真理**。最新的架构定义。 | 永远寻找最大的 `v{N}`。 |
 | `.anws/changelog/` | **升级记录**。`anws update` 生成的变更记录。 | 由 CLI 自动维护，请勿删除。 |
-| `.agents/workflows/` | **工作流**。`/genesis`, `/blueprint` 等。 | 通过 `view_file` 阅读。 |
-| `.agents/skills/` | **技能库**。原子能力。 | 通过 `view_file` 调用。 |
+| `target-specific workflow projection` | **工作流**。`/genesis`, `/blueprint` 等。 | 读取当前 target 对应的原生投影文件。 |
+| `target-specific skill projection` | **技能库**。原子能力。 | 调用当前 target 对应的原生投影文件。 |
 | `.nexus-map/` | **知识库**。代码库结构映射。 | 由 nexus-mapper 生成。 |
 
 ## 🛠️ 工作流注册表
@@ -95,7 +95,7 @@ src/
     ├── bin/cli.js
     ├── lib/ (init, update, diff, changelog, copy, manifest, ...)
     └── templates/
-        ├── .agents/   (工作流模板)
+        ├── .agents/   (内部 canonical 模板源，经 projection 投放到各 target)
         └── AGENTS.md
 
 .anws/

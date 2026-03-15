@@ -139,14 +139,14 @@ description: "在执行 anws update 后，读取 .anws/changelog/vX.Y.Z.md，判
 
 ### Case A: Minor → `/change`
 
-1. 接下来**必须读取** `.agents/workflows/change.md`
+1. 接下来**必须读取**当前 target 对应的 `/change` 原生投影文件
 2. 将 Step 2 的影响分析结果带入 `/change`
 3. 后续所有修改动作必须遵守 `/change` 的权限边界、人类检查点和 CHANGELOG 记录规则
 4. 若在 `/change` 评估中发现超出其权限边界，立即终止并改走 `/genesis`
 
 ### Case B: Major → `/genesis`
 
-1. 接下来**必须读取** `.agents/workflows/genesis.md`
+1. 接下来**必须读取**当前 target 对应的 `/genesis` 原生投影文件
 2. 将 Step 2 的影响分析结果作为新版本演进输入带入 `/genesis`
 3. 后续版本复制、文档演进、Manifest/ADR 变更必须遵守 `/genesis` 的版本管理逻辑
 

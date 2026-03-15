@@ -42,7 +42,7 @@ test('collectManagedFileDiffs consumes grouped projection plan entries', async (
 test('collectManagedFileDiffs still supports explicit projectionEntries input', async () => {
   await withTempDir(async (tempDir) => {
     const plan = buildProjectionPlan(['codex']);
-    const entry = plan[0].projectionEntries.find((item) => item.outputPath === '.codex/prompts/genesis.md');
+    const entry = plan[0].projectionEntries.find((item) => item.outputPath === '.codex/skills/anws-system/references/genesis.md');
     const srcPath = resolveCanonicalSource(entry.source);
 
     await fs.mkdir(path.dirname(path.join(tempDir, entry.outputPath)), { recursive: true });

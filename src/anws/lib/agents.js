@@ -68,8 +68,11 @@ function hasAutoBlock(content) {
 }
 
 function isRecognizedLegacyAgents(content) {
-  return content.includes('# AGENTS.md - AI 协作协议')
-    && LEGACY_HEADINGS.every((heading) => content.includes(heading));
+  // 检查主标题
+  if (!content.includes('# AGENTS.md - AI 协作协议')) return false;
+  
+  // 检查三个核心 section 标题（允许标题后包含额外文字）
+  return LEGACY_HEADINGS.every((heading) => content.includes(heading));
 }
 
 function extractSection(content, heading) {

@@ -58,23 +58,23 @@ test('dedupeTargets keeps the latest record per target id', () => {
   const targets = dedupeTargets([
     {
       targetId: 'codex',
-      targetLabel: 'Codex',
+      targetLabel: 'Codex (Preview)',
       installedVersion: '1.2.0',
-      managedFiles: ['.codex/prompts/genesis.md'],
-      ownership: ['codex:.codex/prompts/genesis.md']
+      managedFiles: ['.codex/skills/anws-system/SKILL.md'],
+      ownership: ['codex:.codex/skills/anws-system/SKILL.md']
     },
     {
       targetId: 'codex',
-      targetLabel: 'Codex',
+      targetLabel: 'Codex (Preview)',
       installedVersion: '1.3.0',
-      managedFiles: ['.codex/prompts/forge.md'],
-      ownership: ['codex:.codex/prompts/forge.md']
+      managedFiles: ['.codex/skills/anws-system/references/forge.md'],
+      ownership: ['codex:.codex/skills/anws-system/references/forge.md']
     }
   ]);
 
   assert.equal(targets.length, 1);
   assert.equal(targets[0].installedVersion, '1.3.0');
-  assert.deepEqual(targets[0].managedFiles, ['.codex/prompts/forge.md']);
+  assert.deepEqual(targets[0].managedFiles, ['.codex/skills/anws-system/references/forge.md']);
 });
 
 test('writeInstallLock persists install-lock under .anws/install-lock.json', async () => {
@@ -200,6 +200,7 @@ test('detectLockDrift reports missing and untracked targets', () => {
 test('detectInstallState falls back to scanned targets when lock is missing', async () => {
   await withTempDir(async (tempDir) => {
     await fs.mkdir(path.join(tempDir, '.windsurf', 'workflows'), { recursive: true });
+    await fs.writeFile(path.join(tempDir, '.windsurf', 'workflows', 'genesis.md'), '# windsurf genesis', 'utf8');
 
     const result = await detectInstallState(tempDir);
 
@@ -226,7 +227,8 @@ test('detectInstallState prefers lock targets while still reporting scan drift',
     });
 
     await writeInstallLock(tempDir, lock);
-    await fs.mkdir(path.join(tempDir, '.codex', 'prompts'), { recursive: true });
+    await fs.mkdir(path.join(tempDir, '.codex', 'skills', 'anws-system'), { recursive: true });
+    await fs.writeFile(path.join(tempDir, '.codex', 'skills', 'anws-system', 'SKILL.md'), '# codex skill', 'utf8');
 
     const result = await detectInstallState(tempDir);
 
@@ -235,5 +237,44 @@ test('detectInstallState prefers lock targets while still reporting scan drift',
     assert.equal(result.drift.hasDrift, true);
     assert.deepEqual(result.drift.missingOnDisk, ['cursor']);
     assert.deepEqual(result.drift.untrackedOnDisk, ['codex']);
+  });
+});
+
+test('detectInstallState falls back to antigravity from legacy sentinel when lock is missing', async () => {
+  await withTempDir(async (tempDir) => {
+    await fs.mkdir(path.join(tempDir, '.agent', 'workflows'), { recursive: true });
+    await fs.writeFile(path.join(tempDir, '.agent', 'workflows', 'genesis.md'), '# legacy genesis', 'utf8');
+
+    const result = await detectInstallState(tempDir);
+
+    assert.equal(result.needsFallback, true);
+    assert.deepEqual(result.selectedTargets, ['antigravity']);
+    assert.equal(result.scannedTargets[0].id, 'antigravity');
+  });
+});
+
+test('detectInstallState falls back to copilot from prompt sentinel when lock is missing', async () => {
+  await withTempDir(async (tempDir) => {
+    await fs.mkdir(path.join(tempDir, '.github', 'prompts'), { recursive: true });
+    await fs.writeFile(path.join(tempDir, '.github', 'prompts', 'genesis.prompt.md'), '# copilot', 'utf8');
+
+    const result = await detectInstallState(tempDir);
+
+    assert.equal(result.needsFallback, true);
+    assert.deepEqual(result.selectedTargets, ['copilot']);
+    assert.equal(result.scannedTargets[0].id, 'copilot');
+  });
+});
+
+test('detectInstallState falls back to cursor from command sentinel when lock is missing', async () => {
+  await withTempDir(async (tempDir) => {
+    await fs.mkdir(path.join(tempDir, '.cursor', 'commands'), { recursive: true });
+    await fs.writeFile(path.join(tempDir, '.cursor', 'commands', 'genesis.md'), '# cursor', 'utf8');
+
+    const result = await detectInstallState(tempDir);
+
+    assert.equal(result.needsFallback, true);
+    assert.deepEqual(result.selectedTargets, ['cursor']);
+    assert.equal(result.scannedTargets[0].id, 'cursor');
   });
 });

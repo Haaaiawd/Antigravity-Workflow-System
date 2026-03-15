@@ -60,7 +60,7 @@ test('anws update --check detects multiple targets from install-lock and scan', 
     assert.equal(checkResult.status, 0, checkResult.stderr || checkResult.stdout);
     assert.match(checkResult.stdout, /Matched targets:/);
     assert.match(checkResult.stdout, /Windsurf \(windsurf\)/);
-    assert.match(checkResult.stdout, /Codex \(codex\)/);
+    assert.match(checkResult.stdout, /Codex \(Preview\) \(codex\)/);
   });
 });
 
@@ -78,22 +78,45 @@ test('anws update falls back to directory scan when install-lock is missing', as
   });
 });
 
+test('anws update migrates legacy .agent into antigravity target layout', async () => {
+  await withTempDir(async (tempDir) => {
+    await fs.mkdir(path.join(tempDir, '.agent', 'rules'), { recursive: true });
+    await fs.writeFile(path.join(tempDir, '.agent', 'rules', 'agents.md'), '# AGENTS.md - AI 协作协议\n\nlegacy', 'utf8');
+
+    const updateResult = runCliInDir(tempDir, ['update', '--yes']);
+
+    assert.equal(updateResult.status, 0, updateResult.stderr || updateResult.stdout);
+    assert.match(updateResult.stdout, /Legacy migration/);
+    assert.match(updateResult.stdout, /Update completed/);
+    assert.match(updateResult.stdout, /Done! \d+ file\(s\) updated/);
+
+    const workflowExists = await fs.access(path.join(tempDir, '.agents', 'workflows', 'genesis.md')).then(() => true).catch(() => false);
+    const skillExists = await fs.access(path.join(tempDir, '.agents', 'skills', 'spec-writer', 'SKILL.md')).then(() => true).catch(() => false);
+    const rootAgentsExists = await fs.access(path.join(tempDir, 'AGENTS.md')).then(() => true).catch(() => false);
+
+    assert.equal(workflowExists, true);
+    assert.equal(skillExists, true);
+    assert.equal(rootAgentsExists, true);
+  });
+});
+
 test('anws update keeps successful targets in lock and reports failed targets separately', async () => {
   await withTempDir(async (tempDir) => {
     const initResult = runCliInDir(tempDir, ['init', '--target', 'windsurf,codex']);
     assert.equal(initResult.status, 0, initResult.stderr || initResult.stdout);
 
     await fs.rm(path.join(tempDir, '.anws', 'changelog'), { recursive: true, force: true });
-    await fs.rm(path.join(tempDir, '.codex', 'prompts'), { recursive: true, force: true });
+    await fs.rm(path.join(tempDir, '.codex', 'skills'), { recursive: true, force: true });
     await fs.mkdir(path.join(tempDir, '.codex'), { recursive: true });
-    await fs.writeFile(path.join(tempDir, '.codex', 'prompts'), 'blocked parent path', 'utf8');
+    await fs.writeFile(path.join(tempDir, '.codex', 'skills'), 'blocked parent path', 'utf8');
 
     const updateResult = runCliInDir(tempDir, ['update', '--yes']);
 
     assert.equal(updateResult.status, 0, updateResult.stderr || updateResult.stdout);
-    assert.match(updateResult.stdout, /Update summary by target:/);
+    assert.match(updateResult.stdout, /Update summary by target/);
+    assert.match(updateResult.stdout, /Update completed/);
     assert.match(updateResult.stdout, /Windsurf \(windsurf\)/);
-    assert.match(updateResult.stdout, /Codex \(codex\)/);
+    assert.match(updateResult.stdout, /Codex \(Preview\) \(codex\)/);
 
     const lock = JSON.parse(await fs.readFile(path.join(tempDir, '.anws', 'install-lock.json'), 'utf8'));
     assert(lock.lastUpdateSummary.successfulTargets.includes('windsurf'));
@@ -104,6 +127,9 @@ test('anws update keeps successful targets in lock and reports failed targets se
     const changelog = await fs.readFile(path.join(tempDir, '.anws', 'changelog', changelogFile), 'utf8');
     assert.match(changelog, /成功 Targets/);
     assert.match(changelog, /失败 Targets/);
-    assert.match(changelog, /Codex \(codex\)/);
+    assert.match(changelog, /Codex \(Preview\) \(codex\)/);
   });
 });
+
+
+

@@ -8,10 +8,12 @@ const { ensureChangelogDir } = require('./changelog');
 const { ROOT_AGENTS_FILE, resolveCanonicalSource } = require('./resources');
 const { writeTargetFiles } = require('./copy');
 const { createInstallLock, dedupeTargets, detectInstallState, summarizeTargetState, writeInstallLock } = require('./install-state');
-const { success, warn, info, fileLine, skippedLine, blank, logo } = require('./output');
+const { selectMultiple, confirm } = require('./prompt');
+const { success, warn, info, fileLine, skippedLine, blank, logo, section } = require('./output');
 
 async function init() {
   const cwd = process.cwd();
+  logo();
   const targets = await selectTargets();
   const targetIds = Array.from(new Set(targets.map((item) => item.id)));
   const targetPlans = buildProjectionPlan(targetIds);
@@ -19,7 +21,6 @@ async function init() {
   const srcAgents = ROOT_AGENTS_FILE;
   const cliVersion = require(path.join(__dirname, '..', 'package.json')).version;
 
-  logo();
   info('Initializing Anws...');
   info(`Target IDEs: ${targets.map((item) => item.label).join(', ')}`);
   if (installState.needsFallback) {
@@ -139,23 +140,16 @@ async function findConflicts(cwd, managedFiles) {
 async function askOverwrite(count, label) {
   if (global.__ANWS_FORCE_YES) return true;
 
-  // 非 TTY 环境：默认不覆盖，防止 CI 挂起
   if (!process.stdin.isTTY) {
     warn(`${count} managed file(s) already exist. Non-TTY: skipping overwrite.`);
     return false;
   }
 
-  const readline = require('node:readline');
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
-  return new Promise((resolve) => {
-    rl.question(
-      `\n\u26a0  ${count} managed file(s) already exist for ${label}. Overwrite? [y/N] `,
-      (answer) => {
-        rl.close();
-        resolve(answer.trim().toLowerCase() === 'y');
-      }
-    );
+  return confirm({
+    message: `Overwrite ${count} managed file(s) for ${label}?`,
+    confirmLabel: 'Overwrite',
+    cancelLabel: 'Skip',
+    defaultValue: false
   });
 }
 
@@ -166,17 +160,11 @@ async function askMigrate() {
     return false;
   }
 
-  const readline = require('node:readline');
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
-  return new Promise((resolve) => {
-    rl.question(
-      '\n\u26a0 Legacy .agent/ directory detected. Do you want to migrate to .agents/? [y/N] ',
-      (answer) => {
-        rl.close();
-        resolve(answer.trim().toLowerCase() === 'y');
-      }
-    );
+  return confirm({
+    message: 'Legacy .agent/ directory detected. Migrate to .agents/?',
+    confirmLabel: 'Migrate',
+    cancelLabel: 'Keep legacy',
+    defaultValue: false
   });
 }
 
@@ -218,54 +206,34 @@ async function selectTargets() {
   }
 
   const targets = listTargets();
-  const readline = require('node:readline');
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-  blank();
-  info('Choose your target AI IDEs:');
-  targets.forEach((target, index) => {
-    info(`  ${index + 1}. ${target.label}`);
-  });
-
-  const selectedIndexes = await new Promise((resolve) => {
-    rl.question('\nSelect targets [1-6, comma separated] (default 2): ', (answer) => {
-      rl.close();
-      const normalized = answer.trim();
-      if (!normalized) {
-        resolve([1]);
-        return;
-      }
-      const parsedValues = normalized
-        .split(',')
-        .map((item) => Number.parseInt(item.trim(), 10))
-        .filter((item) => !Number.isNaN(item) && item >= 1 && item <= targets.length);
-      resolve(parsedValues.length > 0 ? Array.from(new Set(parsedValues.map((item) => item - 1))) : [1]);
-    });
-  });
-
-  return selectedIndexes.map((index) => targets[index]);
+  return selectMultiple({
+    message: 'Choose your target AI IDEs:',
+    options: targets.map((target) => ({ label: target.label, value: target.id })),
+    initialSelectedIndexes: [1]
+  }).then((selectedOptions) => selectedOptions.map((option) => getTarget(option.value)));
 }
 
 function printNextSteps(targets) {
   blank();
-  info('Next steps:');
-  if (targets.some((target) => target.rootAgentFile)) {
-    info('  1. Read AGENTS.md to understand the system');
-  } else {
-    info('  1. Review files written under the selected target directories');
-  }
-  info('  2. Run /quickstart in your AI assistant to analyze and start the workflow');
+  section('Next steps', targets.some((target) => target.rootAgentFile)
+    ? [
+      '1. Read AGENTS.md to understand the system',
+      '2. Run /quickstart in your AI assistant to analyze and start the workflow'
+    ]
+    : [
+      '1. Review files written under the selected target directories',
+      '2. Run /quickstart in your AI assistant to analyze and start the workflow'
+    ]);
 }
 
 function printTargetSummary(successfulTargets, failedTargets) {
   blank();
-  info('Target summary:');
-  for (const target of successfulTargets) {
-    info(`  ✔ ${target.targetLabel} (${target.targetId})`);
-  }
-  for (const target of failedTargets) {
-    info(`  ✖ ${target.targetLabel} (${target.targetId}) — ${target.reason}`);
-  }
+  section('Target summary', [
+    ...successfulTargets.map((target) => `✔ ${target.targetLabel} (${target.targetId})`),
+    ...failedTargets.map((target) => `✖ ${target.targetLabel} (${target.targetId}) — ${target.reason}`)
+  ]);
 }
 
 module.exports = init;
+

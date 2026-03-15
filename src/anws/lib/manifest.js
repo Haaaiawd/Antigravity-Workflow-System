@@ -52,8 +52,19 @@ function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
 
-function toProjectionFileName(resource, projectionType) {
-  if (projectionType === 'commands' || projectionType === 'prompts' || projectionType === 'agents') {
+function toProjectionFileName(resource, projectionType, targetId) {
+  if (targetId === 'codex' && projectionType === 'skills' && resource.type === 'workflow') {
+    return resource.id === 'quickstart'
+      ? 'anws-system/SKILL.md'
+      : `anws-system/references/${resource.id}.md`;
+  }
+  if (projectionType === 'commands') {
+    return `${resource.id}.md`;
+  }
+  if (projectionType === 'prompts') {
+    return targetId === 'copilot' ? `${resource.id}.prompt.md` : `${resource.id}.md`;
+  }
+  if (projectionType === 'agents') {
     return `${resource.id}.md`;
   }
   return resource.fileName;
@@ -69,12 +80,15 @@ function buildProjectionEntries(targetId) {
       return [];
     }
 
-    return toArray(projectionTypes).map((projectionType) => ({
-      ...resource,
-      projectionType,
-      outputRoot: target.projections[projectionType],
-      outputPath: `${target.projections[projectionType]}/${toProjectionFileName(resource, projectionType)}`
-    }));
+    return toArray(projectionTypes).map((projectionType) => {
+      const outputFileName = toProjectionFileName(resource, projectionType, target.id);
+      return {
+        ...resource,
+        projectionType,
+        outputRoot: target.projections[projectionType],
+        outputPath: `${target.projections[projectionType]}/${outputFileName}`
+      };
+    });
   });
 }
 
@@ -120,15 +134,19 @@ function buildProjectionPlan(targetIds = ['antigravity'], resources = RESOURCE_R
         return [];
       }
 
-      return toArray(projectionTypes).map((projectionType) => ({
-        ...resource,
-        projectionType,
-        outputRoot: target.projections[projectionType],
-        outputPath: `${target.projections[projectionType]}/${toProjectionFileName(resource, projectionType)}`,
-        targetId: target.id,
-        targetLabel: target.label,
-        ownershipKey: `${target.id}:${target.projections[projectionType]}/${toProjectionFileName(resource, projectionType)}`
-      }));
+      return toArray(projectionTypes).map((projectionType) => {
+        const outputFileName = toProjectionFileName(resource, projectionType, target.id);
+        const outputPath = `${target.projections[projectionType]}/${outputFileName}`;
+        return {
+          ...resource,
+          projectionType,
+          outputRoot: target.projections[projectionType],
+          outputPath,
+          targetId: target.id,
+          targetLabel: target.label,
+          ownershipKey: `${target.id}:${outputPath}`
+        };
+      });
     });
 
     const managedFiles = target.rootAgentFile
@@ -181,3 +199,6 @@ module.exports = {
   MANAGED_FILES,
   USER_PROTECTED_FILES
 };
+
+
+

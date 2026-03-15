@@ -45,6 +45,7 @@ async function writeTargetFiles(cwd, options = {}) {
   const projectionEntries = targetPlan.projectionEntries || [];
   const shouldWriteRootAgents = options.shouldWriteRootAgents !== false;
   const srcAgents = options.srcAgents;
+  const agentsUpdatePlan = options.agentsUpdatePlan;
   const resolveCanonicalSource = options.resolveCanonicalSource;
   const projectionMap = new Map(projectionEntries.map((item) => [item.outputPath, item]));
   const written = [];
@@ -56,6 +57,28 @@ async function writeTargetFiles(cwd, options = {}) {
       continue;
     }
 
+    if (rel === 'AGENTS.md') {
+      const destPath = path.join(cwd, rel);
+      await fs.mkdir(path.dirname(destPath), { recursive: true });
+
+      if (agentsUpdatePlan && agentsUpdatePlan.mode === 'skip') {
+        skipped.push(rel);
+        continue;
+      }
+
+      if (agentsUpdatePlan && agentsUpdatePlan.content) {
+        await fs.writeFile(destPath, agentsUpdatePlan.content, 'utf8');
+        written.push(rel);
+        continue;
+      }
+
+      if (await pathExists(srcAgents)) {
+        await fs.copyFile(srcAgents, destPath);
+        written.push(rel);
+        continue;
+      }
+    }
+
     if (protectedFiles.includes(rel)) {
       const destPath = path.join(cwd, rel);
       if (await pathExists(destPath)) {
@@ -65,10 +88,10 @@ async function writeTargetFiles(cwd, options = {}) {
     }
 
     const entry = projectionMap.get(rel);
-    const srcPath = rel === 'AGENTS.md' ? srcAgents : resolveCanonicalSource(entry.source);
     const destPath = path.join(cwd, rel);
-
     await fs.mkdir(path.dirname(destPath), { recursive: true });
+
+    const srcPath = resolveCanonicalSource(entry.source);
     if (await pathExists(srcPath)) {
       await fs.copyFile(srcPath, destPath);
       written.push(rel);

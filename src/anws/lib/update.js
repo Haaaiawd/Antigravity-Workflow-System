@@ -9,8 +9,9 @@ const { collectManagedFileDiffs, printPreview } = require('./diff');
 const { detectUpgrade, generateChangelog } = require('./changelog');
 const { writeTargetFiles } = require('./copy');
 const { createInstallLock, dedupeTargets, detectInstallState, summarizeTargetState, writeInstallLock } = require('./install-state');
+const { confirm } = require('./prompt');
 const { ROOT_AGENTS_FILE, resolveCanonicalSource } = require('./resources');
-const { success, warn, error, info, fileLine, skippedLine, blank, logo } = require('./output');
+const { success, warn, error, info, fileLine, skippedLine, blank, logo, section } = require('./output');
 
 async function update(options = {}) {
   const cwd = process.cwd();
@@ -18,11 +19,10 @@ async function update(options = {}) {
   const legacyAgentDir = path.join(cwd, '.agent');
   const { version } = require(path.join(__dirname, '..', 'package.json'));
   const installState = await detectInstallState(cwd);
-  const selectedTargetIds = installState.selectedTargets;
-  const targetPlans = buildProjectionPlan(selectedTargetIds);
-
   const legacyAgentExists = await pathExists(legacyAgentDir);
-  const isLegacyMigration = selectedTargetIds.length === 0 && legacyAgentExists;
+  const isLegacyMigration = installState.selectedTargets.length === 0 && legacyAgentExists;
+  const selectedTargetIds = isLegacyMigration ? ['antigravity'] : installState.selectedTargets;
+  const targetPlans = buildProjectionPlan(selectedTargetIds);
 
   if (selectedTargetIds.length === 0 && !legacyAgentExists) {
     logo();
@@ -36,9 +36,7 @@ async function update(options = {}) {
   if (isLegacyMigration) {
     logo();
     blank();
-    info('Legacy .agent/ directory detected.');
-    info('anws update will migrate managed files into the Antigravity target structure.');
-    info('Your old .agent/ directory will be preserved for manual review.');
+    printLegacyMigrationNotice();
     blank();
   }
 
@@ -131,21 +129,24 @@ async function update(options = {}) {
       blank();
     }
     info(`Already up to date. Latest recorded version is v${versionState.latestVersion || version}.`);
-    printTargetSelection(installState, targetContexts.map((context) => context.target));
     return;
   }
 
-  const confirmed = await askUpdate(targetContexts.map((context) => context.target));
+  if (!isLegacyMigration) {
+    logo();
+    blank();
+  }
+
+  const confirmed = await askUpdate({
+    installState,
+    targets: targetContexts.map((context) => context.target)
+  });
   if (!confirmed) {
     blank();
     info('Aborted. No files were changed.');
     return;
   }
 
-  if (!isLegacyMigration) {
-    logo();
-  }
-  printTargetSelection(installState, targetContexts.map((context) => context.target));
   const updated = [];
   const skipped = [];
   const successfulTargets = [];
@@ -158,6 +159,7 @@ async function update(options = {}) {
         protectedFiles: context.targetPlan.userProtectedFiles,
         srcAgents,
         shouldWriteRootAgents: context.agentsDecision.shouldWriteRootAgents,
+        agentsUpdatePlan: context.agentsUpdatePlan,
         resolveCanonicalSource
       });
 
@@ -214,22 +216,24 @@ async function update(options = {}) {
     }
   }));
 
-  blank();
-  success(`Done! ${updated.length} file(s) updated${skipped.length > 0 ? `, ${skipped.length} skipped` : ''}.`);
-  info('Managed files have been updated to the latest version.');
-  info('Your custom files outside the selected target projections were not touched.');
+  let legacyCleanupLine = '';
   if (isLegacyMigration) {
-    info('Legacy .agent/ was preserved. You can review and delete it manually after migration.');
+    legacyCleanupLine = 'Legacy .agent/ was preserved. You can review and delete it manually after migration.';
     const deleted = await maybeDeleteLegacyDir(legacyAgentDir);
     if (deleted) {
-      info('Legacy .agent/ directory was deleted after confirmation.');
+      legacyCleanupLine = 'Legacy .agent/ directory was deleted after confirmation.';
     }
   }
-  info(`Generated upgrade record: ${path.relative(cwd, changelogPath).replace(/\\/g, '/')}`);
-  info('Run `/upgrade` in your AI IDE to update your architecture docs.');
+
+  printUpdateCompletionSummary({
+    updatedCount: updated.length,
+    skippedCount: skipped.length,
+    changelogPath: path.relative(cwd, changelogPath).replace(/\\/g, '/'),
+    legacyCleanupLine
+  });
 }
 
-async function askUpdate(targets) {
+async function askUpdate({ installState, targets }) {
   if (global.__ANWS_FORCE_YES) return true;
 
   if (!process.stdin.isTTY) {
@@ -237,17 +241,12 @@ async function askUpdate(targets) {
     return false;
   }
 
-  const readline = require('node:readline');
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
-  return new Promise((resolve) => {
-    rl.question(
-      `\n⚠ This will overwrite all managed files for: ${targets.map((target) => target.label).join(', ')}. Continue? [y/N] `,
-      (answer) => {
-        rl.close();
-        resolve(answer.trim().toLowerCase() === 'y');
-      }
-    );
+  return confirm({
+    message: buildUpdateConfirmationMessage(targets),
+    contextLines: buildUpdateConfirmationContextLines(installState, targets),
+    confirmLabel: 'Continue',
+    cancelLabel: 'Cancel',
+    defaultValue: false
   });
 }
 
@@ -258,17 +257,11 @@ async function askMigrate() {
     return false;
   }
 
-  const readline = require('node:readline');
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
-  return new Promise((resolve) => {
-    rl.question(
-      '\n⚠ Legacy .agent/ directory detected. Do you want to migrate to .agents/? [y/N] ',
-      (answer) => {
-        rl.close();
-        resolve(answer.trim().toLowerCase() === 'y');
-      }
-    );
+  return confirm({
+    message: 'Legacy .agent/ directory detected. Migrate to .agents/?',
+    confirmLabel: 'Migrate',
+    cancelLabel: 'Keep legacy',
+    defaultValue: false
   });
 }
 
@@ -284,17 +277,11 @@ async function maybeDeleteLegacyDir(legacyAgentDir) {
     return false;
   }
 
-  const readline = require('node:readline');
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
-  const shouldDelete = await new Promise((resolve) => {
-    rl.question(
-      '\n⚠ Legacy .agent/ directory has been preserved. Delete it now? [y/N] ',
-      (answer) => {
-        rl.close();
-        resolve(answer.trim().toLowerCase() === 'y');
-      }
-    );
+  const shouldDelete = await confirm({
+    message: 'Legacy .agent/ directory has been preserved. Delete it now?',
+    confirmLabel: 'Delete',
+    cancelLabel: 'Keep',
+    defaultValue: false
   });
 
   if (!shouldDelete) return false;
@@ -303,28 +290,66 @@ async function maybeDeleteLegacyDir(legacyAgentDir) {
   return true;
 }
 
+function buildUpdateConfirmationMessage(targets) {
+  const labels = targets.map((target) => target.label).filter(Boolean);
+  if (labels.length === 0) {
+    return 'This will overwrite all managed files for the detected target layout.';
+  }
+  return `This will overwrite all managed files for: ${labels.join(', ')}.`;
+}
+
+function buildUpdateConfirmationContextLines(installState, targets) {
+  const lines = [
+    `Matched targets: ${targets.map((target) => `${target.label} (${target.id})`).join(', ') || 'none'}`,
+    installState.needsFallback ? 'State source: directory scan fallback' : 'State source: install-lock + directory scan'
+  ];
+  if (installState.drift.hasDrift) {
+    lines.push(`State drift detected. Missing on disk: ${installState.drift.missingOnDisk.join(', ') || 'none'}; untracked on disk: ${installState.drift.untrackedOnDisk.join(', ') || 'none'}.`);
+  }
+  return lines;
+}
+
+function printLegacyMigrationNotice() {
+  section('Legacy migration', [
+    'Legacy .agent/ directory detected.',
+    'anws update will migrate managed files into the Antigravity target structure.',
+    'Your old .agent/ directory will be preserved for manual review.'
+  ], { minWidth: 60 });
+}
+
 function printTargetSelection(installState, targets) {
   blank();
-  info(`Matched targets: ${targets.map((target) => `${target.label} (${target.id})`).join(', ') || 'none'}`);
-  if (installState.needsFallback) {
-    info('State source: directory scan fallback');
-  } else {
-    info('State source: install-lock + directory scan');
-  }
-  if (installState.drift.hasDrift) {
-    warn(`State drift detected. Missing on disk: ${installState.drift.missingOnDisk.join(', ') || 'none'}; untracked on disk: ${installState.drift.untrackedOnDisk.join(', ') || 'none'}.`);
-  }
+  section('Target selection', [
+    `Matched targets: ${targets.map((target) => `${target.label} (${target.id})`).join(', ') || 'none'}`,
+    installState.needsFallback ? 'State source: directory scan fallback' : 'State source: install-lock + directory scan',
+    ...(installState.drift.hasDrift
+      ? [`State drift detected. Missing on disk: ${installState.drift.missingOnDisk.join(', ') || 'none'}; untracked on disk: ${installState.drift.untrackedOnDisk.join(', ') || 'none'}.`]
+      : [])
+  ]);
 }
 
 function printTargetUpdateSummary(successfulTargets, failedTargets) {
   blank();
-  info('Update summary by target:');
-  for (const target of successfulTargets) {
-    info(`  ✔ ${target.targetLabel} (${target.targetId})`);
-  }
-  for (const target of failedTargets) {
-    info(`  ✖ ${target.targetLabel} (${target.targetId}) — ${target.reason}`);
-  }
+  section('Update summary by target', [
+    ...successfulTargets.map((target) => `✔ ${target.targetLabel} (${target.targetId})`),
+    ...failedTargets.map((target) => `✖ ${target.targetLabel} (${target.targetId}) — ${target.reason}`)
+  ]);
+}
+
+function printUpdateCompletionSummary({ updatedCount, skippedCount, changelogPath, legacyCleanupLine }) {
+  blank();
+  section('Update completed', [
+    `✔ Done! ${updatedCount} file(s) updated${skippedCount > 0 ? `, ${skippedCount} skipped` : ''}.`,
+    'Managed files have been updated to the latest version.',
+    'Your custom files outside the selected target projections were not touched.',
+    ...(legacyCleanupLine ? [legacyCleanupLine] : []),
+    `Generated upgrade record: ${changelogPath}`,
+    'Run `/upgrade` in your AI IDE to update your architecture docs.'
+  ], { minWidth: 60 });
 }
 
 module.exports = update;
+
+
+
+

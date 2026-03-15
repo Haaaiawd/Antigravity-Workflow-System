@@ -16,7 +16,7 @@ const TARGETS = {
       workflows: '.windsurf/workflows',
       skills: '.windsurf/skills'
     },
-    detect: ['.windsurf/workflows', '.windsurf/skills']
+    detect: ['.windsurf/workflows/genesis.md']
   },
   antigravity: {
     id: 'antigravity',
@@ -30,7 +30,7 @@ const TARGETS = {
       workflows: '.agents/workflows',
       skills: '.agents/skills'
     },
-    detect: ['.agents/workflows', '.agents/skills']
+    detect: ['.agents/workflows/genesis.md', '.agent/workflows/genesis.md']
   },
   cursor: {
     id: 'cursor',
@@ -38,12 +38,13 @@ const TARGETS = {
     rootAgentFile: false,
     projectionTypes: {
       workflow: ['commands'],
-      skill: ['commands']
+      skill: ['skills']
     },
     projections: {
-      commands: '.cursor/commands'
+      commands: '.cursor/commands',
+      skills: '.cursor/skills'
     },
-    detect: ['.cursor/commands']
+    detect: ['.cursor/commands/genesis.md']
   },
   claude: {
     id: 'claude',
@@ -51,40 +52,54 @@ const TARGETS = {
     rootAgentFile: false,
     projectionTypes: {
       workflow: ['commands'],
-      skill: ['commands']
+      skill: ['skills']
     },
     projections: {
-      commands: '.claude/commands'
+      commands: '.claude/commands',
+      skills: '.claude/skills'
     },
-    detect: ['.claude/commands']
+    detect: ['.claude/commands/genesis.md']
   },
   copilot: {
     id: 'copilot',
     label: 'GitHub Copilot',
     rootAgentFile: false,
     projectionTypes: {
-      workflow: ['agents', 'prompts'],
-      skill: ['prompts']
-    },
-    projections: {
-      agents: '.github/agents',
-      prompts: '.github/prompts'
-    },
-    detect: ['.github/agents', '.github/prompts']
-  },
-  codex: {
-    id: 'codex',
-    label: 'Codex',
-    rootAgentFile: false,
-    projectionTypes: {
       workflow: ['prompts'],
       skill: ['skills']
     },
     projections: {
-      prompts: '.codex/prompts',
+      prompts: '.github/prompts',
+      skills: '.github/skills'
+    },
+    detect: ['.github/prompts/genesis.prompt.md']
+  },
+  codex: {
+    id: 'codex',
+    label: 'Codex (Preview)',
+    rootAgentFile: false,
+    projectionTypes: {
+      workflow: ['skills'],
+      skill: ['skills']
+    },
+    projections: {
       skills: '.codex/skills'
     },
-    detect: ['.codex/prompts', '.codex/skills']
+    detect: ['.codex/skills/anws-system/SKILL.md']
+  },
+  opencode: {
+    id: 'opencode',
+    label: 'OpenCode',
+    rootAgentFile: false,
+    projectionTypes: {
+      workflow: ['commands'],
+      skill: ['skills']
+    },
+    projections: {
+      commands: '.opencode/commands',
+      skills: '.opencode/skills'
+    },
+    detect: ['.opencode/commands/genesis.md']
   }
 };
 
@@ -136,3 +151,7 @@ module.exports = {
   getTarget,
   listTargets
 };
+
+
+
+
