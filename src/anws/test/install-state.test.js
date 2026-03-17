@@ -210,7 +210,7 @@ test('detectInstallState falls back to scanned targets when lock is missing', as
   });
 });
 
-test('detectInstallState prefers lock targets while still reporting scan drift', async () => {
+test('detectInstallState prefers scanned targets when lock drift is detected', async () => {
   await withTempDir(async (tempDir) => {
     const lock = createInstallLock({
       cliVersion: '1.3.0',
@@ -233,7 +233,9 @@ test('detectInstallState prefers lock targets while still reporting scan drift',
     const result = await detectInstallState(tempDir);
 
     assert.equal(result.needsFallback, false);
-    assert.deepEqual(result.selectedTargets, ['cursor']);
+    assert.equal(result.stateSource, 'directory_scan_drift');
+    assert.equal(result.canRebuildLock, true);
+    assert.deepEqual(result.selectedTargets, ['codex']);
     assert.equal(result.drift.hasDrift, true);
     assert.deepEqual(result.drift.missingOnDisk, ['cursor']);
     assert.deepEqual(result.drift.untrackedOnDisk, ['codex']);

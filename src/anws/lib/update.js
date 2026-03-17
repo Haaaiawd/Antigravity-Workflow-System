@@ -129,7 +129,7 @@ async function update(options = {}) {
       blank();
     }
     printTargetSelection(installState, targetContexts.map((context) => context.target));
-    if (!check && installState.needsFallback && selectedTargetIds.length > 0) {
+    if (!check && installState.canRebuildLock && selectedTargetIds.length > 0) {
       const generatedAt = new Date().toISOString();
       await writeInstallLock(cwd, createInstallLock({
         cliVersion: version,
@@ -217,11 +217,14 @@ async function update(options = {}) {
     }
   });
   const generatedAt = new Date().toISOString();
+  const existingLockTargets = installState.canRebuildLock
+    ? []
+    : (installState.lockResult.lock?.targets || []);
   await writeInstallLock(cwd, createInstallLock({
     cliVersion: version,
     generatedAt,
     targets: dedupeTargets([
-      ...(installState.lockResult.lock?.targets || []),
+      ...existingLockTargets,
       ...successfulTargets
     ]),
     lastUpdateSummary: {

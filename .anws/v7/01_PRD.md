@@ -101,8 +101,8 @@ v7 的核心目标是：**以当前实现为主重建单一真理，并为新增
 - **故事描述**: 作为维护者，我想让 `.anws/install-lock.json` 成为多目标安装状态、版本、ownership 与最近一次升级结果的主要真相。
 - **验收标准**:
   - Given 用户完成多目标安装，When CLI 写入项目状态，Then 必须生成或更新 `.anws/install-lock.json`
-  - Given lock 文件存在，When 执行 `anws update`，Then lock 必须优先于目录扫描参与目标判定
-  - Given lock 与真实目录漂移，When CLI 执行扫描，Then 必须报告漂移并进入 fallback
+  - Given lock 文件存在且与磁盘状态一致，When 执行 `anws update`，Then lock 必须作为主要状态真相参与目标判定
+  - Given lock 与真实目录漂移，When CLI 执行扫描，Then 必须报告漂移，并以目录扫描结果作为本轮 update 的有效目标来源
   - Given lock 缺失或损坏且目录扫描已识别 targets，When 用户执行实际 update 流程，Then CLI 必须能够重建 `.anws/install-lock.json`
   - **异常处理**: 当 lock 损坏或缺失时，CLI 必须能够通过 sentinel 兜底并提示状态来源与重建状态
 

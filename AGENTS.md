@@ -75,15 +75,15 @@
 
 > **注意**: 这是项目文件中的保留部分，由 `/genesis`、`/blueprint` 和 `/forge` 自动维护。
 
-- **最新架构版本**: `.anws/v6`
-- **活动任务清单**: `.anws/v6/05_TASKS.md`
-- **待办任务数**: 19
-- **最近一次更新**: `2026-03-15`
+- **最新架构版本**: `.anws/v7`
+- **活动任务清单**: `.anws/v7/05_TASKS.md`
+- **待办任务数**: 11
+- **最近一次更新**: `2026-03-17`
 
-### 🌊 Wave 1 — Multi-Target Foundation
-- 当前目标: 完成 S1，打通 canonical manifest、projection planner、install-lock 与多目标 `init`
-- 首批关键任务: `T2.1.1` → `T2.1.2` → `T2.2.1` → `T4.1.1` → `T5.1.1` → `T1.1.1`
-- 完成标志: `anws init` 可显式安装多个 targets，并生成可解释的 `.anws/install-lock.json`
+### 🌊 Current Focus — v7 Consistency Closeout
+- 当前目标: 完成 v7 剩余任务，收口 target matrix、共享根文件写入安全语义与验证闭环
+- 当前关键任务: `T1.2.2` → `T5.1.1` → `T6.2.2` → `INT-S2`
+- 完成标志: `AGENTS.md` / `README` / `CLI` / `update` 语义与 `.anws/v7` 保持一致，且 v7 里程碑完成
 
 ---
 
@@ -102,7 +102,7 @@ src/
 
 .anws/
 ├── changelog/         (升级记录)
-└── v6/                (当前架构文档)
+└── v7/                (当前架构文档)
 ```
 
 ---
@@ -112,9 +112,9 @@ src/
 > **注意**: 此部分由 `/genesis` 维护。
 
 - **在新架构就绪前**: 请勿大规模修改代码。
-- **架构总览**: `.anws/v6/02_ARCHITECTURE_OVERVIEW.md`
-- **ADR**: `.anws/v6/03_ADR/` (跨系统决策的唯一记录源)
-- **遇到架构问题**: 请查阅 `.anws/v6/03_ADR/`。
+- **架构总览**: `.anws/v7/02_ARCHITECTURE_OVERVIEW.md`
+- **ADR**: `.anws/v7/03_ADR/` (跨系统决策的唯一记录源)
+- **遇到架构问题**: 请查阅 `.anws/v7/03_ADR/`。
 
 ---
 
@@ -133,12 +133,12 @@ src/
 ### 活跃 ADR
 - ADR-004: 多目标显式安装策略 — 同一项目允许显式安装多个 targets
 - ADR-006: Canonical Resource Model — 共享源但不共享物理落盘
-- ADR-007: Install Lock 与多目标 Update 编排 — lock 为主，扫描兜底，update 允许部分成功
+- ADR-007: Install Lock 与多目标 Update 编排 — lock 为主要状态真相，drift 时以目录扫描为有效来源，update 允许部分成功
 
 ### 当前任务状态
-- 活动任务清单: `.anws/v6/05_TASKS.md`
-- 当前波次: `Wave 1 / S1 - Multi-Target Foundation`
-- 下一执行入口: `v6` 任务清单已清空；如需继续，请进入下一版本规划或发布收尾
+- 活动任务清单: `.anws/v7/05_TASKS.md`
+- 当前波次: `Current Focus / v7 Consistency Closeout`
+- 下一执行入口: 继续按 `.anws/v7/05_TASKS.md` 收口剩余任务与里程碑验证
 
 <!-- AUTO:END -->
 

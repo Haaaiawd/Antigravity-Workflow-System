@@ -40,7 +40,7 @@ SUPPORTED TARGETS
 EXAMPLES
   anws init                       # Choose target IDEs and install their managed workflow projections
   anws init --target windsurf,codex,opencode
-  anws update                     # Update all matched targets from install-lock or directory scan fallback
+  anws update                     # Update all matched targets from install-lock, fallback scan, or drift repair
   anws update --check             # Preview grouped changes per target without writing files
 `.trimStart();
 

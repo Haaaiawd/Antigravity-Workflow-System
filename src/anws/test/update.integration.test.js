@@ -128,9 +128,9 @@ test('anws update keeps successful targets in lock and reports failed targets se
     assert.equal(initResult.status, 0, initResult.stderr || initResult.stdout);
 
     await fs.rm(path.join(tempDir, '.anws', 'changelog'), { recursive: true, force: true });
-    await fs.rm(path.join(tempDir, '.codex', 'skills'), { recursive: true, force: true });
-    await fs.mkdir(path.join(tempDir, '.codex'), { recursive: true });
-    await fs.writeFile(path.join(tempDir, '.codex', 'skills'), 'blocked parent path', 'utf8');
+    await fs.writeFile(path.join(tempDir, '.codex', 'skills', 'anws-system', 'SKILL.md'), '# codex skill', 'utf8');
+    await fs.rm(path.join(tempDir, '.codex', 'skills', 'nexus-mapper', 'references'), { recursive: true, force: true });
+    await fs.writeFile(path.join(tempDir, '.codex', 'skills', 'nexus-mapper', 'references'), 'blocked codex directory', 'utf8');
 
     const updateResult = runCliInDir(tempDir, ['update', '--yes']);
 

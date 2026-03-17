@@ -3,7 +3,7 @@
 <img src="assets/logo-cli.png" width="260" alt="Anws">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v2.0.2-7FB5B6)](https://github.com/Haaaiawd/Anws/releases)
+[![Version](https://img.shields.io/badge/version-v2.0.3-7FB5B6)](https://github.com/Haaaiawd/Anws/releases)
 [![Targets](https://img.shields.io/badge/Targets-Windsurf%20%7C%20Claude%20Code%20%7C%20Copilot%20%7C%20Cursor%20%7C%20Codex%20Preview%20%7C%20OpenCode%20%7C%20Trae%20%7C%20Qoder%20%7C%20Kilo%20Code-blueviolet)](https://github.com/Haaaiawd/Anws)
 
 [English](./README.md) | [中文](./README_CN.md)
@@ -140,6 +140,7 @@ anws update
 - **State source**
   - `anws update` reads `.anws/install-lock.json`
   - if the lock is missing or invalid, it falls back to directory scan
+  - if lock drift is detected, directory scan becomes the effective source for the current update
   - a real `anws update` can rebuild `.anws/install-lock.json` from detected targets when fallback is active
 
 - **`AGENTS.md` behavior**

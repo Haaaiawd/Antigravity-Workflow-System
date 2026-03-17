@@ -170,10 +170,14 @@ async function detectInstallState(cwd) {
   const fallbackReason = !needsFallback
     ? null
     : (!lockResult.exists ? 'missing_lock' : 'invalid_lock');
-  const selectedTargets = lockTargets.length > 0
-    ? lockTargets.map((item) => item.targetId)
-    : scannedTargets.map((item) => item.id);
   const drift = detectLockDrift(lockResult.lock, scannedTargets);
+  const shouldPreferScannedTargets = needsFallback || drift.hasDrift || lockTargets.length === 0;
+  const selectedTargets = shouldPreferScannedTargets
+    ? scannedTargets.map((item) => item.id)
+    : lockTargets.map((item) => item.targetId);
+  const stateSource = needsFallback
+    ? 'directory_scan_fallback'
+    : (drift.hasDrift ? 'directory_scan_drift' : 'install_lock');
 
   return {
     lockResult,
@@ -182,8 +186,8 @@ async function detectInstallState(cwd) {
     drift,
     needsFallback,
     fallbackReason,
-    stateSource: needsFallback ? 'directory_scan_fallback' : 'install_lock',
-    canRebuildLock: needsFallback && selectedTargets.length > 0
+    stateSource,
+    canRebuildLock: (needsFallback || drift.hasDrift) && selectedTargets.length > 0
   };
 }
 
