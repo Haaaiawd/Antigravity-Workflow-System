@@ -128,6 +128,21 @@ async function update(options = {}) {
       logo();
       blank();
     }
+    printTargetSelection(installState, targetContexts.map((context) => context.target));
+    if (!check && installState.needsFallback && selectedTargetIds.length > 0) {
+      const generatedAt = new Date().toISOString();
+      await writeInstallLock(cwd, createInstallLock({
+        cliVersion: version,
+        generatedAt,
+        targets: dedupeTargets(targetPlans.map((targetPlan) => summarizeTargetState(targetPlan, version))),
+        lastUpdateSummary: {
+          successfulTargets: [],
+          failedTargets: [],
+          updatedAt: generatedAt
+        }
+      }));
+      info('Rebuilt .anws/install-lock.json from the detected target layout.');
+    }
     info(`Already up to date. Latest recorded version is v${versionState.latestVersion || version}.`);
     return;
   }

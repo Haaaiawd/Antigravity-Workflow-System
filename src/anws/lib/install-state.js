@@ -166,16 +166,24 @@ async function detectInstallState(cwd) {
   const lockResult = await readInstallLock(cwd);
   const scannedTargets = await detectInstalledTargets(cwd);
   const lockTargets = lockResult.lock?.targets || [];
+  const needsFallback = !lockResult.exists || !!lockResult.error;
+  const fallbackReason = !needsFallback
+    ? null
+    : (!lockResult.exists ? 'missing_lock' : 'invalid_lock');
   const selectedTargets = lockTargets.length > 0
     ? lockTargets.map((item) => item.targetId)
     : scannedTargets.map((item) => item.id);
+  const drift = detectLockDrift(lockResult.lock, scannedTargets);
 
   return {
     lockResult,
     scannedTargets,
     selectedTargets,
-    drift: detectLockDrift(lockResult.lock, scannedTargets),
-    needsFallback: !lockResult.exists || !!lockResult.error
+    drift,
+    needsFallback,
+    fallbackReason,
+    stateSource: needsFallback ? 'directory_scan_fallback' : 'install_lock',
+    canRebuildLock: needsFallback && selectedTargets.length > 0
   };
 }
 

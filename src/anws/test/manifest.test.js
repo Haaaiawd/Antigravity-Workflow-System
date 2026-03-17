@@ -31,6 +31,7 @@ test('codex managed files fold workflows into anws-system skill and keep standal
 
   assert(files.includes('AGENTS.md'));
   assert(files.includes('.codex/skills/anws-system/SKILL.md'));
+  assert(files.includes('.codex/skills/anws-system/references/quickstart.md'));
   assert(files.includes('.codex/skills/anws-system/references/genesis.md'));
   assert(files.includes('.codex/skills/spec-writer/SKILL.md'));
 });
@@ -64,6 +65,7 @@ test('buildManagedManifest groups ownership by target and preserves root agent f
   assert(manifest.some((item) => item.targetId === 'antigravity' && item.outputPath === 'AGENTS.md'));
   assert(manifest.some((item) => item.targetId === 'codex' && item.outputPath === 'AGENTS.md'));
   assert(manifest.some((item) => item.targetId === 'codex' && item.outputPath === '.codex/skills/anws-system/SKILL.md'));
+  assert(manifest.some((item) => item.targetId === 'codex' && item.outputPath === '.codex/skills/anws-system/references/quickstart.md'));
   assert(manifest.some((item) => item.targetId === 'codex' && item.outputPath === '.codex/skills/anws-system/references/genesis.md'));
   assert(manifest.every((item) => typeof item.ownershipKey === 'string' && item.ownershipKey.length > 0));
 });
@@ -95,8 +97,8 @@ test('all supported targets expose the expected projection shapes', () => {
     cursor: ['AGENTS.md', '.cursor/commands/genesis.md', '.cursor/skills/spec-writer/SKILL.md'],
     claude: ['AGENTS.md', '.claude/commands/genesis.md', '.claude/skills/spec-writer/SKILL.md'],
     copilot: ['AGENTS.md', '.github/prompts/genesis.prompt.md', '.github/skills/spec-writer/SKILL.md'],
-    codex: ['AGENTS.md', '.codex/skills/anws-system/SKILL.md', '.codex/skills/anws-system/references/genesis.md', '.codex/skills/spec-writer/SKILL.md'],
-    trae: ['AGENTS.md', '.trae/skills/anws-system/SKILL.md', '.trae/skills/anws-system/references/genesis.md', '.trae/skills/spec-writer/SKILL.md'],
+    codex: ['AGENTS.md', '.codex/skills/anws-system/SKILL.md', '.codex/skills/anws-system/references/quickstart.md', '.codex/skills/anws-system/references/genesis.md', '.codex/skills/spec-writer/SKILL.md'],
+    trae: ['AGENTS.md', '.trae/skills/anws-system/SKILL.md', '.trae/skills/anws-system/references/quickstart.md', '.trae/skills/anws-system/references/genesis.md', '.trae/skills/spec-writer/SKILL.md'],
     qoder: ['AGENTS.md', '.qoder/commands/genesis.md', '.qoder/skills/spec-writer/SKILL.md'],
     kilo: ['AGENTS.md', '.kilocode/workflows/genesis.md', '.kilocode/skills/spec-writer/SKILL.md'],
     opencode: ['AGENTS.md', '.opencode/commands/genesis.md', '.opencode/skills/spec-writer/SKILL.md']

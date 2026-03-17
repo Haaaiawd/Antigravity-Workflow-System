@@ -73,8 +73,8 @@ graph TD
 
 ### Phase 2: Core
 
-- [ ] **T1.2.1** [REQ-004]: 扩展 `update` 扫描、预览与摘要输出以覆盖 v7 目标矩阵
-  - **描述**: 调整 `src/anws/lib/update.js` 的目标展示、预览、summary 与失败报告，使其覆盖 `Trae / Qoder / Kilo Code`，并与新的 sentinel / lock 语义一致。
+- [x] **T1.2.1** [REQ-004]: 扩展 `update` 扫描、预览与摘要输出以覆盖 v7 目标矩阵
+  - **描述**: 调整 `src/anws/lib/update.js` 的目标展示、预览、summary 与失败报告，使其覆盖 `Trae / Qoder / Kilo Code`，并与新的 sentinel / lock 语义一致；当状态来自 fallback 扫描时，需明确展示状态来源，并与 lock 重建策略衔接。
   - **输入**: T2.1.2 的 projection plan；T4.1.1 的 lock 结构；T4.1.2 的 sentinel 扫描结果。
   - **输出**: 更新后的 `src/anws/lib/update.js`；必要时同步 diff 预览输出。
   - **验收标准**:
@@ -84,6 +84,9 @@ graph TD
     - Given lock 缺失或损坏
     - When 执行 update
     - Then CLI 能通过 sentinel 扫描兜底并明确提示状态来源
+    - Given lock 缺失或损坏且目录扫描已识别 targets
+    - When 用户执行实际 update 流程
+    - Then CLI 必须重建 `.anws/install-lock.json` 或明确报告为何本轮不重建
   - **验证类型**: 集成测试
   - **估时**: 5h
   - **依赖**: T2.1.2, T4.1.1, T4.1.2
@@ -126,7 +129,7 @@ graph TD
   - **依赖**: 无
 
 - [ ] **T2.1.2** [REQ-002]: 更新 `manifest.js` 的投影规则以支持 v7 target family
-  - **描述**: 扩展 `src/anws/lib/manifest.js`，让 `workflow + skill`、`command + skill`、`prompts + skills`、`skills-only bundle` 四类投影规则都可统一表达。
+  - **描述**: 扩展 `src/anws/lib/manifest.js`，让 `workflow + skill`、`command + skill`、`prompts + skills`、`skills-only bundle` 四类投影规则都可统一表达，其中 `skills-only bundle` 采用 `anws-system/SKILL.md` 导航壳 + `references/*.md` 的结构。
   - **输入**: T2.1.1 的 adapter matrix；T3.1.1 的 bundle 规则；现有 `RESOURCE_REGISTRY`。
   - **输出**: 更新后的 `src/anws/lib/manifest.js`。
   - **验收标准**:
@@ -135,7 +138,7 @@ graph TD
     - Then 输出 `.github/prompts/*` 与 `.github/skills/*`
     - Given `Codex / Trae`
     - When 生成 projection entries
-    - Then workflow 被折叠进技能包并落到对应 skill 目录
+    - Then workflow 被折叠为 `anws-system/SKILL.md` 导航壳 + `references/*.md` 并落到对应 skill 目录
     - Given `Qoder`
     - When 生成 projection entries
     - Then 输出 `.qoder/commands/*` 与 `.qoder/skills/*`
@@ -153,13 +156,13 @@ graph TD
 ### Phase 1: Core
 
 - [ ] **T3.1.1** [REQ-002]: 设计并实现 Codex / Trae 的 skills-only bundle 规则
-  - **描述**: 为 `Codex` 与 `Trae` 定义统一的 workflow 折叠策略，但保留 Trae 对 `SKILL.md` frontmatter 与触发语义的差异空间。
+  - **描述**: 为 `Codex` 与 `Trae` 定义统一的 workflow 折叠策略，使用 `anws-system/SKILL.md` 作为导航壳，workflow 明细落在 `references/*.md`，并保留 Trae 对 `SKILL.md` frontmatter 与触发语义的差异空间。
   - **输入**: `note.txt` 中的 Trae 技能结构；当前 Codex 的 `anws-system` bundle 规则。
   - **输出**: v7 可执行的 bundle 规则说明；必要时对应到 `manifest.js` 的命名约定。
   - **验收标准**:
     - Given `Codex`
     - When 投影 workflow
-    - Then 生成 `anws-system/SKILL.md` 与 `references/*.md`
+    - Then 生成 `anws-system/SKILL.md` 作为技能入口壳，并将 workflow 明细投到 `references/*.md`
     - Given `Trae`
     - When 投影 workflow
     - Then 使用同类 bundle 策略，但输出结构可承载 Trae 所需 metadata
@@ -168,7 +171,7 @@ graph TD
   - **依赖**: 无
 
 - [ ] **T3.1.2** [REQ-006]: 同步 README / README_CN / `src/anws/README*.md` 到 v7 矩阵
-  - **描述**: 更新文档中的目录树、目标矩阵、update 说明、lock 说明和 `AGENTS.md` 安全语义。
+  - **描述**: 更新文档中的目录树、目标矩阵、update 说明、lock 说明和 `AGENTS.md` 安全语义，并明确 `skills-only` 目标的 `anws-system/SKILL.md + references/*.md` 结构。
   - **输入**: T1.1.1 的 CLI 文案；T1.2.1 的 update 行为；T1.2.2 的 AGENTS 保留语义。
   - **输出**: 更新后的仓库文档与包内镜像文档。
   - **验收标准**:
@@ -185,14 +188,17 @@ graph TD
 
 ### Phase 1: Foundation
 
-- [ ] **T4.1.1** [REQ-005]: 扩展 install-lock schema 与 state summary 到 v7 目标矩阵
-  - **描述**: 确认 `src/anws/lib/install-state.js` 能稳定记录新增 targets 的 `managedFiles`、`ownership`、`installedVersion` 与 `lastUpdateSummary`。
+- [x] **T4.1.1** [REQ-005]: 扩展 install-lock schema 与 state summary 到 v7 目标矩阵
+  - **描述**: 确认 `src/anws/lib/install-state.js` 能稳定记录新增 targets 的 `managedFiles`、`ownership`、`installedVersion` 与 `lastUpdateSummary`，并为 fallback 扫描后的 lock 重建提供一致状态模型。
   - **输入**: T2.1.2 的 projection outputs；现有 install-lock schema。
   - **输出**: 更新后的 `src/anws/lib/install-state.js`。
   - **验收标准**:
     - Given 新老 targets 并存
     - When 写入 `.anws/install-lock.json`
     - Then lock 中的 target 列表、ownership 与 managedFiles 不重复且可解释
+    - Given lock 缺失或损坏但目录扫描已识别 targets
+    - When update 进入实际执行路径
+    - Then 重建后的 lock 结构仍满足同样的去重与可解释性要求
   - **验证类型**: 单元测试
   - **估时**: 3h
   - **依赖**: T2.1.2
@@ -263,7 +269,7 @@ graph TD
   - **估时**: 3h
   - **依赖**: T2.1.1, T2.1.2
 
-- [ ] **T6.1.2** [REQ-005]: 扩展 install-state 单元测试覆盖新 sentinel 与 drift 路径
+- [x] **T6.1.2** [REQ-005]: 扩展 install-state 单元测试覆盖新 sentinel 与 drift 路径
   - **描述**: 更新 `src/anws/test/install-state.test.js`，覆盖新增 targets 的 fallback 扫描、lock 去重与 drift 检测。
   - **输入**: T4.1.1、T4.1.2 的实现产物。
   - **输出**: 更新后的 install-state 单测。
@@ -277,14 +283,17 @@ graph TD
 
 ### Phase 2: Integration Coverage
 
-- [ ] **T6.2.1** [REQ-004]: 扩展 `update` 集成测试覆盖 v7 目标矩阵
-  - **描述**: 更新 `src/anws/test/update.integration.test.js`，验证 `--check`、部分成功、lock fallback 与新 sentinel。
+- [x] **T6.2.1** [REQ-004]: 扩展 `update` 集成测试覆盖 v7 目标矩阵
+  - **描述**: 更新 `src/anws/test/update.integration.test.js`，验证 `--check`、部分成功、lock fallback、新 sentinel，以及 fallback 后的 lock 重建语义。
   - **输入**: T1.2.1、T5.1.2 的实现产物。
   - **输出**: 更新后的 update 集成测试。
   - **验收标准**:
     - Given 多个 v7 targets 并存
     - When 执行 `update` / `update --check`
     - Then 结果按 target 分组展示且更新范围正确
+    - Given lock 缺失但目录结构完整
+    - When 执行实际 `update`
+    - Then CLI 必须覆盖 lock 重建路径或明确验证当前不重建的既定语义
   - **验证类型**: 集成测试
   - **估时**: 4h
   - **依赖**: T1.2.1, T5.1.2

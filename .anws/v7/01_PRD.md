@@ -41,7 +41,7 @@ v7 的核心目标是：**以当前实现为主重建单一真理，并为新增
 - **[G1]**: `anws init` 支持在同一项目中显式选择多个目标 AI IDE 并一次性完成安装
 - **[G2]**: `anws` 内部继续坚持独立于目标目录的 canonical resource model
 - **[G3]**: v7 正式支持的目标矩阵为 `Windsurf`、`Antigravity`、`Cursor`、`Claude`、`GitHub Copilot`、`Codex`、`OpenCode`、`Trae`、`Qoder`、`Kilo Code`
-- **[G4]**: 统一源资产必须可以投影为 `workflow / skill / prompt / command` 等目标资源形态，并允许某些工具把 workflow 折叠进 skill bundle
+- **[G4]**: 统一源资产必须可以投影为 `workflow / skill / prompt / command` 等目标资源形态，并允许某些工具把 workflow 投影为 `skill router + references` 结构
 - **[G5]**: `anws update` 必须扫描项目中所有已安装 targets，展示扫描结果后统一更新全部命中的受管投影
 - **[G6]**: `.anws/install-lock.json` 必须作为已安装 targets 与受管 ownership 的主要真相，目录扫描仅作 fallback
 - **[G7]**: `AGENTS.md` 在 `init` 与 `update` 中都必须保持可合并、可保留 AUTO 区块、可解释
@@ -81,8 +81,8 @@ v7 的核心目标是：**以当前实现为主重建单一真理，并为新增
 - **故事描述**: 作为维护者，我想要一份明确且与实现一致的目标矩阵，以便安装、更新和文档行为都能解释。
 - **验收标准**:
   - Given `GitHub Copilot`，When 生成投影，Then 物理布局为 `.github/prompts/` + `.github/skills/`
-  - Given `Codex`，When 生成投影，Then 物理布局为 `.codex/skills/`，workflow 被折叠进技能包
-  - Given `Trae`，When 生成投影，Then 物理布局为 `.trae/skills/`，workflow 被折叠进 skill 定义并保留 YAML frontmatter 约束
+  - Given `Codex`，When 生成投影，Then 物理布局为 `.codex/skills/`，并生成 `anws-system/SKILL.md` 作为导航壳，workflow 详情落在 `anws-system/references/*.md`
+  - Given `Trae`，When 生成投影，Then 物理布局为 `.trae/skills/`，并生成 `anws-system/SKILL.md` 作为导航壳，workflow 详情落在 `anws-system/references/*.md`，同时保留 YAML frontmatter / triggers 约束
   - Given `Qoder`，When 生成投影，Then 物理布局为 `.qoder/commands/` + `.qoder/skills/`
   - Given `Kilo Code`，When 生成投影，Then 物理布局为 `.kilocode/workflows/` + `.kilocode/skills/`
   - **异常处理**: 当用户选择未支持 target 时，CLI 必须拒绝安装并展示可用 targets
@@ -93,7 +93,7 @@ v7 的核心目标是：**以当前实现为主重建单一真理，并为新增
 - **验收标准**:
   - Given 项目中已安装多个 targets，When 执行 `anws update`，Then CLI 必须先展示命中的 targets
   - Given 用户执行 `anws update --check`，When 存在多个已安装 targets，Then 预览结果必须按 target 分组展示差异
-  - Given lock 文件缺失或损坏，When 执行 update，Then CLI 必须通过 sentinel 扫描兜底识别 targets
+  - Given lock 文件缺失或损坏，When 执行 update，Then CLI 必须通过 sentinel 扫描兜底识别 targets，并明确提示当前状态来源
   - **异常处理**: 当某个 target 更新失败时，CLI 允许部分成功，但必须按 target 报告
 
 ### US05: 安装状态权威记录 [REQ-005] (P0)
@@ -103,7 +103,8 @@ v7 的核心目标是：**以当前实现为主重建单一真理，并为新增
   - Given 用户完成多目标安装，When CLI 写入项目状态，Then 必须生成或更新 `.anws/install-lock.json`
   - Given lock 文件存在，When 执行 `anws update`，Then lock 必须优先于目录扫描参与目标判定
   - Given lock 与真实目录漂移，When CLI 执行扫描，Then 必须报告漂移并进入 fallback
-  - **异常处理**: 当 lock 损坏或缺失时，CLI 必须能够通过 sentinel 兜底并提示重建状态
+  - Given lock 缺失或损坏且目录扫描已识别 targets，When 用户执行实际 update 流程，Then CLI 必须能够重建 `.anws/install-lock.json`
+  - **异常处理**: 当 lock 损坏或缺失时，CLI 必须能够通过 sentinel 兜底并提示状态来源与重建状态
 
 ### US06: 文案与帮助一致性 [REQ-006] (P1)
 
@@ -130,7 +131,7 @@ v7 继续采用三层内部真相：
 - **Workflow + Skill**: Windsurf、Antigravity、Kilo Code
 - **Command + Skill**: Cursor、Claude、OpenCode、Qoder
 - **Prompt + Skill**: GitHub Copilot
-- **Skills-only bundle**: Codex、Trae
+- **Skills-only bundle**: Codex、Trae（`anws-system/SKILL.md` 导航壳 + `references/*.md` workflow 明细）
 
 ### 5.3 Install State Model
 

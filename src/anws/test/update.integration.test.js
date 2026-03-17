@@ -78,6 +78,28 @@ test('anws update falls back to directory scan when install-lock is missing', as
   });
 });
 
+test('anws update rebuilds install-lock from detected targets when already up to date', async () => {
+  await withTempDir(async (tempDir) => {
+    const initResult = runCliInDir(tempDir, ['init', '--target', 'windsurf,codex']);
+    assert.equal(initResult.status, 0, initResult.stderr || initResult.stdout);
+    const firstUpdateResult = runCliInDir(tempDir, ['update', '--yes']);
+    assert.equal(firstUpdateResult.status, 0, firstUpdateResult.stderr || firstUpdateResult.stdout);
+    await fs.rm(path.join(tempDir, '.anws', 'install-lock.json'), { force: true });
+
+    const updateResult = runCliInDir(tempDir, ['update', '--yes']);
+
+    assert.equal(updateResult.status, 0, updateResult.stderr || updateResult.stdout);
+    assert.match(updateResult.stdout, /State source: directory scan fallback/);
+    assert.match(updateResult.stdout, /Rebuilt \.anws\/install-lock\.json from the detected target layout\./);
+    assert.match(updateResult.stdout, /Already up to date/);
+
+    const lock = JSON.parse(await fs.readFile(path.join(tempDir, '.anws', 'install-lock.json'), 'utf8'));
+    assert.deepEqual(lock.targets.map((item) => item.targetId), ['codex', 'windsurf']);
+    assert.deepEqual(lock.lastUpdateSummary.successfulTargets, []);
+    assert.deepEqual(lock.lastUpdateSummary.failedTargets, []);
+  });
+});
+
 test('anws update migrates legacy .agent into antigravity target layout', async () => {
   await withTempDir(async (tempDir) => {
     await fs.mkdir(path.join(tempDir, '.agent', 'rules'), { recursive: true });

@@ -19,6 +19,7 @@ const RESOURCE_REGISTRY = [
   { id: 'probe', type: 'workflow', source: '.agents/workflows/probe.md', fileName: 'probe.md' },
   { id: 'quickstart', type: 'workflow', source: '.agents/workflows/quickstart.md', fileName: 'quickstart.md' },
   { id: 'upgrade', type: 'workflow', source: '.agents/workflows/upgrade.md', fileName: 'upgrade.md' },
+  { id: 'anws-system', type: 'skill', source: '.agents/skills/anws-system/SKILL.md', fileName: 'anws-system/SKILL.md', targets: ['codex', 'trae'] },
   { id: 'concept-modeler', type: 'skill', source: '.agents/skills/concept-modeler/SKILL.md', fileName: 'concept-modeler/SKILL.md' },
   { id: 'design-reviewer', type: 'skill', source: '.agents/skills/design-reviewer/SKILL.md', fileName: 'design-reviewer/SKILL.md' },
   { id: 'nexus-mapper', type: 'skill', source: '.agents/skills/nexus-mapper/SKILL.md', fileName: 'nexus-mapper/SKILL.md' },
@@ -54,9 +55,7 @@ function toArray(value) {
 
 function toProjectionFileName(resource, projectionType, targetId) {
   if ((targetId === 'codex' || targetId === 'trae') && projectionType === 'skills' && resource.type === 'workflow') {
-    return resource.id === 'quickstart'
-      ? 'anws-system/SKILL.md'
-      : `anws-system/references/${resource.id}.md`;
+    return `anws-system/references/${resource.id}.md`;
   }
   if (projectionType === 'commands') {
     return `${resource.id}.md`;
@@ -75,6 +74,9 @@ function buildProjectionEntries(targetId) {
   const typeMap = target.projectionTypes;
 
   return RESOURCE_REGISTRY.flatMap((resource) => {
+    if (resource.targets && !resource.targets.includes(target.id)) {
+      return [];
+    }
     const projectionTypes = typeMap[resource.type];
     if (!projectionTypes) {
       return [];
@@ -129,6 +131,9 @@ function buildProjectionPlan(targetIds = ['antigravity'], resources = RESOURCE_R
     const target = getTarget(targetId);
     const typeMap = target.projectionTypes;
     const projectionEntries = resources.flatMap((resource) => {
+      if (resource.targets && !resource.targets.includes(target.id)) {
+        return [];
+      }
       const projectionTypes = typeMap[resource.type];
       if (!projectionTypes) {
         return [];
