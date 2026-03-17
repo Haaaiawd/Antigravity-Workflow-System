@@ -96,6 +96,9 @@ test('all supported targets expose the expected projection shapes', () => {
     claude: ['AGENTS.md', '.claude/commands/genesis.md', '.claude/skills/spec-writer/SKILL.md'],
     copilot: ['AGENTS.md', '.github/prompts/genesis.prompt.md', '.github/skills/spec-writer/SKILL.md'],
     codex: ['AGENTS.md', '.codex/skills/anws-system/SKILL.md', '.codex/skills/anws-system/references/genesis.md', '.codex/skills/spec-writer/SKILL.md'],
+    trae: ['AGENTS.md', '.trae/skills/anws-system/SKILL.md', '.trae/skills/anws-system/references/genesis.md', '.trae/skills/spec-writer/SKILL.md'],
+    qoder: ['AGENTS.md', '.qoder/commands/genesis.md', '.qoder/skills/spec-writer/SKILL.md'],
+    kilo: ['AGENTS.md', '.kilocode/workflows/genesis.md', '.kilocode/skills/spec-writer/SKILL.md'],
     opencode: ['AGENTS.md', '.opencode/commands/genesis.md', '.opencode/skills/spec-writer/SKILL.md']
   };
 

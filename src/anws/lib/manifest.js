@@ -53,7 +53,7 @@ function toArray(value) {
 }
 
 function toProjectionFileName(resource, projectionType, targetId) {
-  if (targetId === 'codex' && projectionType === 'skills' && resource.type === 'workflow') {
+  if ((targetId === 'codex' || targetId === 'trae') && projectionType === 'skills' && resource.type === 'workflow') {
     return resource.id === 'quickstart'
       ? 'anws-system/SKILL.md'
       : `anws-system/references/${resource.id}.md`;

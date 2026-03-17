@@ -87,6 +87,47 @@ const TARGETS = {
     },
     detect: ['.codex/skills/anws-system/SKILL.md']
   },
+  trae: {
+    id: 'trae',
+    label: 'Trae',
+    rootAgentFile: true,
+    projectionTypes: {
+      workflow: ['skills'],
+      skill: ['skills']
+    },
+    projections: {
+      skills: '.trae/skills'
+    },
+    detect: ['.trae/skills/anws-system/SKILL.md']
+  },
+  qoder: {
+    id: 'qoder',
+    label: 'Qoder',
+    rootAgentFile: true,
+    projectionTypes: {
+      workflow: ['commands'],
+      skill: ['skills']
+    },
+    projections: {
+      commands: '.qoder/commands',
+      skills: '.qoder/skills'
+    },
+    detect: ['.qoder/commands/genesis.md']
+  },
+  kilo: {
+    id: 'kilo',
+    label: 'Kilo Code',
+    rootAgentFile: true,
+    projectionTypes: {
+      workflow: ['workflows'],
+      skill: ['skills']
+    },
+    projections: {
+      workflows: '.kilocode/workflows',
+      skills: '.kilocode/skills'
+    },
+    detect: ['.kilocode/workflows/genesis.md']
+  },
   opencode: {
     id: 'opencode',
     label: 'OpenCode',

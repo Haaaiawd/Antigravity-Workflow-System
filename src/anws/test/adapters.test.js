@@ -76,7 +76,7 @@ test('detectInstalledTargets does not treat plain target directories as anws ins
 test('listTargets exposes all supported target contracts', () => {
   const targets = listTargets();
 
-  assert.equal(targets.length, 7);
+  assert.equal(targets.length, 10);
   assert(targets.every((target) => target.id));
   assert(targets.every((target) => target.label));
   assert(targets.every((target) => target.projectionTypes));
@@ -84,10 +84,10 @@ test('listTargets exposes all supported target contracts', () => {
   assert(targets.every((target) => Array.isArray(target.detect)));
 });
 
-test('listTargets covers the complete first-wave target matrix', () => {
+test('listTargets covers the complete v7 target matrix', () => {
   assert.deepEqual(
     listTargets().map((target) => target.id),
-    ['windsurf', 'antigravity', 'cursor', 'claude', 'copilot', 'codex', 'opencode']
+    ['windsurf', 'antigravity', 'cursor', 'claude', 'copilot', 'codex', 'trae', 'qoder', 'kilo', 'opencode']
   );
 });
 
