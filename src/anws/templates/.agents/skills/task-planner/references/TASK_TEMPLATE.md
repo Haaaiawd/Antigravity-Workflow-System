@@ -14,6 +14,8 @@
 - **[验证]**: 检查点任务（人工 / E2E 验证）
 - **用户故事**: 映射到 PRD（US01, US02...）
 - **验收成立**: 验收成立条件
+- **📎 ADR**: 关联的架构决策记录
+- **📎 System**: 关联的系统设计文档
 
 ---
 
@@ -22,12 +24,17 @@
 #### T001 - 数据库 Schema 初始化
 - **用户故事**: US01
 - **描述**: 创建 `users` 表，包含 `id`、`email`、`password_hash`、`created_at` 字段。
+- **输入**: `04_SYSTEM_DESIGN/database.md` §用户表设计
+- **输出**: `migrations/001_create_users.sql`
 - **依赖**: 无
 - **验收成立**: `psql -c "\d users"` 显示正确的表结构。
+- **📎 ADR**: ADR-003 (密码存储方案)
   
 #### T002 - [P] 环境配置
 - **用户故事**: US01
 - **描述**: 添加包含 `DATABASE_URL`、`JWT_SECRET` 的 `.env` 文件。
+- **输入**: `02_ARCHITECTURE_OVERVIEW.md` §环境配置
+- **输出**: `.env.example`, `docker-compose.yml`
 - **依赖**: 无
 - **验收成立**: `docker-compose up` 可以无报错启动数据库。
 
@@ -39,14 +46,20 @@
 #### T003 - 用户注册接口
 - **用户故事**: US01
 - **描述**: 实现 `POST /api/register`，对密码做哈希并保存用户。
-- **依赖**: T001（数据库 Schema）
-- **验收成立**: `curl -X POST /api
+- **输入**: `04_SYSTEM_DESIGN/auth.md` §注册流程, T001 产出的 `users` 表
+- **输出**: `src/routes/auth.js`, `src/services/user.service.js`
+- **依赖**: T001
+- **验收成立**: `curl -X POST /api/register` 返回 201。
+- **📎 ADR**: ADR-003 (密码存储方案)
 
 #### T004 - [P] JWT Token 生成
 - **用户故事**: US01
 - **描述**: 创建 `generate_token(user_id)` 辅助函数。
-- **依赖**: T002（JWT_SECRET 已配置）
+- **输入**: `04_SYSTEM_DESIGN/auth.md` §JWT 签发, T002 产出的 `JWT_SECRET` 配置
+- **输出**: `src/utils/jwt.js`
+- **依赖**: T002
 - **验收成立**: 单元测试 `test_generate_token()` 通过。
+- **📎 ADR**: ADR-004 (JWT 认证方案)
 
 ---
 
@@ -64,18 +77,21 @@
 #### T005 - 登录接口
 - **用户故事**: US01
 - **描述**: 实现 `POST /api/login`，校验凭证并返回 JWT。
-- **依赖**: T003（用户表已有数据）、T004（JWT 生成器就绪）
-- **输入**: T003 产出的 `users` 表 + T004 产出的 `generate_token()` 函数
+- **输入**: `04_SYSTEM_DESIGN/auth.md` §登录流程, T003 产出的 `users` 表, T004 产出的 `generate_token()` 函数
 - **输出**: `/api/login` 端点 (`src/routes/auth.js`)
+- **依赖**: T003, T004
 - **验收成立**: 
   1. 合法登录返回 `{token: "..."}`。
   2. 非法登录返回 401。
+- **📎 ADR**: ADR-004 (JWT 认证方案)
 
 #### INT-S2 - [MILESTONE] S2 集成验证 — 核心逻辑
 - **用户故事**: US01
 - **类型**: 集成验证（迭代关卡）
 - **描述**: 验证 S2 退出标准：完整认证流程可运行
-- **依赖**: S2 的所有任务（T003-T005）
+- **输入**: `02_ARCHITECTURE_OVERVIEW.md` §认证流程, S2 所有任务的产出
+- **输出**: 集成验证报告
+- **依赖**: T003, T004, T005
 - **验收成立**:
   1. 运行 `npm run dev` 或等价命令
   2. 通过 `/api/register` 注册新用户
@@ -117,6 +133,7 @@ T002 (环境配置) [P]
 - [ ] 所有任务都有唯一 ID
 - [ ] 依赖关系明确（使用 `→` 表示）
 - [ ] 每个任务都有 `验收成立` 条件
+- [ ] **每个任务的「输入」都引用了设计文档**（ADR/System Design/PRD/Architecture）
 - [ ] 任务中不包含实际代码（仅保留 <10 行描述）
 - [ ] 总体估时合理
 - [ ] 用户已确认该任务清单
@@ -135,8 +152,10 @@ T001 - 构建认证系统
 ✅ **好任务示例**：
 ```
 T001 - 数据库 Schema 初始化
+- 输入: `04_SYSTEM_DESIGN/database.md` §用户表设计
 - 描述: 创建包含 `id`、`email`、`password_hash` 的 `users` 表。
 - 验收成立: `psql -c "\d users"` 显示正确表结构。
+- 📎 ADR: ADR-003 (密码存储方案)
 ```
 
 ---

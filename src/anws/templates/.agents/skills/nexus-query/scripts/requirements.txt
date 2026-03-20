@@ -1,0 +1,6 @@
+# nexus-mapper scripts 依赖
+# 用于独立使用或分发时安装
+# 在 Nexus 项目内部使用时，依赖已由 poetry 环境覆盖（tree-sitter ^0.25.2 + tree-sitter-language-pack）
+
+tree-sitter>=0.22.0
+tree-sitter-language-pack

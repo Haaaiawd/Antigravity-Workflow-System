@@ -1,0 +1,127 @@
+{
+  "extensions": {
+    ".py": "python",
+    ".pyw": "python",
+    ".pyi": "python",
+    ".js": "javascript",
+    ".mjs": "javascript",
+    ".cjs": "javascript",
+    ".jsx": "javascript",
+    ".ts": "typescript",
+    ".mts": "typescript",
+    ".tsx": "tsx",
+    ".sh": "bash",
+    ".bash": "bash",
+    ".zsh": "bash",
+    ".java": "java",
+    ".go": "go",
+    ".rs": "rust",
+    ".cs": "csharp",
+    ".c": "c",
+    ".h": "c",
+    ".cpp": "cpp",
+    ".cc": "cpp",
+    ".cxx": "cpp",
+    ".hpp": "cpp",
+    ".hxx": "cpp",
+    ".kt": "kotlin",
+    ".kts": "kotlin",
+    ".rb": "ruby",
+    ".php": "php",
+    ".lua": "lua",
+    ".swift": "swift",
+    ".scala": "scala",
+    ".sc": "scala",
+    ".ex": "elixir",
+    ".exs": "elixir",
+    ".gd": "gdscript",
+    ".dart": "dart",
+    ".hs": "haskell",
+    ".clj": "clojure",
+    ".cljs": "clojure",
+    ".cljc": "clojure",
+    ".sql": "sql",
+    ".proto": "proto",
+    ".sol": "solidity",
+    ".vue": "vue",
+    ".svelte": "svelte",
+    ".r": "r",
+    ".pl": "perl",
+    ".pm": "perl"
+  },
+  "queries": {
+    "python": {
+      "struct": "(class_definition name: (identifier) @class.name) @class.def\n(function_definition name: (identifier) @func.name) @func.def",
+      "imports": "(import_statement name: (dotted_name) @mod)\n(import_from_statement module_name: (dotted_name) @mod)"
+    },
+    "javascript": {
+      "struct": "(class_declaration name: (identifier) @class.name) @class.def\n(function_declaration name: (identifier) @func.name) @func.def\n(method_definition name: (property_identifier) @func.name) @func.def",
+      "imports": "(import_statement source: (string (string_fragment) @mod))"
+    },
+    "typescript": {
+      "struct": "(class_declaration name: (type_identifier) @class.name) @class.def\n(function_declaration name: (identifier) @func.name) @func.def\n(method_definition name: (property_identifier) @func.name) @func.def",
+      "imports": "(import_statement source: (string (string_fragment) @mod))"
+    },
+    "tsx": {
+      "struct": "(class_declaration name: (type_identifier) @class.name) @class.def\n(function_declaration name: (identifier) @func.name) @func.def\n(method_definition name: (property_identifier) @func.name) @func.def",
+      "imports": "(import_statement source: (string (string_fragment) @mod))"
+    },
+    "java": {
+      "struct": "(class_declaration name: (identifier) @class.name) @class.def\n(method_declaration name: (identifier) @func.name) @func.def\n(interface_declaration name: (identifier) @class.name) @class.def",
+      "imports": "(import_declaration (scoped_identifier) @mod)"
+    },
+    "go": {
+      "struct": "(type_declaration (type_spec name: (type_identifier) @class.name)) @class.def\n(function_declaration name: (identifier) @func.name) @func.def\n(method_declaration name: (field_identifier) @func.name) @func.def",
+      "imports": "(import_spec path: (interpreted_string_literal) @mod)"
+    },
+    "rust": {
+      "struct": "(struct_item name: (type_identifier) @class.name) @class.def\n(enum_item name: (type_identifier) @class.name) @class.def\n(function_item name: (identifier) @func.name) @func.def",
+      "imports": "(use_declaration argument: (scoped_identifier) @mod)\n(use_declaration argument: (identifier) @mod)"
+    },
+    "csharp": {
+      "struct": "(class_declaration name: (identifier) @class.name) @class.def\n(method_declaration name: (identifier) @func.name) @func.def\n(interface_declaration name: (identifier) @class.name) @class.def",
+      "imports": "(using_directive (qualified_name) @mod)\n(using_directive (identifier) @mod)"
+    },
+    "cpp": {
+      "struct": "(class_specifier name: (type_identifier) @class.name) @class.def\n(function_definition\n    declarator: (function_declarator\n        declarator: (identifier) @func.name)) @func.def",
+      "imports": "(preproc_include path: (system_lib_string) @mod)\n(preproc_include path: (string_literal) @mod)"
+    },
+    "c": {
+      "struct": "(struct_specifier name: (type_identifier) @class.name) @class.def\n(function_definition\n    declarator: (function_declarator\n        declarator: (identifier) @func.name)) @func.def",
+      "imports": "(preproc_include path: (system_lib_string) @mod)\n(preproc_include path: (string_literal) @mod)"
+    },
+    "kotlin": {
+      "struct": "(class_declaration (type_identifier) @class.name) @class.def\n(function_declaration (simple_identifier) @func.name) @func.def",
+      "imports": "(import_header (identifier) @mod)"
+    },
+    "ruby": {
+      "struct": "(class name: (constant) @class.name) @class.def\n(method name: (identifier) @func.name) @func.def",
+      "imports": ""
+    },
+    "swift": {
+      "struct": "(class_declaration name: (type_identifier) @class.name) @class.def\n(function_declaration name: (simple_identifier) @func.name) @func.def",
+      "imports": "(import_declaration (identifier) @mod)"
+    },
+    "scala": {
+      "struct": "(class_definition name: (identifier) @class.name) @class.def\n(function_definition name: (identifier) @func.name) @func.def",
+      "imports": "(import_declaration importees: (import_selectors selector: (import_selector name: (identifier) @mod)))"
+    },
+    "lua": {
+      "struct": "(function_declaration name: (identifier) @func.name) @func.def",
+      "imports": ""
+    },
+    "php": {
+      "struct": "(class_declaration name: (name) @class.name) @class.def\n(method_declaration name: (name) @func.name) @func.def\n(function_definition name: (name) @func.name) @func.def",
+      "imports": "(namespace_use_declaration (namespace_use_clause (qualified_name (name) @mod)))"
+    },
+    "elixir": {
+      "struct": "(call target: (identifier) @_keyword\n      arguments: (arguments (alias) @class.name)\n      (#match? @_keyword \"^(defmodule|defprotocol)$\")) @class.def\n(call target: (identifier) @_keyword\n      arguments: (arguments (identifier) @func.name)\n      (#match? @_keyword \"^(def|defp)$\")) @func.def",
+      "imports": ""
+    },
+    "gdscript": {
+      "struct": "(class_name_statement name: (name) @class.name) @class.def\n(function_definition name: (name) @func.name) @func.def",
+      "imports": ""
+    }
+  },
+  "unsupported_extensions": {}
+}

@@ -11,10 +11,9 @@ description: "探测系统风险、隐藏耦合和架构暗坑。适用于接手
 在架构更新 (`.anws/v{N}`) 之前或之后，探测系统风险、暗坑和耦合。
 探测结果将作为**输入**反馈给 Architectural Overview。
 
-**核心能力**：
-- 调用 `nexus-mapper` 执行完整 PROBE 五阶段协议
-- 调用 `runtime-inspector` 补充进程边界分析
-- 产出风险矩阵和 Gap Analysis
+**探测模式**（双级别）：
+- **轻量探测**：nexus-query + runtime-inspector → 快速精准查询
+- **深度探测**：nexus-mapper + runtime-inspector → 完整知识库
 
 **你的限制**：
 - 不修改架构，只**观测**和**报告**
@@ -28,13 +27,21 @@ description: "探测系统风险、隐藏耦合和架构暗坑。适用于接手
 
 ---
 
-## ⚠️ CRITICAL 流程约束
+## ⚠️ CRITICAL 强约束：双级别探测
 
 > [!IMPORTANT]
-> Probe 不修改架构，只**观测**和**报告**。
-> 你的报告应该被 Genesis 过程参考。
+> **Probe 采用双级别探测，强制调用 skill，不允许"空手探测"。**
 >
-> **为什么？** 探测的目的是发现问题，而非解决问题。混在一起会导致视角偏差。
+> | 级别 | 触发条件 | 调用 Skill | 产出 |
+> | :--: | -------- | :--------- | :--- |
+> | **轻量** | 默认 | `nexus-query` + `runtime-inspector` | 精准查询结果 + 进程边界 |
+> | **深度** | 用户要求 `/probe --deep` 或项目 > 100 文件 | `nexus-mapper` + `runtime-inspector` | 完整 `.nexus-map/` 知识库 |
+>
+> **强约束**：
+> - ❌ **禁止**跳过 skill 调用直接写报告
+> - ❌ **禁止**用"目录扫描"替代 nexus-query
+> - ✅ **必须**至少执行轻量探测
+> - ✅ runtime-inspector 在两种级别都调用（进程边界分析不可省略）
 
 > [!NOTE]
 > **Probe 双模式说明**:
@@ -46,23 +53,88 @@ description: "探测系统风险、隐藏耦合和架构暗坑。适用于接手
 
 ---
 
-## Step 1: 执行 nexus-mapper PROBE 协议
+## Step 0: 级别判定
 
-**目标**: 完成项目深度探测，产出 `.nexus-map/` 知识库。
+**目标**: 确定探测级别。
+
+**判定规则**:
+
+```markdown
+检查条件：
+1. 用户是否明确要求 `/probe deep`？
+2. 项目源码文件数是否 > 100？
+
+判定结果：
+├── 满足任一条件 → 深度探测 → 跳到 Step 2
+└── 均不满足 → 轻量探测 → 继续 Step 1
+```
+
+**输出**: 记录 `probe_level = "light" | "deep"`
+
+---
+
+## Step 1: 轻量探测
+
+**目标**: 使用 nexus-query 快速获取关键结构信息。
 
 > [!IMPORTANT]
-> 你**必须**调用 `nexus-mapper` 执行完整的 PROBE 五阶段协议。
->
-> **为什么？** nexus-mapper 已整合了构建拓扑、Git 热点、领域概念分析能力，一次调用即可获得完整的项目认知。
+> 此步骤**必须调用 nexus-query skill**，不允许跳过或替代。
+
+### 1.1 调用 nexus-query
+
+**调用技能**: `nexus-query`
+
+**必执行查询**（按顺序）:
+
+```bash
+# 1. 全局结构摘要
+python $SKILL_DIR/scripts/query_graph.py $AST_JSON --summary
+
+# 2. 核心节点分析（高耦合热点）
+python $SKILL_DIR/scripts/query_graph.py $AST_JSON --hub-analysis --top 10
+
+# 3. 如果有特定关注模块，执行影响分析
+python $SKILL_DIR/scripts/query_graph.py $AST_JSON --impact <关注模块路径>
+```
+
+**输出**: 
+- 模块分布摘要
+- 高耦合热点清单
+- 关键模块影响半径
+
+### 1.2 调用 runtime-inspector
+
+**调用技能**: `runtime-inspector`
+
+> [!IMPORTANT]
+> runtime-inspector **必须调用**，进程边界分析不可省略。
+
+**分析内容**:
+- 识别入口点（main 函数）
+- 追踪进程生成链（spawn, fork）
+- 检测 IPC 契约状态（Strong/Weak/None）
+
+**输出**: Process Roots + Contract Status
+
+---
+
+## Step 2: 深度探测
+
+**目标**: 使用 nexus-mapper 产出完整知识库。
+
+> [!IMPORTANT]
+> 此步骤**必须调用 nexus-mapper skill**，产出完整的 `.nexus-map/` 目录。
+
+### 2.1 调用 nexus-mapper
 
 **调用技能**: `nexus-mapper`
 
 **nexus-mapper 内置能力**:
 - **PROFILE**: AST 提取、文件树、语言覆盖
-- **REASON**: 构建拓扑、依赖分析（原 build-inspector 功能）
+- **REASON**: 构建拓扑、依赖分析
 - **OBJECT**: 质疑验证、三维度分析
-- **BENCHMARK**: Git 热点、耦合对分析（原 git-forensics 功能）
-- **EMIT**: 概念模型、知识库生成（原 concept-modeler 功能）
+- **BENCHMARK**: Git 热点、耦合对分析
+- **EMIT**: 概念模型、知识库生成
 
 **输出**: `.nexus-map/` 目录，包含：
 - `INDEX.md` — AI 冷启动入口
@@ -71,18 +143,14 @@ description: "探测系统风险、隐藏耦合和架构暗坑。适用于接手
 - `concepts/concept_model.json` — 机器可读概念模型
 - `hotspots/git_forensics.md` — Git 热点分析
 
----
-
-## Step 2: 补充运行时拓扑分析
-
-**目标**: 追踪进程间通信和契约状态（nexus-mapper 不覆盖此领域）。
+### 2.2 调用 runtime-inspector
 
 **调用技能**: `runtime-inspector`
 
-**思考引导**:
-1. "进程边界在哪里？通信协议是什么？"
-2. "有没有僵尸进程或协议漂移风险？"
-3. "契约是强类型还是隐式约定？"
+**分析内容**:
+- 识别入口点和进程边界
+- 追踪进程生成链
+- 检测 IPC 契约状态（Strong/Weak/None）
 
 **输出**: Process Roots + Contract Status
 
@@ -96,7 +164,7 @@ description: "探测系统风险、隐藏耦合和架构暗坑。适用于接手
 > 仅在 `.anws/v{N}/` 存在时执行此步骤。
 
 **Gap Analysis 内容**:
-- 将 `.nexus-map/concepts/concept_model.json` 与 `.anws/v{N}/` 中的架构定义对比
+- 对比代码结构与 Architecture Overview 定义的系统边界
 - 识别文档与实现的偏差
 - 标记概念漂移或隐式设计
 
@@ -135,21 +203,22 @@ description: "探测系统风险、隐藏耦合和架构暗坑。适用于接手
 
 **探测时间**: [时间戳]
 **探测模式**: [模式 A/B]
+**探测级别**: [轻量 / 深度]
 
 ## 1. System Fingerprint
-[项目结构概览]
+[模块分布摘要，来自 nexus-query --summary 或 nexus-mapper]
 
 ## 2. Build Topology
-[构建边界和依赖]
+[依赖关系，来自 nexus-query --hub-analysis 或 nexus-mapper]
 
 ## 3. Runtime Topology
-[进程边界和契约]
+[进程边界和契约，来自 runtime-inspector]
 
 ## 4. Temporal Topology
-[历史耦合和热点]
+[历史耦合和热点] (深度探测才有)
 
 ## 5. Gap Analysis
-[文档 vs 代码偏差]
+[文档 vs 代码偏差] (模式 B)
 
 ## 6. Risk Matrix
 
@@ -159,10 +228,11 @@ description: "探测系统风险、隐藏耦合和架构暗坑。适用于接手
 ```
 
 <completion_criteria>
-- ✅ 建立了系统指纹
-- ✅ 识别了构建和运行时拓扑
-- ✅ 发现了历史耦合热点
-- ✅ 完成了 Gap Analysis
+- ✅ 确定了探测级别（轻量/深度）
+- ✅ 调用了 nexus-query 或 nexus-mapper
+- ✅ 调用了 runtime-inspector
+- ✅ 完成了 Gap Analysis（模式 B）
 - ✅ 产出了风险矩阵
+- ✅ 生成了报告文件
 </completion_criteria>
 
