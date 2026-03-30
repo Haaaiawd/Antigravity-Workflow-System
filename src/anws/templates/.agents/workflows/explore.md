@@ -137,6 +137,13 @@ description: "深度探索复杂问题，产出结构化洞察。适用于技术
 
 使用搜索工具搜索相关关键词
 
+> [!IMPORTANT]
+> **可选 Skill 可用性检测**:
+> - `find-skills` 是**可选增强**，不是默认依赖
+> - 如果当前环境支持 `find-skills`，可将其作为方法论与能力发现的额外来源
+> - 如果当前环境**不支持** `find-skills`，直接继续使用 `search_web`、`read_url_content` 等标准搜索路径
+> - **不得因 `find-skills` 不可用而中断 workflow**
+
 **搜索技巧**:
 | 目标 | 技巧 | 示例 |
 |------|------|------|
@@ -146,6 +153,27 @@ description: "深度探索复杂问题，产出结构化洞察。适用于技术
 | 对比分析 | `vs`, `comparison`, `benchmark` | "Rust vs Go benchmark" |
 | 实战经验 | `best practices`, `production` | "K8s production best practices" |
 | 问题解决 | `how to`, `fix`, `solution` | "Python asyncio memory leak fix" |
+| **find-skills** | `find-skills` | "find-skills Rust async" |
+
+> [!IMPORTANT]
+> **`find-skills` 是可选探索源，不是默认必用步骤。**
+>
+> 当问题需要吸收成熟方法论、检查框架、设计启发或测试策略时，可以额外调用 `find-skills`。
+> 适用场景包括：
+> - 想了解某类专业能力是否已有现成 skill 可复用
+> - 希望借鉴 UI/UX、架构评审、测试、性能优化等领域的成熟框架
+> - 需要把外部 skill 中的结构化经验转译进 ADR、SYSTEM_DESIGN、TASKS 或 Workflow
+
+**Skill Harvesting 原则**:
+1.  **先发现**: 用 `find-skills` 查找相关能力或方法源
+2.  **再提炼**: 提取有价值的检查维度、输出结构、启发式原则、验收方式
+3.  **后转译**: 将这些内容写入当前探索报告与后续文档，而不是整段搬运 skill 本体
+4.  **保持可选**: 如果普通搜索和内部推理已足够，不必强行调用 `find-skills`
+
+**备用搜索路径**（当 `find-skills` 不可用时）:
+1.  使用 `search_web` 搜索方法论关键词、最佳实践、对标对象和测试策略关键词
+2.  使用 `read_url_content` 读取高质量文档、官方文档或代表性深度文章
+3.  在最终报告中标注：本次结论来自 Web / 文档搜索，**未使用 skill harvesting 增强**
 
 ### 2.2 向内发散 (Inward Divergence) 🧠
 
@@ -247,6 +275,12 @@ description: "深度探索复杂问题，产出结构化洞察。适用于技术
 - 确保对应目录存在
 
 将内容保存到报告文件。
+
+> [!NOTE]
+> 如果本次探索使用了 `find-skills`，请在报告中明确区分：
+> - 哪些结论来自 Web / 文档搜索
+> - 哪些结论来自 skill harvesting
+> - 哪些内容被建议沉淀到 ADR、SYSTEM_DESIGN、TASKS 或 Workflow
 
 **报告模板**:
 
