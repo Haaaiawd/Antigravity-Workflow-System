@@ -41,7 +41,7 @@ description: "智能编排全流程。适用于不确定从哪个工作流开始
    **3.1 调用 CLI 初始化**:
    执行以下命令完成项目初始化:
    ```bash
-   anws init --target windsurf
+   anws init --target <Your IDE>
    ```
 
    **3.2 输出初始化确认**:
