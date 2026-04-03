@@ -55,6 +55,61 @@ function compareSemver(a, b) {
   return 0;
 }
 
+function normalizeText(text) {
+  return String(text || '').replace(/\r\n/g, '\n');
+}
+
+function buildMergedChangeKey(item) {
+  const canonicalPath = item.source || item.file;
+  const summaryKey = JSON.stringify(item.summary || []);
+  const contentKey = item.type === 'modified'
+    ? summaryKey
+    : `${normalizeText(item.oldContent)}\n<<<ANWS_CHANGE_SPLIT>>>\n${normalizeText(item.newContent)}`;
+
+  return `${item.type}::${canonicalPath}::${item.resourceId || canonicalPath}::${contentKey}`;
+}
+
+function mergeChanges(changes) {
+  const grouped = new Map();
+
+  for (const item of changes) {
+    const canonicalPath = item.source || item.file;
+    const key = buildMergedChangeKey(item);
+    const affectedFile = {
+      file: item.file,
+      targetId: item.targetId || null,
+      targetLabel: item.targetLabel || null
+    };
+
+    if (!grouped.has(key)) {
+      grouped.set(key, {
+        ...item,
+        canonicalPath,
+        affectedFiles: [affectedFile]
+      });
+      continue;
+    }
+
+    const current = grouped.get(key);
+    current.affectedFiles.push(affectedFile);
+  }
+
+  return Array.from(grouped.values()).map((item) => ({
+    ...item,
+    affectedFiles: item.affectedFiles.sort((left, right) => left.file.localeCompare(right.file))
+  }));
+}
+
+function formatAffectedTargetList(item) {
+  const targets = Array.from(new Set(
+    item.affectedFiles
+      .filter((entry) => entry.targetId && entry.targetLabel)
+      .map((entry) => `${entry.targetLabel} (${entry.targetId})`)
+  ));
+
+  return targets.length > 0 ? targets.join(', ') : '无';
+}
+
 function formatFileList(title, items) {
   const lines = [`### ${title}`];
   if (items.length === 0) {
@@ -63,7 +118,10 @@ function formatFileList(title, items) {
   }
 
   for (const item of items) {
-    lines.push(`- \`${item.file}\``);
+    lines.push(`- \`${item.canonicalPath}\` — 影响 Targets: ${formatAffectedTargetList(item)}`);
+    for (const affectedFile of item.affectedFiles) {
+      lines.push(`  - \`${affectedFile.file}\``);
+    }
   }
 
   return lines.join('\n');
@@ -72,7 +130,10 @@ function formatFileList(title, items) {
 function formatDetail(item) {
   if (item.type === 'added') {
     return [
-      `### \`${item.file}\``,
+      `### \`${item.canonicalPath}\``,
+      `- **影响 Targets**: ${formatAffectedTargetList(item)}`,
+      '- **影响文件**:',
+      ...item.affectedFiles.map((entry) => `  - \`${entry.file}\``),
       '- **新增文件**',
       '- **说明**: 该文件在旧版本中不存在，因此无前后逐行对比。'
     ].join('\n');
@@ -80,7 +141,10 @@ function formatDetail(item) {
 
   if (item.type === 'deleted') {
     return [
-      `### \`${item.file}\``,
+      `### \`${item.canonicalPath}\``,
+      `- **影响 Targets**: ${formatAffectedTargetList(item)}`,
+      '- **影响文件**:',
+      ...item.affectedFiles.map((entry) => `  - \`${entry.file}\``),
       '- **删除文件**',
       '- **说明**: 该文件在新版本中不存在，因此无前后逐行对比。'
     ].join('\n');
@@ -88,13 +152,19 @@ function formatDetail(item) {
 
   if (item.summary.length === 0) {
     return [
-      `### \`${item.file}\``,
+      `### \`${item.canonicalPath}\``,
+      `- **影响 Targets**: ${formatAffectedTargetList(item)}`,
+      '- **影响文件**:',
+      ...item.affectedFiles.map((entry) => `  - \`${entry.file}\``),
       '- **说明**: 检测到内容变更，但未能提取到摘要。'
     ].join('\n');
   }
 
   return [
-    `### \`${item.file}\``,
+    `### \`${item.canonicalPath}\``,
+    `- **影响 Targets**: ${formatAffectedTargetList(item)}`,
+    '- **影响文件**:',
+    ...item.affectedFiles.map((entry) => `  - \`${entry.file}\``),
     '```diff',
     ...item.summary.flatMap((pair) => [
       `- [old:${pair.oldLineNumber === null ? '-' : pair.oldLineNumber}] ${pair.oldText}`,
@@ -106,7 +176,8 @@ function formatDetail(item) {
 
 async function generateChangelog({ cwd, version, changes, targetSummary = null }) {
   const changelogDir = await ensureChangelogDir(cwd);
-  const grouped = groupChanges(changes);
+  const mergedChanges = mergeChanges(changes);
+  const grouped = groupChanges(mergedChanges);
   const now = new Date();
   const timestamp = now.toISOString().replace('T', ' ').slice(0, 19);
   const filePath = path.join(changelogDir, `v${version}.md`);
@@ -143,7 +214,7 @@ async function generateChangelog({ cwd, version, changes, targetSummary = null }
     '',
     '## 内容级变更详情',
     '',
-    ...(changes.length > 0 ? changes.map(formatDetail).flatMap((section) => [section, '']) : ['- 无变更', ''])
+    ...(mergedChanges.length > 0 ? mergedChanges.map(formatDetail).flatMap((section) => [section, '']) : ['- 无变更', ''])
   ].join('\n');
 
   await fs.writeFile(filePath, content, 'utf8');

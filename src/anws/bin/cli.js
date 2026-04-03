@@ -22,8 +22,7 @@ COMMANDS
 OPTIONS
   -v, --version   Print version number
   -h, --help      Show this help message
-  --target        Target AI IDE(s) for \`init\`, comma-separated (${TARGET_IDS.join(', ')})
-  --check         Preview grouped update diffs without writing files or rebuilding install-lock state
+  --target        Target AI IDE(s) for init, comma-separated (${TARGET_IDS.join(', ')})
 
 SUPPORTED TARGETS
   windsurf     workflows + skills
@@ -40,8 +39,7 @@ SUPPORTED TARGETS
 EXAMPLES
   anws init                       # Choose target IDEs and install their managed workflow projections
   anws init --target windsurf,codex,opencode
-  anws update                     # Update all matched targets from install-lock, fallback scan, or drift repair
-  anws update --check             # Preview grouped changes per target without writing files
+  anws update                     # One-click update for all matched targets from install-lock, fallback scan, or drift repair
 `.trimStart();
 
 // ─── 参数解析 ─────────────────────────────────────────────────────────────────
@@ -90,7 +88,15 @@ async function main() {
       break;
 
     case 'update':
-      await require('../lib/update')({ check: values.check });
+      if (values.target !== undefined) {
+        error('`anws update --target` has been removed. Use `anws update` to update all matched targets.');
+        process.exit(1);
+      }
+      if (values.check) {
+        error('`anws update --check` has been removed. Use `anws update` directly.');
+        process.exit(1);
+      }
+      await require('../lib/update')();
       break;
 
     default:

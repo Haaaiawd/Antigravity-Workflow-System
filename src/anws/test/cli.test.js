@@ -16,13 +16,17 @@ function runCli(args, options = {}) {
   });
 }
 
-test('cli help documents the target option', () => {
+test('cli help documents init target option and one-click update flow', () => {
   const result = runCli(['--help']);
 
   assert.equal(result.status, 0);
   assert.match(result.stdout, /--target/);
+  assert.match(result.stdout, /for init/);
   assert.match(result.stdout, /windsurf/);
   assert.match(result.stdout, /antigravity/);
+  assert.match(result.stdout, /One-click update/);
+  assert.doesNotMatch(result.stdout, /update --target/);
+  assert.doesNotMatch(result.stdout, /update --check/);
 });
 
 test('cli exits with an error for unsupported target ids', () => {
@@ -42,4 +46,20 @@ test('cli accepts comma-separated target ids for init', () => {
   assert.match(result.stdout, /comma-separated/);
   assert.match(result.stdout, /windsurf/);
   assert.match(result.stdout, /codex/);
+});
+
+test('cli rejects removed update flags', () => {
+  const targetResult = runCli(['update', '--target', 'windsurf'], {
+    input: '',
+    stdio: ['pipe', 'pipe', 'pipe']
+  });
+  const checkResult = runCli(['update', '--check'], {
+    input: '',
+    stdio: ['pipe', 'pipe', 'pipe']
+  });
+
+  assert.notEqual(targetResult.status, 0);
+  assert.match(targetResult.stderr + targetResult.stdout, /`anws update --target` has been removed/);
+  assert.notEqual(checkResult.status, 0);
+  assert.match(checkResult.stderr + checkResult.stdout, /`anws update --check` has been removed/);
 });

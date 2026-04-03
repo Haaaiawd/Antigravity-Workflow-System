@@ -137,6 +137,7 @@ async function collectManagedFileDiffs({
     ? managedFiles
     : projectionPlan.flatMap((item) => item.managedFiles || []);
   const projectionMap = new Map(normalizedProjectionEntries.map((item) => [item.outputPath, item]));
+  const fallbackTarget = projectionPlan[0] || null;
 
   for (const rel of normalizedManagedFiles) {
     if (rel === 'AGENTS.md' && !shouldWriteRootAgents) {
@@ -144,6 +145,19 @@ async function collectManagedFileDiffs({
     }
 
     const entry = projectionMap.get(rel);
+    const metadata = entry
+      ? {
+          source: entry.source,
+          resourceId: entry.id,
+          targetId: entry.targetId,
+          targetLabel: entry.targetLabel
+        }
+      : {
+          source: rel,
+          resourceId: rel === 'AGENTS.md' ? 'root-agents' : rel,
+          targetId: fallbackTarget?.targetId || null,
+          targetLabel: fallbackTarget?.targetLabel || null
+        };
     const srcPath = rel === 'AGENTS.md'
       ? srcAgents
       : path.join(path.join(__dirname, '..', 'templates'), entry.source);
@@ -160,6 +174,7 @@ async function collectManagedFileDiffs({
     if (srcExists && !destExists) {
       results.push({
         file: rel,
+        ...metadata,
         type: 'added',
         summary: [],
         oldContent: '',
@@ -171,6 +186,7 @@ async function collectManagedFileDiffs({
     if (!srcExists && destExists) {
       results.push({
         file: rel,
+        ...metadata,
         type: 'deleted',
         summary: [],
         oldContent: await readTextOrEmpty(destPath),
@@ -193,6 +209,7 @@ async function collectManagedFileDiffs({
 
     results.push({
       file: rel,
+      ...metadata,
       type: 'modified',
       summary: createLineDiff(oldContent, newContent),
       oldContent,

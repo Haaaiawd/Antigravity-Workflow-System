@@ -5,31 +5,32 @@ const path = require('node:path');
 const { buildProjectionPlan } = require('./manifest');
 const { getTarget } = require('./adapters');
 const { planAgentsUpdate, resolveAgentsInstall, printLegacyMigrationWarning, pathExists } = require('./agents');
-const { collectManagedFileDiffs, printPreview } = require('./diff');
+const { collectManagedFileDiffs } = require('./diff');
 const { detectUpgrade, generateChangelog } = require('./changelog');
 const { writeTargetFiles } = require('./copy');
 const { createInstallLock, dedupeTargets, detectInstallState, summarizeTargetState, writeInstallLock } = require('./install-state');
 const { confirm } = require('./prompt');
 const { ROOT_AGENTS_FILE, resolveCanonicalSource } = require('./resources');
-const { success, warn, error, info, fileLine, skippedLine, blank, logo, section } = require('./output');
+const { warn, error, info, fileLine, skippedLine, blank, logo, section } = require('./output');
 
-async function update(options = {}) {
+async function update() {
   const cwd = process.cwd();
-  const check = !!options.check;
   const legacyAgentDir = path.join(cwd, '.agent');
   const { version } = require(path.join(__dirname, '..', 'package.json'));
   const installState = await detectInstallState(cwd);
   const legacyAgentExists = await pathExists(legacyAgentDir);
   const isLegacyMigration = installState.selectedTargets.length === 0 && legacyAgentExists;
-  const selectedTargetIds = isLegacyMigration ? ['antigravity'] : installState.selectedTargets;
-  const targetPlans = buildProjectionPlan(selectedTargetIds);
+  const detectedTargetIds = isLegacyMigration ? ['antigravity'] : installState.selectedTargets;
 
-  if (selectedTargetIds.length === 0 && !legacyAgentExists) {
+  if (detectedTargetIds.length === 0 && !legacyAgentExists) {
     logo();
     error('No supported Anws target layout found in current directory.');
     info('Run `anws init` first to set up the workflow system.');
     process.exit(1);
   }
+
+  const targetPlans = buildProjectionPlan(detectedTargetIds);
+  const detectedTargetPlans = buildProjectionPlan(detectedTargetIds);
 
   const srcAgents = ROOT_AGENTS_FILE;
 
@@ -100,41 +101,18 @@ async function update(options = {}) {
 
   const changes = targetContexts.flatMap((context) => context.changes);
 
-  if (check) {
-    if (!versionState.needUpgrade) {
-      if (!isLegacyMigration) {
-        logo();
-        blank();
-      }
-      info(`Already up to date. Latest recorded version is v${versionState.latestVersion || version}.`);
-      printTargetSelection(installState, targetContexts.map((context) => context.target));
-      return;
-    }
-    if (!isLegacyMigration) {
-      logo();
-      blank();
-    }
-    printTargetSelection(installState, targetContexts.map((context) => context.target));
-    printPreview({
-      fromVersion: versionState.fromVersion,
-      toVersion: versionState.toVersion,
-      changes
-    });
-    return;
-  }
-
   if (!versionState.needUpgrade) {
     if (!isLegacyMigration) {
       logo();
       blank();
     }
     printTargetSelection(installState, targetContexts.map((context) => context.target));
-    if (!check && installState.canRebuildLock && selectedTargetIds.length > 0) {
+    if (installState.canRebuildLock && detectedTargetIds.length > 0) {
       const generatedAt = new Date().toISOString();
       await writeInstallLock(cwd, createInstallLock({
         cliVersion: version,
         generatedAt,
-        targets: dedupeTargets(targetPlans.map((targetPlan) => summarizeTargetState(targetPlan, version))),
+        targets: dedupeTargets(detectedTargetPlans.map((targetPlan) => summarizeTargetState(targetPlan, version))),
         lastUpdateSummary: {
           successfulTargets: [],
           failedTargets: [],
@@ -152,15 +130,7 @@ async function update(options = {}) {
     blank();
   }
 
-  const confirmed = await askUpdate({
-    installState,
-    targets: targetContexts.map((context) => context.target)
-  });
-  if (!confirmed) {
-    blank();
-    info('Aborted. No files were changed.');
-    return;
-  }
+  printTargetSelection(installState, targetContexts.map((context) => context.target));
 
   const updated = [];
   const skipped = [];
@@ -217,6 +187,12 @@ async function update(options = {}) {
     }
   });
   const generatedAt = new Date().toISOString();
+  const successfulTargetIdSet = new Set(successfulTargets.map((item) => item.targetId));
+  const retainedDetectedTargets = installState.canRebuildLock
+    ? detectedTargetPlans
+        .filter((targetPlan) => !successfulTargetIdSet.has(targetPlan.targetId))
+        .map((targetPlan) => summarizeTargetState(targetPlan, version))
+    : [];
   const existingLockTargets = installState.canRebuildLock
     ? []
     : (installState.lockResult.lock?.targets || []);
@@ -225,6 +201,7 @@ async function update(options = {}) {
     generatedAt,
     targets: dedupeTargets([
       ...existingLockTargets,
+      ...retainedDetectedTargets,
       ...successfulTargets
     ]),
     lastUpdateSummary: {
@@ -248,23 +225,6 @@ async function update(options = {}) {
     skippedCount: skipped.length,
     changelogPath: path.relative(cwd, changelogPath).replace(/\\/g, '/'),
     legacyCleanupLine
-  });
-}
-
-async function askUpdate({ installState, targets }) {
-  if (global.__ANWS_FORCE_YES) return true;
-
-  if (!process.stdin.isTTY) {
-    warn('Non-TTY environment detected. Skipping update to avoid accidental overwrites.');
-    return false;
-  }
-
-  return confirm({
-    message: buildUpdateConfirmationMessage(targets),
-    contextLines: buildUpdateConfirmationContextLines(installState, targets),
-    confirmLabel: 'Continue',
-    cancelLabel: 'Cancel',
-    defaultValue: false
   });
 }
 
@@ -308,23 +268,8 @@ async function maybeDeleteLegacyDir(legacyAgentDir) {
   return true;
 }
 
-function buildUpdateConfirmationMessage(targets) {
-  const labels = targets.map((target) => target.label).filter(Boolean);
-  if (labels.length === 0) {
-    return 'This will overwrite all managed files for the detected target layout.';
-  }
-  return `This will overwrite all managed files for: ${labels.join(', ')}.`;
-}
-
-function buildUpdateConfirmationContextLines(installState, targets) {
-  const lines = [
-    `Matched targets: ${targets.map((target) => `${target.label} (${target.id})`).join(', ') || 'none'}`,
-    installState.needsFallback ? 'State source: directory scan fallback' : 'State source: install-lock + directory scan'
-  ];
-  if (installState.drift.hasDrift) {
-    lines.push(`State drift detected. Missing on disk: ${installState.drift.missingOnDisk.join(', ') || 'none'}; untracked on disk: ${installState.drift.untrackedOnDisk.join(', ') || 'none'}.`);
-  }
-  return lines;
+function buildSelectionModeLine() {
+  return 'Selection mode: detected target layout';
 }
 
 function printLegacyMigrationNotice() {
@@ -338,6 +283,7 @@ function printLegacyMigrationNotice() {
 function printTargetSelection(installState, targets) {
   blank();
   section('Target selection', [
+    buildSelectionModeLine(),
     `Matched targets: ${targets.map((target) => `${target.label} (${target.id})`).join(', ') || 'none'}`,
     installState.needsFallback ? 'State source: directory scan fallback' : 'State source: install-lock + directory scan',
     ...(installState.drift.hasDrift

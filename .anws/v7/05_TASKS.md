@@ -60,27 +60,33 @@ graph TD
 ### Phase 1: Foundation
 
 - [x] **T1.1.1** [REQ-006]: 同步 CLI 对 v7 目标矩阵的帮助文案与展示名称
-  - **描述**: 更新 `src/anws/bin/cli.js` 与相关输出模块，使 `Copilot / Codex / OpenCode / Trae / Qoder / Kilo Code` 的显示名、说明、示例命令和支持矩阵与 v7 一致。
+  - **描述**: 更新 `src/anws/bin/cli.js` 与相关输出模块，使 `Copilot / Codex / OpenCode / Trae / Qoder / Kilo Code` 的显示名、说明、示例命令和支持矩阵与 v7 一致，并明确区分人类默认交互流与 AI/agent 推荐的显式参数流，尤其是 `update --target` 的 AI-friendly 用法。
   - **输入**: `.anws/v7/01_PRD.md` 的 US06；`.anws/v7/02_ARCHITECTURE_OVERVIEW.md` 的目标投影矩阵；`src/anws/bin/cli.js` 当前帮助输出。
   - **输出**: 更新后的 `src/anws/bin/cli.js`；必要时同步 `src/anws/lib/output.js`。
   - **验收标准**:
     - Given 用户查看 `anws --help`
     - When 阅读支持列表与 init / update 说明
-    - Then 能看到 v7 中定义的完整目标矩阵
+    - Then 能看到 v7 中定义的完整目标矩阵，并理解 `update` 默认更新全部命中 targets，而 AI/agent 可通过 `--target` 使用显式限定模式
   - **验证类型**: 手动验证
   - **估时**: 2h
   - **依赖**: T1.2.1
 
-### Phase 2: Core
+ ### Phase 2: Core
 
 - [x] **T1.2.1** [REQ-004]: 扩展 `update` 扫描、预览与摘要输出以覆盖 v7 目标矩阵
-  - **描述**: 调整 `src/anws/lib/update.js` 的目标展示、预览、summary 与失败报告，使其覆盖 `Trae / Qoder / Kilo Code`，并与新的 sentinel / lock 语义一致；当状态来自 fallback 扫描时，需明确展示状态来源，并与 lock 重建策略衔接。
+  - **描述**: 调整 `src/anws/lib/update.js` 的目标展示、预览、summary 与失败报告，使其覆盖 `Trae / Qoder / Kilo Code`，并与新的 sentinel / lock 语义一致；当状态来自 fallback 扫描时，需明确展示状态来源，并与 lock 重建策略衔接；同时移除 `update` 执行前的交互确认，使该命令保持“检测命中 targets 后直接覆盖更新”的一键式语义。
   - **输入**: T2.1.2 的 projection plan；T4.1.1 的 lock 结构；T4.1.2 的 sentinel 扫描结果。
   - **输出**: 更新后的 `src/anws/lib/update.js`；必要时同步 diff 预览输出。
   - **验收标准**:
     - Given 项目中存在多个 v7 targets
     - When 执行 `anws update` 或 `anws update --check`
     - Then 输出按 target 分组展示，且命中集合与 scan + lock 语义一致
+    - Given AI/agent 显式执行 `anws update --target ...`
+    - When 传入的 target 是当前项目已命中集合的子集
+    - Then CLI 仅在该子集内执行 `update` / `update --check`，以非交互直出模式清晰报告显式选择来源，且默认 `anws update` 仍更新全部命中 targets
+    - Given 用户执行 `anws update`
+    - When 已识别到需要更新的 targets
+    - Then CLI 必须直接执行更新，不再额外弹出确认交互，仅保留目标识别、处理过程与结果摘要输出
     - Given lock 缺失或损坏
     - When 执行 update
     - Then CLI 能通过 sentinel 扫描兜底并明确提示状态来源
@@ -293,13 +299,22 @@ graph TD
 ### Phase 2: Integration Coverage
 
 - [x] **T6.2.1** [REQ-004]: 扩展 `update` 集成测试覆盖 v7 目标矩阵
-  - **描述**: 更新 `src/anws/test/update.integration.test.js`，验证 `--check`、部分成功、lock fallback、新 sentinel，以及 fallback 后的 lock 重建语义。
+  - **描述**: 更新 `src/anws/test/update.integration.test.js`，验证 `--check`、部分成功、lock fallback、新 sentinel、agent-friendly `update --target` 显式限定模式、默认 `update` 的无确认执行，以及 fallback 后的 lock 重建语义；同时验证 changelog 在多 target 同源变更场景下不会重复展开同一份内容级 diff。
   - **输入**: T1.2.1、T5.1.2 的实现产物。
   - **输出**: 更新后的 update 集成测试。
   - **验收标准**:
     - Given 多个 v7 targets 并存
     - When 执行 `update` / `update --check`
     - Then 结果按 target 分组展示且更新范围正确
+    - Given 多个 v7 targets 并存
+    - When 执行 `update --target <subset>`
+    - Then 仅更新显式传入且当前项目已命中的 targets，并保持默认 `update` 的全量命中更新行为不变
+    - Given 非 TTY 环境下存在需要更新的 targets
+    - When 执行默认 `update`
+    - Then CLI 仍直接更新，不因缺少交互确认而中止
+    - Given 多个 targets 对应同一 canonical source 且变更内容相同
+    - When 生成 changelog
+    - Then 内容级变更详情必须按同源变更合并，而不是为每个 target 重复展开相同 diff
     - Given lock 缺失但目录结构完整
     - When 执行实际 `update`
     - Then CLI 必须覆盖 lock 重建路径或明确验证当前不重建的既定语义
