@@ -115,6 +115,11 @@ description: "按照架构文档和任务清单将设计锻造为代码。适用
      - 如全部完成 → **新波次** → 继续 Step 1
    - 如果不存在 → **新开始** → 继续 Step 1
 
+7. **Git 上下文检查**:
+   - 读取当前 branch
+   - 如当前在 `main` 且本次不是单文件小修 → 先创建并切换到 `feature/{topic-slug}`
+   - 如本波次属于高风险改造（跨系统 / 预计改动 > 5 文件 / 涉及公共接口）→ 先创建 checkpoint commit：`checkpoint: before {topic}`
+
 ---
 
 ## Step 1: 波次规划 (Wave Planning)
@@ -334,8 +339,11 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 ### 3.6 提交 (Commit)
 
 1. **Git commit**:
-   - 消息格式: `feat(system-id): T{X.Y.Z} — 任务标题`
+   - 消息格式: `{type}({scope}): T{X.Y.Z} — 任务标题`
+   - `type` ∈ `feat | fix | refactor | docs | test | chore`
+   - `scope` 默认使用 `system-id`；workflow/skill 改动可用对应名称
    - 例: `feat(core): T2.1.1 — 地形与资源数据模型`
+   - 例: `fix(challenge): T4.2.3 — 严重度语义对齐`
 
 2. **任务完成持久化** (立即回写):
 
@@ -386,7 +394,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 ### 4.3 Git commit 状态更新
 
 ```
-chore: Wave {N} settlement — update task progress
+chore(wave): settle wave {N} progress
 ```
 
 ### 4.4 下一步判定
@@ -407,7 +415,11 @@ chore: Wave {N} settlement — update task progress
 
 1. **集成验证**: 运行集成测试（如有），确保跨系统功能正常
 2. **更新 AGENTS.md**: 清除"当前波次"信息，更新已完成的 Sprint/Phase
-3. **汇报用户**: 列出已完成的 Sprint/Phase 概要
+3. **Git 里程碑锚点**:
+   - Sprint/Phase 完成 → `milestone: {name} complete`
+   - 对应版本发布 → `release: vX.Y.Z`
+   - 如存在明确版本号，可打 tag：`vX.Y.Z`
+4. **汇报用户**: 列出已完成的 Sprint/Phase 概要
 
 ---
 
