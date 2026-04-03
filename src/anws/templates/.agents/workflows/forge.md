@@ -118,7 +118,10 @@ description: "按照架构文档和任务清单将设计锻造为代码。适用
 7. **Git 上下文检查**:
    - 读取当前 branch
    - 如当前在 `main` 且本次不是单文件小修 → 先创建并切换到 `feature/{topic-slug}`
-   - 如本波次属于高风险改造（跨系统 / 预计改动 > 5 文件 / 涉及公共接口）→ 先创建 checkpoint commit：`checkpoint: before {topic}`
+   - 如当前已在 `feature/*` 且本波次仍属于同一交付主题 → 继续在当前 branch 上推进
+   - 如当前已在 `feature/*` 但本波次目标已切换为另一独立主题 → 新建并切换到新的 `feature/{topic-slug}`
+   - 同一交付目标下的多波次，默认持续使用同一个 `feature/*` branch，直到 Step 5 完成里程碑结算
+   - 如本波次属于高风险改造（跨系统 / 预计改动 > 5 文件 / 涉及公共接口）→ 在当前工作 branch 上先创建 checkpoint commit：`checkpoint: before {topic}`
 
 ---
 
@@ -139,7 +142,7 @@ description: "按照架构文档和任务清单将设计锻造为代码。适用
 
 ### 1.2 分组与建议
 
-按以下策略组织一个波次:
+按以下策略组织一个波次：
 
 | 策略             | 说明                                         |
 | ---------------- | -------------------------------------------- |
@@ -149,7 +152,7 @@ description: "按照架构文档和任务清单将设计锻造为代码。适用
 
 ### 1.3 波次确认
 
-向用户展示:
+向用户展示：
 
 ```markdown
 ## 📋 Wave {N} 建议
@@ -195,7 +198,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 |  **L2 任务级**  | 每个任务的 `**输入**` 字段指定的精确文档章节                             | 实现细节             |
 
 > [!IMPORTANT]
-> **L1.5 加载规则（CRITICAL）**:
+> **L1.5 加载规则（CRITICAL）**：
 >
 > - `{system}.md`（L0 导航层）**始终加载** ← 这是默认行为
 > - `{system}.detail.md`（L1 实现层）**仅当任务 `**输入**` 字段明确引用时才加载**
@@ -208,7 +211,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 ### 加载步骤
 
 1. **L0**: 读取 `{TARGET_DIR}/02_ARCHITECTURE_OVERVIEW.md` 的系统清单部分
-2. **L1**: 根据本波任务涉及的系统，读取对应的:
+2. **L1**: 根据本波任务涉及的系统，读取对应的：
    - `{TARGET_DIR}/04_SYSTEM_DESIGN/{system-id}.md`
    - `{TARGET_DIR}/03_ADR/` 中相关的 ADR（由任务的"输入"字段指引）
 
@@ -221,7 +224,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 > [!IMPORTANT]
 > **严格按以下流程执行每个任务，不跳步。**
 
-对本波次中的每个任务，执行以下循环:
+对本波次中的每个任务，执行以下循环：
 
 ---
 
@@ -253,7 +256,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 >
 > **为什么？** 错误的理解导致返工，提前发现问题比事后修复便宜 10 倍。
 
-**思考引导** (必须逐个回答):
+**思考引导** (必须逐个回答)：
 1. "这个任务要我做什么？输出哪些文件？"
 2. "与哪些已有代码/接口交互？接口签名是什么？"
 3. "验收标准里最关键的约束是什么？"
@@ -278,7 +281,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 ### 3.4 验证 (Verify)
 
-**根据任务的验证类型执行相应验证**，并按类型分类证据:
+**根据任务的验证类型执行相应验证**，并按类型分类证据：
 
 > [!IMPORTANT]
 > **验证类型决定验证方式和证据要求**：
@@ -297,13 +300,13 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 **验证类型**: [单元测试 | 集成测试 | E2E测试 | 编译检查 | Lint检查 | 手动验证]
 
-**自动验证** (单元测试/集成测试/E2E/编译/Lint):
+**自动验证** (单元测试/集成测试/E2E/编译/Lint)：
 | 验收标准 | 命令 | 输出摘要 | 状态 |
 | -------- | ---- | -------- | :--: |
 | 测试通过 | `npm test` | 12 passed, 0 failed | ✅ |
 | 构建成功 | `npm run build` | Build succeeded | ✅ |
 
-**手动验证**:
+**手动验证**：
 | 验收标准 | 说明 | 状态 |
 | -------- | ---- | :--: |
 | 页面显示正确 | 需要打开浏览器确认渲染效果 | ⏳ |
@@ -319,7 +322,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 ### 3.5 遵从性检查 (Compliance Check)
 
-**检查清单** (每条都要回答):
+**检查清单** (每条都要回答)：
 
 | #   | 检查项                              | 通过？ |
 | --- | ----------------------------------- | :----: |
@@ -338,14 +341,16 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 ### 3.6 提交 (Commit)
 
-1. **Git commit**:
+1. **Git commit**：
+   - Task commit 一律落在**当前工作 branch** 上
+   - 默认当前工作 branch 为本次交付对应的 `feature/*`；只有 Step 0 明确判定为单文件小修时才允许留在 `main`
    - 消息格式: `{type}({scope}): T{X.Y.Z} — 任务标题`
    - `type` ∈ `feat | fix | refactor | docs | test | chore`
    - `scope` 默认使用 `system-id`；workflow/skill 改动可用对应名称
    - 例: `feat(core): T2.1.1 — 地形与资源数据模型`
    - 例: `fix(challenge): T4.2.3 — 严重度语义对齐`
 
-2. **任务完成持久化** (立即回写):
+2. **任务完成持久化** (立即回写)：
 
    > [!IMPORTANT]
    > **每完成一个 task 并通过验证，立即回写 `05_TASKS.md`**。
@@ -369,7 +374,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 ### 4.1 更新状态
 
-**更新 `AGENTS.md`**:
+**更新 `AGENTS.md`**：
 
 1. 更新 `🌊 Wave` 块为下一波的初始状态（如果已知下一波任务），或标记当前波已完成：
 ```markdown
@@ -380,7 +385,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 ### 4.2 波次回顾
 
-向用户简要汇报:
+向用户简要汇报：
 
 ```markdown
 ## 🌊 Wave {N} 完成
@@ -393,13 +398,16 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 ### 4.3 Git commit 状态更新
 
-```
+- Wave settlement commit 与本波次 task commits 一样，落在当前工作 branch 上
+- 如下一波仍属于同一交付主题，默认继续沿用当前 `feature/*` branch
+
+```markdown
 chore(wave): settle wave {N} progress
 ```
 
 ### 4.4 下一步判定
 
-**人类检查点** ⚠️:
+**人类检查点** ⚠️：
 
 - 还有未完成任务 → 询问用户："继续下一波？" → 回到 **Step 1**
 - 当前 Sprint 所有任务完成 → 进入 **Step 5**
@@ -415,11 +423,15 @@ chore(wave): settle wave {N} progress
 
 1. **集成验证**: 运行集成测试（如有），确保跨系统功能正常
 2. **更新 AGENTS.md**: 清除"当前波次"信息，更新已完成的 Sprint/Phase
-3. **Git 里程碑锚点**:
+3. **Git 里程碑锚点**：
    - Sprint/Phase 完成 → `milestone: {name} complete`
    - 对应版本发布 → `release: vX.Y.Z`
    - 如存在明确版本号，可打 tag：`vX.Y.Z`
-4. **汇报用户**: 列出已完成的 Sprint/Phase 概要
+   - 以上里程碑 commit / tag 默认创建在当前工作 branch 上
+4. **合流主线**：
+   - 当前 feature branch 达到可验收里程碑后，合并回 `main`
+   - 合并策略遵循仓库既有规范（merge / squash / rebase），但 `main` 最终应指向该里程碑的稳定状态
+5. **汇报用户**: 列出已完成的 Sprint/Phase 概要
 
 ---
 
@@ -427,7 +439,7 @@ chore(wave): settle wave {N} progress
 - ✅ 每个任务的验收标准全部通过
 - ✅ 每个任务的遵从性检查全部通过
 - ✅ 所有代码已 git commit，message 包含 Task ID
-- ✅ 05_TASKS.md checkbox 已更新
+- ✅ 所有任务已完成持久化（05_TASKS.md）
 - ✅ AGENTS.md 当前状态已更新
 - ✅ 用户已确认波次完成
 </completion_criteria>
