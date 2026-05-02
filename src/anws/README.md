@@ -79,6 +79,7 @@ Anws addresses those problems with:
   - `/forge` reads the latest `07_CHALLENGE_REPORT.md` before implementation work continues
   - unresolved Critical findings block forge; unresolved High findings require explicit human sign-off
   - high-risk implementation waves can run `code-reviewer` before manual verification
+  - when UI or E2E paths matter, **`e2e-testing-guide`** structures manual or browser-assisted acceptance (skills degrade when no browser tooling is available)
 
 ---
 
@@ -158,8 +159,8 @@ cd your-project
 anws update
 ```
 
-- **Preview mode**
-  - `anws update --check` previews grouped diffs without writing files
+- **Update flags**
+  - `anws update --check` and `anws update --target` are removed; run `anws update` once to refresh all matched targets
 
 - **State source**
   - `anws update` reads `.anws/install-lock.json`

@@ -86,6 +86,7 @@ Anws 用以下机制应对这些问题：
   - `/forge` 在继续实现前会读取最新 `07_CHALLENGE_REPORT.md`
   - 未解决 Critical 阻塞 forge；未解决 High 需要明确的人类确认
   - 高风险实现波次可在人工验证前运行 `code-reviewer`
+  - 涉及 UI 或端到端路径时，用 **`e2e-testing-guide`** 组织浏览器辅助或手动验收（无浏览器工具时在 skill 内降级为指南模式）
 
 ---
 
@@ -165,8 +166,8 @@ cd your-project
 anws update
 ```
 
-- **预览模式**
-  - `anws update --check` 会按 target 分组预览 diff，不写入文件
+- **CLI 约束**
+  - `anws update --check` 与 `anws update --target` 已移除；请直接执行 `anws update` 一次性刷新所有已匹配 target
 
 - **状态来源**
   - `anws update` 优先读取 `.anws/install-lock.json`
