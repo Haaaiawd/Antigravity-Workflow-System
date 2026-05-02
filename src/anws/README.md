@@ -265,7 +265,8 @@ Use Anws as a lifecycle, not just a folder pack.
 
 - workflows force staged reasoning before implementation
 - the built-in `sequential-thinking` skill standardizes deep analysis
-- review steps exist to catch drift before code lands
+- review steps catch drift before and during implementation: `/challenge` may invoke **code-reviewer** (static implementation evidence); `/forge` runs it as a pre-commit fidelity gate; browser/E2E acceptance may use **e2e-testing-guide**
+- each IDE receives the same projected assets; subagents and browser tooling are optional—skills must degrade gracefully (same-agent execution or guide-only)
 
 ---
 

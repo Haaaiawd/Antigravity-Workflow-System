@@ -272,7 +272,8 @@ Anws 维护一份统一的工作流 / 技能源，然后将其投影到各个 AI
 
 - 工作流会强制经历阶段化推理
 - 内置 `sequential-thinking` skill 统一深度分析路径
-- 通过 review 节点在代码落地前拦截漂移
+- 通过 review 节点在代码落地前拦截漂移：`/challenge` 可选接入 **code-reviewer**（实现侧静态证据）；`/forge` 在提交前强制执行同一 skill 作为忠实度门禁；浏览器/E2E 手动验收可走 **e2e-testing-guide**
+- 各 IDE 仅保证同一套**投影文件**落地；子代理、浏览器工具是否可用取决于宿主环境，需在 skill 内做 **capability profile** 降级（同 agent 执行或仅交付指南）
 
 ---
 

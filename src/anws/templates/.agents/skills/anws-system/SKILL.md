@@ -42,9 +42,9 @@ description: 当用户在 skills-only 环境中需要判断应该从哪个 anws 
 - `references/blueprint.md`
   - 用途：将架构设计拆成可执行的 `05_TASKS.md`
 - `references/challenge.md`
-  - 用途：在编码前系统性挑战设计或任务清单
+  - 用途：在编码前（或需要时含 `src/`）对抗式审查；可组合 design-reviewer、task-reviewer、**code-reviewer**（`CODE` / `FULL` 或自适应升级）
 - `references/forge.md`
-  - 用途：按 `05_TASKS.md` 执行编码任务，并维护 Wave 进度
+  - 用途：按 `05_TASKS.md` 执行编码；在验证与提交之间调用 **code-reviewer**（静态忠实度）及按需 **`e2e-testing-guide`**（浏览器/E2E 指南或实测）
 - `references/change.md`
   - 用途：只微调已有任务定义，不创建新任务，不推进实现状态
 - `references/explore.md`
@@ -70,6 +70,8 @@ description: 当用户在 skills-only 环境中需要判断应该从哪个 anws 
 1. 读取 `references/forge.md`
 2. 检查 `.anws/v{N}/05_TASKS.md` 是否存在且任务已定义
 3. 若缺任务清单，不得直接实现，先回到 `blueprint` 或 `genesis`
+4. 若任务含 **E2E / 浏览器手动验证**：在执行路径上读取 **`e2e-testing-guide`** skill（同目录 `skills/e2e-testing-guide/SKILL.md`）；投影环境下路径以目标 IDE 的 `skills/` 为准
+5. 在提交前需要静态契约核对时：读取 **`code-reviewer`** skill；无子代理时由当前会话按 skill 执行（检查清单相同）
 
 ### Route 3: 请求是“微调现有任务 / 修正文案 / 调整验收标准”
 

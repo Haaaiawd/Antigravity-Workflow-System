@@ -145,6 +145,10 @@ async function collectManagedFileDiffs({
     }
 
     const entry = projectionMap.get(rel);
+    if (!entry && rel !== 'AGENTS.md') {
+      throw new Error(`anws: managed file "${rel}" has no projection entry — manifest/registry mismatch`);
+    }
+
     const metadata = entry
       ? {
           source: entry.source,
@@ -161,6 +165,13 @@ async function collectManagedFileDiffs({
     const srcPath = rel === 'AGENTS.md'
       ? srcAgents
       : path.join(path.join(__dirname, '..', 'templates'), entry.source);
+
+    if (rel !== 'AGENTS.md' && !(await pathExists(srcPath))) {
+      throw new Error(
+        `anws: missing canonical template for "${rel}" (${entry.source}). Expected: ${srcPath}`
+      );
+    }
+
     const existing = rel === 'AGENTS.md'
       ? { file: rel, absolutePath: path.join(cwd, rel), sourceKind: 'current' }
       : await resolveExistingManagedPath(cwd, rel);

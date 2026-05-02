@@ -59,3 +59,32 @@ test('collectManagedFileDiffs still supports explicit projectionEntries input', 
     assert.deepEqual(changes, []);
   });
 });
+
+test('collectManagedFileDiffs throws when canonical template source is missing', async () => {
+  await withTempDir(async (tempDir) => {
+    const bogusEntry = {
+      id: 'bogus',
+      type: 'workflow',
+      source: '.agents/workflows/__missing_canonical_fixture__.md',
+      fileName: 'genesis.md',
+      projectionType: 'workflows',
+      outputRoot: '.windsurf/workflows',
+      outputPath: '.windsurf/workflows/genesis.md',
+      targetId: 'windsurf',
+      targetLabel: 'Windsurf',
+      ownershipKey: 'windsurf:.windsurf/workflows/genesis.md'
+    };
+
+    await assert.rejects(
+      () =>
+        collectManagedFileDiffs({
+          cwd: tempDir,
+          managedFiles: [bogusEntry.outputPath],
+          projectionEntries: [bogusEntry],
+          srcAgents: ROOT_AGENTS_FILE,
+          shouldWriteRootAgents: false
+        }),
+      /missing canonical template/i
+    );
+  });
+});

@@ -88,14 +88,21 @@ async function writeTargetFiles(cwd, options = {}) {
     }
 
     const entry = projectionMap.get(rel);
+    if (!entry) {
+      throw new Error(`anws: managed file "${rel}" has no projection entry — manifest/registry mismatch`);
+    }
+
     const destPath = path.join(cwd, rel);
     await fs.mkdir(path.dirname(destPath), { recursive: true });
 
     const srcPath = resolveCanonicalSource(entry.source);
-    if (await pathExists(srcPath)) {
-      await fs.copyFile(srcPath, destPath);
-      written.push(rel);
+    if (!(await pathExists(srcPath))) {
+      throw new Error(
+        `anws: missing canonical template for "${rel}" (${entry.source}). Expected: ${srcPath}`
+      );
     }
+    await fs.copyFile(srcPath, destPath);
+    written.push(rel);
   }
 
   return {
