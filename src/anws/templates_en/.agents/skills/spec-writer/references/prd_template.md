@@ -11,7 +11,7 @@
 
 ## 1. Executive Summary
 <!-- Context compression: explain "why" and "what" in under 50 words. -->
-<!-- ⚠️ CRITICAL: This is the elevator pitch and must stay within 50 words. -->
+<!--  CRITICAL: This is the elevator pitch and must stay within 50 words. -->
 
 [Briefly describe the problem being solved and the proposed solution, focusing on core value.]
 
@@ -39,7 +39,7 @@
 ## 3. Goals & Non-Goals
 
 ### 3.1 Goals
-<!-- ⚠️ CRITICAL: Must follow SMART principles (Specific, Measurable, Achievable, Relevant, Time-bound) -->
+<!--  CRITICAL: Must follow SMART principles (Specific, Measurable, Achievable, Relevant, Time-bound) -->
 
 - **[G1]**: [Measurable business goal, e.g., raise login conversion rate above 95%]
 - **[G2]**: [Measurable technical goal, e.g., list page P95 load time < 1.5s]
@@ -54,9 +54,9 @@
 
 ## 4. User Stories and Requirement List
 <!-- Required format: As a [role], I want [action], so that [value/benefit]. -->
-<!-- ⚠️ CRITICAL: Every User Story must have a unique ID [REQ-XXX]; this is the foundation of anti-corruption and traceability. -->
-<!-- ⚠️ CRITICAL: Must be ordered by user value priority (P0 core path → P1 important experience → P2 nice-to-have). -->
-<!-- ⚠️ CRITICAL: Each User Story must be independently testable—after completion it should be demonstrable without depending on other stories. -->
+<!--  CRITICAL: Every User Story must have a unique ID [REQ-XXX]; this is the foundation of anti-corruption and traceability. -->
+<!--  CRITICAL: Must be ordered by user value priority (P0 core path → P1 important experience → P2 nice-to-have). -->
+<!--  CRITICAL: Each User Story must be independently testable—after completion it should be demonstrable without depending on other stories. -->
 
 ### US-001: [Task Title] [REQ-001] (Priority: P0)
 
@@ -162,7 +162,7 @@ flowchart TD
 
 ---
 
-<!-- ⚠️ CRITICAL usage guide -->
+<!--  CRITICAL usage guide -->
 <!-- 
 **PRD Writing Principles (Lean Spec Requirements)**:
 1. **Cut the noise**: Resist long essays; target under 10 minutes reading time.

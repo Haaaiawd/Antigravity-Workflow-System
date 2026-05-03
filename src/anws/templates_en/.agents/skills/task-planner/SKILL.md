@@ -12,7 +12,7 @@ You are **Task Planning Master**, responsible for converting system design into 
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 1. **Locate version**: Scan `.anws/` to find latest `v{N}`
 2. **Load required documents**: Read Architecture Overview + PRD
@@ -25,7 +25,7 @@ You are **Task Planning Master**, responsible for converting system design into 
 
 ---
 
-## ⚠️ Core Principles
+## Core Principles
 
 > [!IMPORTANT]
 > **Four Principles of Task Planning**:
@@ -44,14 +44,14 @@ You are **Task Planning Master**, responsible for converting system design into 
 > - **Base layer, shared layer, pure logic layer default prioritize unit tests**, main branches, boundary cases and error paths should cover as much as possible
 > - **Public contracts must have handoff**: at least one implementation task + at least one verification handoff point
 
-❌ **Wrong approach**:
+ **Wrong approach**:
 - Flat task list (no hierarchy)
 - Tasks too large (e.g., "implement entire backend")
 - Tasks too small (e.g., "write one line of code")
 - Missing acceptance criteria
 - Ignore dependencies
 
-✅ **Right approach**:
+ **Right approach**:
 - **Three-level hierarchy**: System → Phase → Task
 - **Reasonable granularity**: Each Task 2h-2d
 - **Clear acceptance**: Default Given / When / Then, use clear Done When when necessary
@@ -59,7 +59,7 @@ You are **Task Planning Master**, responsible for converting system design into 
 
 ---
 
-## 🎯 WBS Method: Work Breakdown Structure
+## WBS Method: Work Breakdown Structure
 
 ### Level 1: System (System Level)
 **Group by system**, get system list from Architecture Overview.
@@ -112,8 +112,8 @@ You are **Task Planning Master**, responsible for converting system design into 
 > - `03_ADR/ADR-XXX.md` - Architecture decisions, technical constraints
 > - `04_SYSTEM_DESIGN/{system}.md` §Chapter - Interface contracts, data models
 >
-> - ✅ Good: `04_SYSTEM_DESIGN/auth.md` §JWT signing
-> - ❌ Bad: "JWT related design" (no specific document reference)
+> - Good: `04_SYSTEM_DESIGN/auth.md` §JWT signing
+> - Bad: "JWT related design" (no specific document reference)
 
 **Task structure**:
 ```markdown
@@ -122,7 +122,7 @@ You are **Task Planning Master**, responsible for converting system design into 
   - **Input**: Design document reference + prerequisite task output (must include at least one document reference)
   - **Output**: What deliverables are produced
   - **Contract Handoff**: Public contracts this task implements or verifies; if none write "none"
-  - **📎 Reference**: ADR-XXX or System Design chapter (if any)
+  - ** Reference**: ADR-XXX or System Design chapter (if any)
   - **Acceptance Criteria**: 
     - Given [precondition]
     - When [action executed]
@@ -213,12 +213,12 @@ Rules:
 >
 > If task B depends on task A, then B's "Input" must explicitly reference specific artifacts of A's "Output" (file paths, interface names, data formats).
 >
-> - ✅ Good: B input = "`App.tsx` component produced by T1.1.1 + `vite.config.ts` configuration"
-> - ❌ Bad: B input = "frontend project"
+> - Good: B input = "`App.tsx` component produced by T1.1.1 + `vite.config.ts` configuration"
+> - Bad: B input = "frontend project"
 
 ---
 
-## 📋 Task Metadata Completeness
+## Task Metadata Completeness
 
 ### Required Fields
 
@@ -246,7 +246,7 @@ Rules:
 
 ---
 
-## 🔗 Dependency Relationship Types
+## Dependency Relationship Types
 
 ### 1. Logical Dependency
 **Definition**: Technically required sequential order
@@ -287,7 +287,7 @@ Although can be parallel, better with UI design first
 
 ---
 
-## 📊 Task Decomposition Principles
+## Task Decomposition Principles
 
 ### Principle 1: 2h-2d Rule
 **Rule**: Single Task should prioritize within 2 hours to 2 days; over 2 days should continue decomposing.
@@ -306,8 +306,8 @@ Although can be parallel, better with UI design first
 **Rule**: Each Task should produce a verifiable deliverable.
 
 **Example**:
-- ✅ Good: "Implement LoginForm component" → Deliverable: LoginForm.tsx
-- ❌ Bad: "Do frontend" → Deliverable unclear
+- Good: "Implement LoginForm component" → Deliverable: LoginForm.tsx
+- Bad: "Do frontend" → Deliverable unclear
 
 ---
 
@@ -315,8 +315,8 @@ Although can be parallel, better with UI design first
 **Rule**: Each Task should correspond to a reviewable PR.
 
 **Example**:
-- ✅ Good: Task completion = 1 PR (~200-500 lines code)
-- ❌ Bad: Task completion = 10 PRs
+- Good: Task completion = 1 PR (~200-500 lines code)
+- Bad: Task completion = 10 PRs
 
 ---
 
@@ -324,13 +324,13 @@ Although can be parallel, better with UI design first
 **Rule**: Each Task must have clear, executable, observable acceptance criteria; default use Given / When / Then, pure technical base tasks can use clear Done When.
 
 **Example**:
-- ✅ Good: "Given valid input, When call interface, Then return 200 and structure matches contract"
-- ✅ Good: "[ ] Unit test passes (only for pure technical base tasks)"
-- ❌ Bad: "Done When: almost done"
+- Good: "Given valid input, When call interface, Then return 200 and structure matches contract"
+- Good: "[ ] Unit test passes (only for pure technical base tasks)"
+- Bad: "Done When: almost done"
 
 ---
 
-## 🛡️ Task Planning Rules
+## Task Planning Rules
 
 ### Rule 1: Complete Traceability Chain
 **Rule**: Each Task must associate with PRD requirement [REQ-XXX].
@@ -395,7 +395,7 @@ Total estimate = Development time × 1.5 + Test time + Documentation time
 
 ---
 
-## 🧰 Toolbox
+## Toolbox
 
 > **Output path**: Task list should save to `.anws/v{N}/05_TASKS.md`, specific `v{N}` version specified by caller (blueprint workflow).
 
@@ -444,7 +444,7 @@ After decomposing tasks, use this checklist to analyze dependencies:
 
 ---
 
-## 🎯 Sprint Exit Criteria and Integration Verification Tasks
+## Sprint Exit Criteria and Integration Verification Tasks
 
 ### Sprint Exit Criteria
 
@@ -488,7 +488,7 @@ INT task is the "closing task" of that Sprint. **Sprint not passing INT task mus
 
 ---
 
-## 💡 Common Scenarios and Patterns
+## Common Scenarios and Patterns
 
 ### Scenario 1: New Feature Development
 **Characteristics**: Implement new User Story
@@ -551,7 +551,7 @@ Phase 3: Regression Test
 
 ---
 
-## 📊 Quality Checklist
+## Quality Checklist
 
 After completing task decomposition, use this checklist for self-check:
 
@@ -584,7 +584,7 @@ After completing task decomposition, use this checklist for self-check:
 
 ---
 
-## 🚀 Quick Start Example
+## Quick Start Example
 
 **Task**: Decompose tasks for "user login" feature
 
@@ -626,4 +626,4 @@ T2.2.1 acceptance:
 **Remember**: Good task decomposition is balancing art.  
 Don't over-decompose (high management cost), don't over-aggregate (uncontrollable risk).
 
-Happy Planning! 📋
+Happy Planning! 

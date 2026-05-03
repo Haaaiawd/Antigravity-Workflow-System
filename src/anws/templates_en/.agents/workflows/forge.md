@@ -24,17 +24,17 @@ Faithfully forge design documents into runnable code. You do not make design dec
 
 **Core principles**:
 
-- 📖 **Docs are contracts** — Spec documents are authoritative and must not be violated
-- 🌊 **Wave execution** — 2-5 tasks per wave: load → code → verify → commit
-- 🛑 **Stop on doubt** — Stop immediately when issues are found; no guessing, no rushing
-- ✍ **Signature mechanism** — Every wave start must go through a checkpoint; normal mode waits for user signature, `/forge AUTO` mode records as `AUTO`
+- **Docs are contracts** — Spec documents are authoritative and must not be violated
+- **Wave execution** — 2-5 tasks per wave: load → code → verify → commit
+- **Stop on doubt** — Stop immediately when issues are found; no guessing, no rushing
+- **Signature mechanism** — Every wave start must go through a checkpoint; normal mode waits for user signature, `/forge AUTO` mode records as `AUTO`
 
 **Your relationship with the user**:
 You are the user's **faithful executor**, not a creator with free improvisation.
 
 ---
 
-## ⚠️ CRITICAL Permission Boundaries
+## CRITICAL Permission Boundaries
 
 > [!IMPORTANT]
 > **`/forge` permissions are strictly scoped**:
@@ -42,38 +42,38 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 >
 > | Capability                                                                 | Allowed | Forbidden |
 > | -------------------------------------------------------------------------- | ------- | --------- |
-> | Write business code under `src/`                                           | ✅       |           |
-> | Write unit tests                                                           | ✅       |           |
-> | Update checkboxes in `05_TASKS.md`                                         | ✅       |           |
-> | Run tests and lint                                                         | ✅       |           |
-> | Git commit completed tasks                                                 | ✅       |           |
-> | Update current status in `AGENTS.md`                                       | ✅       |           |
-> | **Modify any design docs under `.anws/`**                                  |         | ❌         |
-> | **Create features not present in TASKS.md**                                |         | ❌         |
-> | **Downgrade or skip acceptance criteria**                                  |         | ❌         |
-> | **Introduce third-party dependencies not approved by ADR**                 |         | ❌         |
-> | **Modify existing public interfaces (unless explicitly required by task)** |         | ❌         |
-> | **"By the way" optimize/refactor code outside task scope**                 |         | ❌         |
-> | **Add or modify undefined public contracts without routing to /change**    |         | ❌         |
+> | Write business code under `src/`                                           | Yes | |
+> | Write unit tests                                                           | Yes | |
+> | Update checkboxes in `05_TASKS.md`                                         | Yes | |
+> | Run tests and lint                                                         | Yes | |
+> | Git commit completed tasks                                                 | Yes | |
+> | Update current status in `AGENTS.md`                                       | Yes | |
+> | **Modify any design docs under `.anws/`**                                  | | Yes |
+> | **Create features not present in TASKS.md**                                | | Yes |
+> | **Downgrade or skip acceptance criteria**                                  | | Yes |
+> | **Introduce third-party dependencies not approved by ADR**                 | | Yes |
+> | **Modify existing public interfaces (unless explicitly required by task)** | | Yes |
+> | **"By the way" optimize/refactor code outside task scope**                 | | Yes |
+> | **Add or modify undefined public contracts without routing to /change**    | | Yes |
 >
 
 ---
 
-## ⚠️ CRITICAL Anti-Improv Guardrails
+## CRITICAL Anti-Improv Guardrails
 
 > [!IMPORTANT]
 > **You only implement what is explicitly required in task description and acceptance criteria.**
 >
-> - ❌ "I think adding a cache would be better" → **Forbidden**
-> - ❌ "By the way I optimized this function" → **Forbidden**
-> - ❌ "Although docs didn't mention it, I added error handling" → **Forbidden** (unless required by acceptance criteria)
-> - ❌ "This design seems unreasonable, so I adjusted it" → **Forbidden**
-> - ✅ Implement strictly by task description + acceptance criteria
-> - ✅ Find any issue → report to user → user modifies via corresponding workflow → continue after modification
+> - "I think adding a cache would be better" → **Forbidden**
+> - "By the way I optimized this function" → **Forbidden**
+> - "Although docs didn't mention it, I added error handling" → **Forbidden** (unless required by acceptance criteria)
+> - "This design seems unreasonable, so I adjusted it" → **Forbidden**
+> - Implement strictly by task description + acceptance criteria
+> - Find any issue → report to user → user modifies via corresponding workflow → continue after modification
 
 ---
 
-## ⚠️ CRITICAL Conflict Handling Protocol
+## CRITICAL Conflict Handling Protocol
 
 > [!IMPORTANT]
 > **In the following situations, you must stop coding immediately and report to user**:
@@ -81,13 +81,13 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 >
 > | Conflict Type                                            | Handling Method                                                       |
 > | -------------------------------------------------------- | --------------------------------------------------------------------- |
-> | Contradictions between documents                         | 🛑 Stop → list contradictions → user fixes via `/change`              |
-> | Task description ambiguous/incomplete                    | 🛑 Stop → list questions → user confirms or supplements via `/change` |
-> | Outputs from prerequisite tasks do not match expectation | 🛑 Stop → report differences → user decides                           |
-> | Design found to be unimplementable                       | 🛑 Stop → record reasons → suggest user run `/challenge`              |
-> | New dependency needed but not ADR-approved               | 🛑 Stop → explain reason → user decides whether to create new ADR     |
-> | Required system design docs do not exist                 | 🛑 Stop → guide user to run `/design-system`                          |
-> | **Undefined but required public contract discovered**    | 🛑 Stop → generate backflow explanation → route to `/change`          |
+> | Contradictions between documents                         |  Stop → list contradictions → user fixes via `/change`              |
+> | Task description ambiguous/incomplete                    |  Stop → list questions → user confirms or supplements via `/change` |
+> | Outputs from prerequisite tasks do not match expectation |  Stop → report differences → user decides                           |
+> | Design found to be unimplementable                       |  Stop → record reasons → suggest user run `/challenge`              |
+> | New dependency needed but not ADR-approved               |  Stop → explain reason → user decides whether to create new ADR     |
+> | Required system design docs do not exist                 |  Stop → guide user to run `/design-system`                          |
+> | **Undefined but required public contract discovered**    |  Stop → generate backflow explanation → route to `/change`          |
 >
 >
 > **Core principle: Better to stop and ask than to guess.**
@@ -108,7 +108,7 @@ You are the user's **faithful executor**, not a creator with free improvisation.
   - `{TARGET_DIR}/05_TASKS.md` exists
 4. **Check recommended files** (warn if missing):
   - `{TARGET_DIR}/04_SYSTEM_DESIGN/` exists and is non-empty
-  - If missing: "⚠️ Recommended to run `/design-system` first. Missing detailed design may reduce implementation quality."
+  - If missing: " Recommended to run `/design-system` first. Missing detailed design may reduce implementation quality."
 5. **If required files are missing**: Throw error and suggest running `/genesis` + `/blueprint`.
 6. **Challenge gate check**:
   - If `{TARGET_DIR}/07_CHALLENGE_REPORT.md` exists, must read latest review results first
@@ -116,7 +116,7 @@ You are the user's **faithful executor**, not a creator with free improvisation.
   - If **unresolved High** exists → only allow explicit user sign-off; AUTO mode cannot auto-pass
   - If no unresolved high-severity issues → continue
 7. **Resume-from-breakpoint determination**:
-  - Read `🌊 Wave` block in `AGENTS.md`
+  - Read `Wave` block in `AGENTS.md`
   - If wave info exists:
     - Check wave task list against checkboxes in `05_TASKS.md`
     - If unfinished tasks exist → **resume from breakpoint** → jump to Step 3 and continue unfinished tasks
@@ -175,7 +175,7 @@ Organize a wave by following strategy:
 Show user:
 
 ```markdown
-## 📋 Wave {N} Recommendation
+## Wave {N} Recommendation
 
 | Task ID  | Title | Dependent Docs                        | Estimate  |
 | -------- | ---- | ------------------------------- | :---: |
@@ -188,10 +188,10 @@ Show user:
 Confirm this wave? Or adjust task combination?
 ```
 
-**Signature checkpoint** ⚠️: After obtaining signature, write confirmed wave to `🌊 Wave` block in `AGENTS.md`:
+**Signature checkpoint** : After obtaining signature, write confirmed wave to `Wave` block in `AGENTS.md`:
 
 ```markdown
-### 🌊 Wave {N} — {brief wave goal}
+### Wave {N} — {brief wave goal}
 T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 ```
 
@@ -291,7 +291,7 @@ If task depends on completed prerequisites, inspect relevant existing code to un
 3. "What is the most critical constraint in acceptance criteria?"
 4. "Are there ambiguous places? Any uncertain points?"
 
-- If ambiguity or uncertainty is found → 🛑 **Trigger conflict handling protocol**, stop and report user
+- If ambiguity or uncertainty is found →  **Trigger conflict handling protocol**, stop and report user
 - If no issue → continue to 3.3
 
 ---
@@ -330,31 +330,31 @@ If task depends on completed prerequisites, inspect relevant existing code to un
 >
 > | Validation Type         | Validation Method                                         | Evidence Requirement                                | Mark |
 > | ----------------------- | --------------------------------------------------------- | --------------------------------------------------- | ---- |
-> | **Unit Test**           | Run `npm test` or equivalent command                      | Terminal output: `X passed, 0 failed`               | ✅/❌  |
-> | **Integration Test**    | Run integration test script                               | Terminal output or logs                             | ✅/❌  |
-> | **E2E Test**            | Run E2E test script                                       | Test report or screenshots                          | ✅/❌  |
-> | **Smoke Test**          | Run minimum real path check                               | Key path logs, screenshots or terminal output       | ✅/❌  |
-> | **Regression Test**     | Run minimum regression test set for affected capabilities | Explicitly list re-verification scope + test output | ✅/❌  |
-> | **Compile Check**       | Run `npm run build` or equivalent command                 | Terminal output: `Build succeeded`                  | ✅/❌  |
-> | **Lint Check**          | Run `npm run lint` or equivalent command                  | Terminal output: `0 problems`                       | ✅/❌  |
-> | **Manual Verification** | Manual inspection                                         | User confirmation                                   | ⏳    |
+> | **Unit Test**           | Run `npm test` or equivalent command                      | Terminal output: `X passed, 0 failed`               | Pass / Fail |
+> | **Integration Test**    | Run integration test script                               | Terminal output or logs                             | Pass / Fail |
+> | **E2E Test**            | Run E2E test script                                       | Test report or screenshots                          | Pass / Fail |
+> | **Smoke Test**          | Run minimum real path check                               | Key path logs, screenshots or terminal output       | Pass / Fail |
+> | **Regression Test**     | Run minimum regression test set for affected capabilities | Explicitly list re-verification scope + test output | Pass / Fail |
+> | **Compile Check**       | Run `npm run build` or equivalent command                 | Terminal output: `Build succeeded`                  | Pass / Fail |
+> | **Lint Check**          | Run `npm run lint` or equivalent command                  | Terminal output: `0 problems`                       | Pass / Fail |
+> | **Manual Verification** | Manual inspection | User confirmation | Pending |
 >
 
 ```markdown
-### ✅ Verification Report: T{X.Y.Z}
+### Verification Report: T{X.Y.Z}
 
 **Validation Type**: [Unit Test | Integration Test | E2E Test | Compile Check | Lint Check | Manual Verification]
 
 **Automated Verification** (Unit/Integration/E2E/Compile/Lint):
 | Acceptance Criterion | Command | Output Summary | Status |
 | -------- | ---- | -------- | :--: |
-| Tests pass | `npm test` | 12 passed, 0 failed | ✅ |
-| Build success | `npm run build` | Build succeeded | ✅ |
+| Tests pass | `npm test` | 12 passed, 0 failed | Pass / Fail |
+| Build success | `npm run build` | Build succeeded | Pass / Fail |
 
 **Manual Verification**:
 | Acceptance Criterion | Description | Status |
 | -------- | ---- | :--: |
-| Page renders correctly | Need to open browser to confirm rendering | ⏳ |
+| Page renders correctly | Need to open browser to confirm rendering | Pending |
 ```
 
 Run checks according to task `**Validation Type**` and `**Validation Instructions**` fields.
@@ -366,8 +366,8 @@ Run checks according to task `**Validation Type**` and `**Validation Instruction
 > - Regression tests must explicitly write which existing capabilities are covered in this re-verification, avoid generalizing to "randomly run some tests"
 > - If a task declares smoke test or regression test, but `Validation Instructions` cannot guide execution, treat as incomplete validation definition, first fix task definition or route back to `/change`
 
-- Any automated validation type ❌ → **fix and re-verify**, no skipping allowed
-- All automated validation types ✅ → apply **§3.4.5 / §3.4.6 cadence** below to decide whether to run **3.4.5 / 3.4.6** on **this task**, then proceed **3.5 → 3.6**. If skipped/deferred, record rationale on the task or wave notes (consistent with each **skill** skip protocol).
+- If any automated validation type does not pass → **fix and re-verify**, no skipping allowed
+- If all automated validation types pass → apply **§3.4.5 / §3.4.6 cadence** below to decide whether to run **3.4.5 / 3.4.6** on **this task**, then proceed **3.5 → 3.6**. If skipped/deferred, record rationale on the task or wave notes (consistent with each **skill** skip protocol).
 
 ### 3.4.5 / 3.4.6 Cadence (defaults)
 
@@ -376,7 +376,7 @@ Run checks according to task `**Validation Type**` and `**Validation Instruction
 >
 > **3.4.5 (`code-reviewer`) default cadence**:
 >
-> - **Primary path**: After automated checks ✅ on the **last task of the wave**, run **3.4.5 once** for the whole wave’s landed changes.
+> - **Primary path**: After automated checks  on the **last task of the wave**, run **3.4.5 once** for the whole wave’s landed changes.
 > - **Earlier tasks in the wave**: usually **skip** 3.4.5 and go to **3.5 → 3.6**; if skipped, note rationale (e.g. `3.4.5 deferred — wave cadence`).
 > - **Fallback**: If **~2–3 consecutive waves** ran without **3.4.5**, run a catch-up pass before the next wave **Step 1** or at the end of the prior wave **Step 4** (scope/evidence per skill).
 > - **Exceptions** (may run 3.4.5 immediately after the task): explicit **per-task static review**; **high public-contract risk**; long **`/forge` AUTO** sessions need denser checks — still obey the **`code-reviewer`** skill skip/intensity rules.
@@ -405,6 +405,8 @@ Follow the `**code-reviewer`** skill end-to-end (inputs, lenses, outputs, skip p
 
 Follow the `**e2e-testing-guide`** skill end-to-end (triggers, guide-only mode, evidence rules).
 
+Verification is **user-journey** oriented: steps, assertions, evidence, and `PASS` / `FAIL` / `BLOCKED` / `NOT RUN` rules follow the skill.
+
 If host has browser automation: **guide first, then live steps (authorized)**; without tools, guide-only — never pretend tests ran.
 
 If not triggered → `E2E guide skipped` + one-line reason → **3.5**.
@@ -418,17 +420,17 @@ If not triggered → `E2E guide skipped` + one-line reason → **3.5**.
 
 | #   | Check Item                                                                                                    | Pass? |
 | --- | ------------------------------------------------------------------------------------------------------------- | ----- |
-| 1   | Are code interfaces consistent with SYSTEM_DESIGN definitions?                                                | ✅/❌   |
-| 2   | No dependencies introduced without ADR approval?                                                              | ✅/❌   |
-| 3   | No features added outside task scope?                                                                         | ✅/❌   |
-| 4   | Code style consistent with project and lint passes?                                                           | ✅/❌   |
-| 5   | All acceptance criteria verified and passed?                                                                  | ✅/❌   |
-| 6   | All executable acceptance criteria backed by adequate evidence (terminal / logs / screenshots as applicable)? | ✅/❌   |
-| 7   | Acceptance criteria requiring manual confirmation marked ⏳?                                                   | ✅/❌   |
+| 1   | Are code interfaces consistent with SYSTEM_DESIGN definitions?                                                | Yes / No |
+| 2   | No dependencies introduced without ADR approval?                                                              | Yes / No |
+| 3   | No features added outside task scope?                                                                         | Yes / No |
+| 4   | Code style consistent with project and lint passes?                                                           | Yes / No |
+| 5   | All acceptance criteria verified and passed?                                                                  | Yes / No |
+| 6   | All executable acceptance criteria backed by adequate evidence (terminal / logs / screenshots as applicable)? | Yes / No |
+| 7   | Acceptance criteria requiring manual confirmation marked as pending (explicit)                                                   | Yes / No |
 
 
-- All ✅ → continue to 3.6
-- Any ❌ → **fix**
+- If all checklist items pass → continue to 3.6
+- If any checklist item fails → **fix**
 
 ---
 
@@ -465,10 +467,10 @@ If not triggered → `E2E guide skipped` + one-line reason → **3.5**.
 
 **Update `AGENTS.md`**:
 
-1. Update `🌊 Wave` block to initial state of next wave (if next-wave tasks are known), or mark current wave as completed:
+1. Update `Wave` block to initial state of next wave (if next-wave tasks are known), or mark current wave as completed:
 
 ```markdown
-### 🌊 Wave {N} ✅ — {brief wave goal}
+### Wave {N}  — {brief wave goal}
 T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 ```
 
@@ -479,7 +481,7 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 Briefly report to user:
 
 ```markdown
-## 🌊 Wave {N} Completed
+## Wave {N} Completed
 
 **Completed**: T{X.Y.Z}, T{X.Y.Z}, ...
 **Verification Status**: All passed / Partially passed
@@ -499,7 +501,7 @@ chore(wave): settle wave {N} progress
 
 ### 4.4 Next step decision
 
-**Signature checkpoint** ⚠️:
+**Signature checkpoint** :
 
 - Unfinished tasks remain → ask: "Continue next wave?"; normal mode waits for user signature, AUTO mode signs with `AUTO` and continues → back to **Step 1**
 - Current Sprint all tasks completed → enter **Step 5**
@@ -536,12 +538,12 @@ chore(wave): settle wave {N} progress
 
 ---
 
-- ✅ All acceptance criteria of each task passed
-- ✅ All compliance checks of each task passed
-- ✅ **3.4.5**: `code-reviewer` executed per wave-end / ~2–3 wave fallback / skill exceptions, or skip/defer rationale recorded on task or wave notes
-- ✅ **3.4.6**: `e2e-testing-guide` per skill triggers; with browser tools → guide then live; else guide-only; if not triggered, document reason
-- ✅ All code committed to git with message including Task ID
-- ✅ `05_TASKS.md` checkboxes updated
-- ✅ `AGENTS.md` current status updated
-- ✅ User confirmed wave completion
+- All acceptance criteria of each task passed
+- All compliance checks of each task passed
+- **3.4.5**: `code-reviewer` executed per wave-end / ~2–3 wave fallback / skill exceptions, or skip/defer rationale recorded on task or wave notes
+- **3.4.6**: `e2e-testing-guide` per skill triggers; with browser tools → guide then live; else guide-only; if not triggered, document reason
+- All code committed to git with message including Task ID
+- `05_TASKS.md` checkboxes updated
+- `AGENTS.md` current status updated
+- User confirmed wave completion
 

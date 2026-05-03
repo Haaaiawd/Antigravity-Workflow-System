@@ -9,6 +9,7 @@
 ## raw/ast_nodes.json (extract_ast.py output)
 
 ### Top-level structure
+
 ```json
 {
   "languages": ["cpp", "python"],
@@ -38,6 +39,7 @@
 ```
 
 ### Module node
+
 ```json
 {
   "id": "src.nexus.application.weaving.treesitter_parser",
@@ -50,6 +52,7 @@
 ```
 
 ### Class node
+
 ```json
 {
   "id": "src.nexus.application.weaving.treesitter_parser.TreeSitterParser",
@@ -63,6 +66,7 @@
 ```
 
 ### Edge
+
 ```json
 {
   "source": "src.nexus.infrastructure",
@@ -76,6 +80,7 @@
 ### warnings field
 
 `warnings` is optional array, used to expose downgrade information that won't cause PROFILE failure but affects downstream credibility, for example:
+
 - grammar loadable, but currently only Module-level coverage
 - Known but unsupported languages exist
 - AST truncated
@@ -83,15 +88,17 @@
 
 ### Coverage layering fields
 
-| Field                                   | Meaning                                                             |
-| --------------------------------------- | ------------------------------------------------------------------- |
-| `supported_file_counts`                 | Files successfully entering AST flow (including full structural coverage and module-only coverage) |
-| `languages_with_structural_queries`     | Languages covered by current bundled query templates               |
-| `languages_with_custom_queries`         | Languages where queries added or overridden via `--add-query` or `--language-config` |
-| `module_only_file_counts`               | Languages where grammar loadable, but no structural query currently, only produce Module nodes |
-| `known_unsupported_file_counts`         | Languages known to exist but completely not entering AST flow        |
-| `configured_but_unavailable_file_counts` | Languages agent explicitly requested support for, but current environment has no available parser |
-| `custom_language_config_paths`         | Paths of explicit language config files actually loaded this time; empty in pure CLI mode |
+
+| Field                                    | Meaning                                                                                            |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `supported_file_counts`                  | Files successfully entering AST flow (including full structural coverage and module-only coverage) |
+| `languages_with_structural_queries`      | Languages covered by current bundled query templates                                               |
+| `languages_with_custom_queries`          | Languages where queries added or overridden via `--add-query` or `--language-config`               |
+| `module_only_file_counts`                | Languages where grammar loadable, but no structural query currently, only produce Module nodes     |
+| `known_unsupported_file_counts`          | Languages known to exist but completely not entering AST flow                                      |
+| `configured_but_unavailable_file_counts` | Languages agent explicitly requested support for, but current environment has no available parser  |
+| `custom_language_config_paths`           | Paths of explicit language config files actually loaded this time; empty in pure CLI mode          |
+
 
 ---
 
@@ -181,21 +188,24 @@ Schema V1 human-readable name field only has `label`, do not introduce additiona
 
 ### Node field validation rules
 
-| Field                  | Required | Triggers `[!ERROR]` situation                                                      |
-| ----------------------- | :------: | ---------------------------------------------------------------------------------- |
-| `id`                    |    Yes   | Global duplicate; contains uppercase letters or spaces (must be kebab-case lowercase) |
-| `type`                  |    Yes   | Not in enum `System / Domain / Module / Class / Function`                         |
-| `label`                 |    Yes   | Empty string                                                                       |
-| `title`                 |    No    | Schema V1 does not define this field; if written, treat as extra field            |
-| `responsibility`        |    Yes   | Too vague to verify; character count < 10 or > 120                                |
-| `implementation_status` |    Yes   | Not in enum `implemented / planned / inferred`                                    |
-| `code_path`             | Conditional required | `implementation_status=implemented` but empty; or path does not actually exist in repo |
+
+| Field                   | Required             | Triggers `[!ERROR]` situation                                                               |
+| ----------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
+| `id`                    | Yes                  | Global duplicate; contains uppercase letters or spaces (must be kebab-case lowercase)       |
+| `type`                  | Yes                  | Not in enum `System / Domain / Module / Class / Function`                                   |
+| `label`                 | Yes                  | Empty string                                                                                |
+| `title`                 | No                   | Schema V1 does not define this field; if written, treat as extra field                      |
+| `responsibility`        | Yes                  | Too vague to verify; character count < 10 or > 120                                          |
+| `implementation_status` | Yes                  | Not in enum `implemented / planned / inferred`                                              |
+| `code_path`             | Conditional required | `implementation_status=implemented` but empty; or path does not actually exist in repo      |
 | `evidence_path`         | Conditional required | `implementation_status=planned/inferred` but empty; or path does not actually exist in repo |
-| `evidence_gap`          | Conditional required | `implementation_status=planned/inferred` but empty                                 |
+| `evidence_gap`          | Conditional required | `implementation_status=planned/inferred` but empty                                          |
+
 
 ### Node status expression specification
 
 **Implemented node**
+
 ```json
 {
   "implementation_status": "implemented",
@@ -206,6 +216,7 @@ Schema V1 human-readable name field only has `label`, do not introduce additiona
 ```
 
 **Planned node**
+
 ```json
 {
   "implementation_status": "planned",
@@ -216,6 +227,7 @@ Schema V1 human-readable name field only has `label`, do not introduce additiona
 ```
 
 **Inferred node**
+
 ```json
 {
   "implementation_status": "inferred",
@@ -296,3 +308,4 @@ Top fan-out (imports most others):
   Key classes: ClassA, ClassB, ...
   Key imports from: <other_dir>, ...
 ```
+

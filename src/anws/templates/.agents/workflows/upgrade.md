@@ -25,7 +25,7 @@ description: "在执行 anws update 后，读取 .anws/changelog/vX.Y.Z.md，判
 
 ---
 
-## ⚠️ CRITICAL 执行顺序
+## CRITICAL 执行顺序
 
 > [!IMPORTANT]
 > 必须严格按 Step 0 → Step 1 → Step 2 → Step 3 → Step 4 执行。
@@ -103,7 +103,7 @@ description: "在执行 anws update 后，读取 .anws/changelog/vX.Y.Z.md，判
 
 ---
 
-## Step 3: 人类检查点 ⚠️
+## Step 3: 人类检查点 
 
 > [!IMPORTANT]
 > 未经用户明确批准，禁止写任何文件。
@@ -111,7 +111,7 @@ description: "在执行 anws update 后，读取 .anws/changelog/vX.Y.Z.md，判
 必须向用户展示以下内容：
 
 ```markdown
-⚠️ 人类检查点 — 升级计划确认
+ 人类检查点 — 升级计划确认
 
 **最新 changelog**: `.anws/changelog/vX.Y.Z.md`
 **当前架构版本**: `.anws/v{N}`
@@ -130,7 +130,7 @@ description: "在执行 anws update 后，读取 .anws/changelog/vX.Y.Z.md，判
 - 哪些段落需要 AI 推断
 - 哪些业务常量将被保护不改
 
-请确认: ✅ 批准并路由 / ❌ 拒绝 / ✏️ 调整
+请确认:  批准并路由 /  拒绝 /  调整
 ```
 
 ---
@@ -183,10 +183,10 @@ description: "在执行 anws update 后，读取 .anws/changelog/vX.Y.Z.md，判
 ---
 
 <completion_criteria>
-- ✅ 已读取最新 `.anws/changelog/vX.Y.Z.md`
-- ✅ 已完成升级定级
-- ✅ 已输出推荐路由 (`/change` / `/genesis`)
-- ✅ 已展示升级计划并获得用户批准
-- ✅ 已在执行前切换去读取目标工作流
-- ✅ 后续写操作由目标工作流规范接管
+- 已读取最新 `.anws/changelog/vX.Y.Z.md`
+- 已完成升级定级
+- 已输出推荐路由 (`/change` / `/genesis`)
+- 已展示升级计划并获得用户批准
+- 已在执行前切换去读取目标工作流
+- 后续写操作由目标工作流规范接管
 </completion_criteria>

@@ -7,14 +7,14 @@ description: "Intelligently orchestrate the full workflow chain. Use when it is 
 <phase_context>
 You are **NAVIGATOR**.
 Your core task is: **intelligently diagnose project state and orchestrate the best workflow path.**
-Principles: ⏸️ wait for confirmation at every step | 🧭 auto-align to the correct starting point | 📋 deliverable-driven.
+Principles:  wait for confirmation at every step |  auto-align to the correct starting point |  deliverable-driven.
 
 **Note**: `/explore` is an independent workflow and not part of quickstart's main flow. Trigger it only when the user explicitly asks for "research/exploration".
 </phase_context>
 
 ---
 
-## 🚀 Pre-Check: Auto-Init
+## Pre-Check: Auto-Init
 
 > **Purpose**: Ensure the project is properly initialized. If `AGENTS.md` is missing, guide initialization automatically.
 
@@ -26,13 +26,13 @@ Principles: ⏸️ wait for confirmation at every step | 🧭 auto-align to the 
 
 2. **State decision**:
    ```
-   ├── ✅ Has AGENTS.md and has .anws/
+   ├──  Has AGENTS.md and has .anws/
    │   └── Project initialized -> Enter Step 0: Project Diagnosis
    │
-   ├── ⚠️ Has AGENTS.md but no .anws/
+   ├──  Has AGENTS.md but no .anws/
    │   └── Abnormal state -> Auto-create .anws/ structure, then enter Step 0
    │
-   └── ❌ No AGENTS.md
+   └──  No AGENTS.md
        └── Brand new project -> Auto-initialize, then enter Step 0
    ```
 
@@ -47,7 +47,7 @@ Principles: ⏸️ wait for confirmation at every step | 🧭 auto-align to the 
    **3.2 Output init confirmation**:
    Tell the user initialization is complete:
    ```
-   ✅ anws environment initialization complete!
+    anws environment initialization complete!
 
    Initialization finished via anws init.
 
@@ -65,18 +65,18 @@ Scan the project to decide the starting point.
 
 ### State Matrix
 ```
-├── 🛑 No .anws/
-│   ├── Has code -> 🏚️ [Legacy project] -> Jump to Step 0.5 (Probe)
-│   └── No code -> 🆕 [Brand new project] -> Jump to Step 1 (Genesis)
-├── 📝 Has architecture (no tasks)
+├──  No .anws/
+│   ├── Has code ->  [Legacy project] -> Jump to Step 0.5 (Probe)
+│   └── No code ->  [Brand new project] -> Jump to Step 1 (Genesis)
+├──  Has architecture (no tasks)
 │   ├── Has system design -> Step 3 (Challenge Design)
 │   └── No system design -> Step 2 (Design System - if needed)
-└── 🔨 Has tasks
+└──  Has tasks
     ├── No code -> Step 5 (Challenge Tasks)
     └── Has code -> Step 7 (Forge / Incremental)
 ```
 
-⏸️ **Confirm probing result** -> Enter the recommended step.
+ **Confirm probing result** -> Enter the recommended step.
 
 ---
 

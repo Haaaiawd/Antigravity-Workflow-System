@@ -33,13 +33,13 @@ Your goal is to find independent systems in the project and define clear boundar
 > 2. **Clear boundaries** - explicit input/output, avoid responsibility ambiguity
 > 3. **Moderate splitting** - avoid over-splitting (>10 systems) and over-aggregation (1 giant system)
 
-❌ **Bad practices**:
+ **Bad practices**:
 - Over-splitting: every feature becomes an independent system
 - Over-aggregation: everything in one "big system"
 - Boundary ambiguity: overlapping responsibilities
 - Ignoring tech-stack differences: frontend and backend mixed
 
-✅ **Good practices**:
+ **Good practices**:
 - **Split by stack** - frontend/backend/database are usually separate systems
 - **Split by deployment unit** - independently deployable parts should be independent systems
 - **Split by responsibility** - business logic, data processing, external integration should be separated
@@ -272,9 +272,9 @@ graph TD
 **System count**: 4
 
 **Assessment**:
-- ✅ Reasonable count (<10)
-- ✅ Clear boundaries
-- ✅ Simple dependencies (no cycles)
+- Reasonable count (<10)
+- Clear boundaries
+- Simple dependencies (no cycles)
 
 **Potential risks**:
 - Backend API may become a bottleneck
@@ -393,4 +393,4 @@ graph TD
 Remember: good decomposition is the art of balance.
 Avoid over-splitting (microservice trap), and avoid over-aggregation (big mudball).
 
-Happy Architecting! 🏗️
+Happy Architecting! 

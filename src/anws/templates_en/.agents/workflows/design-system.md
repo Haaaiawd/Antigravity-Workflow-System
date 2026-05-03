@@ -30,7 +30,7 @@ Run `/design-system <system-id>` to start system design
 
 ---
 
-## ⚠️ CRITICAL Independent Session and Context Loading
+## CRITICAL Independent Session and Context Loading
 
 > [!IMPORTANT]
 > **Why independent sessions?**
@@ -38,13 +38,13 @@ Run `/design-system <system-id>` to start system design
 > Complex projects have multiple systems, and each system should ideally be designed separately.
 > We use the **file system as external memory**:
 > 
-> - ✅ **Load**: Load PRD, Architecture Overview, and related ADRs as needed
-> - ✅ **Flexible**: Load full documents or summaries depending on context
-> - ✅ **Use**: Treat file system as "external memory" instead of relying on session history
+> - **Load**: Load PRD, Architecture Overview, and related ADRs as needed
+> - **Flexible**: Load full documents or summaries depending on context
+> - **Use**: Treat file system as "external memory" instead of relying on session history
 
 ---
 
-## ⚠️ CRITICAL Independent Session Principle
+## CRITICAL Independent Session Principle
 
 > [!IMPORTANT]
 > **Each system's design is completed in an independent session**
@@ -271,7 +271,7 @@ System-specific decisions (not in ADR):
 
 ---
 
-## Step 3: Research (Research via /explore) ⭐ user-emphasized
+## Step 3: Research (Research via /explore)  user-emphasized
 
 **Goal**: Learn industry best practices and avoid designing in isolation
 
@@ -375,7 +375,7 @@ Usage principles:
 9. "How should database schema be designed? (if needed)"
 10. "How does data flow across components?"
 
-### 4.4 Trade-offs Discussion (⭐ Google style)
+### 4.4 Trade-offs Discussion ( Google style)
 11. "Why choose option A over option B? (technical selection)"
 12. "What are the trade-offs in this design? Pros and cons?"
 13. "What alternatives exist? Why not choose them?"
@@ -443,11 +443,11 @@ Check whether this design draft triggers any of the following rules:
 
 | Rule   | Check Item                              | Triggered? |
 | ------ | ----------------------------------- | :----: |
-| **R1** | Any single function/algorithm pseudocode > 30 lines     |  ✅/❌   |
-| **R2** | Total lines across all code blocks > 200         |  ✅/❌   |
-| **R3** | Contains configuration constant dictionary with > 5 entries         |  ✅/❌   |
-| **R4** | Version history comments (`# vX.X changes`) > 5 occurrences |  ✅/❌   |
-| **R5** | Expected total document lines > 500             |  ✅/❌   |
+| **R1** | Any single function/algorithm pseudocode > 30 lines     | Y/N |
+| **R2** | Total lines across all code blocks > 200         | Y/N |
+| **R3** | Contains configuration constant dictionary with > 5 entries         | Y/N |
+| **R4** | Version history comments (`# vX.X changes`) > 5 occurrences | Y/N |
+| **R5** | Expected total document lines > 500             | Y/N |
 
 **Decision**:
 - Any triggered → **Yes**: create two files (L0 + L1)
@@ -477,7 +477,7 @@ Read `.agent/skills/system-designer/references/system-design-detail-template.md`
 5. **Interface Design** — use **operation contract tables** instead of function pseudocode (see SKILL.md Rule 7)
 6. **Data Model** — include only **attribute field declarations**, no method bodies (see SKILL.md Rule 8)
 7. Technology Stack
-8. **Trade-offs & Alternatives** ⭐ core
+8. **Trade-offs & Alternatives**  core
 9. Security Considerations
 10. Performance Considerations
 11. Testing Strategy
@@ -492,7 +492,7 @@ Read `.agent/skills/system-designer/references/system-design-detail-template.md`
 - §2 Complete data structures (@dataclass with method bodies)
 - §3 Core algorithm pseudocode (full function bodies, mapped to operation contract tables)
 - §4 Decision tree detailed logic (expanded from L0 Mermaid diagram)
-- §5 Edge cases and notes (extracted from old document comments like `# ⚠️ Notes`)
+- §5 Edge cases and notes (extracted from old document comments like `#  Notes`)
 - Version history table (placed at end of L1)
 
 **Key requirements**:
@@ -565,11 +565,11 @@ Save content to `.anws/v{N}/04_SYSTEM_DESIGN/{system-id}.detail.md`
 
 **Display**:
 ```
-✅ System design document generated:
+ System design document generated:
   - File: .anws/v{N}/04_SYSTEM_DESIGN/{system-id}.md
   - Research: .anws/v{N}/04_SYSTEM_DESIGN/_research/{system-id}-research.md
 
-📋 Document includes:
+ Document includes:
   - 14 sections (full version) or 11 sections (simplified)
   - Architecture diagram (Mermaid)
   - Interface design (API/components)
@@ -604,19 +604,19 @@ Append or update the current designed system info under `### System Boundaries`:
 ---
 
 <completion_criteria>
-- ✅ System ID confirmed
-- ✅ Context loaded (PRD + Architecture Overview + related ADR)
-- ✅ System understanding completed (`sequential-thinking` 3-5 thoughts)
-- ✅ Research completed (/explore)
-- ✅ Design completed (`sequential-thinking` 5-7 thoughts)
-- ✅ Document generated (using templates)
-- ✅ Updated AGENTS.md AUTO:BEGIN block (system boundaries)
-- ✅ User confirmed
+- System ID confirmed
+- Context loaded (PRD + Architecture Overview + related ADR)
+- System understanding completed (`sequential-thinking` 3-5 thoughts)
+- Research completed (/explore)
+- Design completed (`sequential-thinking` 5-7 thoughts)
+- Document generated (using templates)
+- Updated AGENTS.md AUTO:BEGIN block (system boundaries)
+- User confirmed
 </completion_criteria>
 
 ---
 
-## 📚 Example Prompts
+## Example Prompts
 
 **Design for frontend system**:
 `/design-system frontend-system`

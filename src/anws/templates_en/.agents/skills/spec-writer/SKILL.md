@@ -68,7 +68,7 @@ After creating PRD, you **must**:
 
 After drafting PRD, you **must** systematically scan the full document across these 10 dimensions. This replaces ad-hoc "anything else?" with a **repeatable, exhaustive** method.
 
-For each dimension, mark status: `Clear` ✅ / `Partial` ⚠️ / `Missing` ❌
+For each dimension, mark status: `Clear`  / `Partial`  / `Missing` 
 
 | # | Dimension | What to check | Status |
 |---|------|----------|:------:|

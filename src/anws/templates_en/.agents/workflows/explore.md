@@ -21,7 +21,7 @@ You **switch naturally** based on problem nature, not mechanically.
 
 ---
 
-## ⚠️ CRITICAL Trigger Conditions
+## CRITICAL Trigger Conditions
 
 > [!IMPORTANT]
 > **Clarify when /explore should be triggered to avoid overuse or omission.**
@@ -43,7 +43,7 @@ You **switch naturally** based on problem nature, not mechanically.
 
 ---
 
-## ⚠️ CRITICAL Deep Thinking Requirements
+## CRITICAL Deep Thinking Requirements
 
 > [!IMPORTANT]
 > **Exploration requires deep thinking; thinking mode depends on model capability and task complexity.**
@@ -65,7 +65,7 @@ You **switch naturally** based on problem nature, not mechanically.
 
 ---
 
-## ⚠️ Bidirectional Exploration Principle
+## Bidirectional Exploration Principle
 
 > [!IMPORTANT]
 > **When to go outward (search)? When to go inward (diverge)?**
@@ -119,10 +119,10 @@ You **switch naturally** based on problem nature, not mechanically.
 **Subproblem List**:
 | Subproblem | Exploration Direction | Expected Output |
 |--------|:-------:|---------|
-| What is the current state? | 🔍 Outward | Factual information |
-| Why is it so? | 🔍🧠 Mixed | Causal analysis |
-| How can it be solved? | 🧠 Inward | Creative options |
-| Which option is best? | 🔍🧠 Mixed | Evaluation conclusion |
+| What is the current state? |  Outward | Factual information |
+| Why is it so? |  Mixed | Causal analysis |
+| How can it be solved? |  Inward | Creative options |
+| Which option is best? |  Mixed | Evaluation conclusion |
 ```
 
 ---
@@ -136,14 +136,14 @@ You **switch naturally** based on problem nature, not mechanically.
 
 | Subproblem    | Status        | Core Finding (1-2 sentences) |
 | ------------- | ------------- | ---------------------------- |
-| [Subproblem1] | ⏳ In progress | -                            |
-| [Subproblem2] | ⬜ Pending     | -                            |
+| [Subproblem1] |  In progress | -                            |
+| [Subproblem2] |  Pending     | -                            |
 | ...           |               |                              |
 
 
-> After each subproblem is completed, update status to ✅ and fill in core finding. This is your "memory anchor".
+> After each subproblem is completed, update status to  and fill in core finding. This is your "memory anchor".
 
-### 2.1 Outward Search 🔍
+### 2.1 Outward Search 
 
 Used for: collecting facts, understanding current state, validating assumptions
 
@@ -194,7 +194,7 @@ Use search tools to search relevant keywords
 2. Use `read_url_content` to read high-quality docs, official docs, or representative in-depth articles
 3. Mark in final report: conclusions come from Web/doc search, **without skill harvesting enhancement**
 
-### 2.2 Inward Divergence 🧠
+### 2.2 Inward Divergence 
 
 Used for: generating ideas, exploring possibilities, breaking conventions
 
@@ -345,7 +345,7 @@ Save content to report file.
 
 ### 3.1 [Subproblem 1]
 
-**Exploration method**: 🔍 Search / 🧠 Divergence / 🔍🧠 Mixed
+**Exploration method**:  Search /  Divergence /  Mixed
 
 **Findings**:
 - ...
@@ -361,7 +361,7 @@ Save content to report file.
 
 | Solution | Innovation | Feasibility | Impact | Recommendation |
 |------|:------:|:------:|:------:|:------:|
-| ... | ★★★ | ★★★ | ★★★ | ⭐ |
+| ... |  |  |  |  |
 
 ---
 

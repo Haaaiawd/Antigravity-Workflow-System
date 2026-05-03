@@ -2,7 +2,7 @@
 
 > **文件性质**: L1 实现层 · **对应 L0**: [`{system-id}.md`](./{system-id}.md)
 > 本文件仅在 `/forge` 任务明确引用时加载。日常阅读和任务规划请优先看 L0。
-> **⚠️ 孤岛检查**: 本文件各节均须在 L0 有对应超链接入口，禁止孤岛内容。
+> ** 孤岛检查**: 本文件各节均须在 L0 有对应超链接入口，禁止孤岛内容。
 
 ---
 
@@ -140,10 +140,10 @@ def plan_or_decide(...):
 ### §5.1 {具体情况}
 
 ```python
-# ❌ 错误做法
+# 错误做法
 # cloned_unit.embarked_unit = unit.embarked_unit  # 浅拷贝 → 状态污染!
 
-# ✅ 正确做法
+# 正确做法
 # cloned_unit.embarked_unit = deepcopy(unit.embarked_unit) if unit.embarked_unit else None
 ```
 
@@ -166,7 +166,7 @@ def make_test_world(size=8) -> World:
 
 ---
 
-<!-- ⚠️ AGENT 使用指南
+<!--  AGENT 使用指南
 
 何时创建本文件: 触发 L0 拆分规则 R1-R5 任意一条时。
   R1 单个代码块 > 30 行
@@ -182,6 +182,6 @@ def make_test_world(size=8) -> World:
   §2 数据结构  — 含方法体的完整类
   §3 算法伪代码 — 按函数顺序编号 (§3.1, §3.2 ...)
   §4 决策树    — 对应 L0 Mermaid 图的展开
-  §5 边缘情况  — 从代码注释中提取的 "# ⚠️ 注意" 类内容
+  §5 边缘情况  — 从代码注释中提取的 "#  注意" 类内容
   §6 测试辅助  — 可选
 -->

@@ -27,7 +27,7 @@
 
 ---
 
-## 🚀 Pre-Check: 自动初始化 (Auto-Init)
+## Pre-Check: 自动初始化 (Auto-Init)
 
 > **目的**: 确保项目已正确初始化，无 AGENTS.md 则自动创建。
 
@@ -42,13 +42,13 @@
   - 检查项目根目录是否存在 `.anws/` 目录
 2. **状态判断**:
   ```
-   ├── ✅ 有 AGENTS.md 且有 .anws/
+   ├──  有 AGENTS.md 且有 .anws/
    │   └── 项目已初始化 → 直接进入 Step 0
    │
-   ├── ⚠️ 有 AGENTS.md 但无 .anws/
+   ├──  有 AGENTS.md 但无 .anws/
    │   └── 异常状态 → 创建 .anws/ 目录结构
    │
-   └── ❌ 无 AGENTS.md
+   └──  无 AGENTS.md
        └── 全新项目 → 执行自动初始化
   ```
 3. **自动初始化流程** (仅当无 AGENTS.md 时):
@@ -61,7 +61,7 @@
 
 ---
 
-## ⚠️ CRITICAL 流程约束
+## CRITICAL 流程约束
 
 > [!IMPORTANT]
 > **严格的执行顺序** (CRITICAL):
@@ -134,7 +134,7 @@
   - Given-When-Then 验收标准
 3. **输出**: 保存到 `.anws/v{N}/01_PRD.md`
 
-**人类检查点 #1** ⚠️:
+**人类检查点 #1** :
 
 - 确认 PRD Goals & User Stories。
 
@@ -226,7 +226,7 @@
   - 确定**项目结构树** (ASCII Tree 格式)
 5. **输出**: 保存到 `.anws/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 
-**人类检查点 #2** ⚠️:
+**人类检查点 #2** :
 
 - 确认系统拆分合理性。
 
@@ -272,7 +272,7 @@
 
 使用 `replace_file_content` 或 `multi_replace_file_content`:
 
-**更新 "📍 当前状态"**:
+**更新 " 当前状态"**:
 
 ```markdown
 - **最新架构版本**: `.anws/v{N}`
@@ -280,10 +280,10 @@
 - **最近一次更新**: `{YYYY-MM-DD}`
 ```
 
-**更新 "🌳 项目结构"**:
+**更新 " 项目结构"**:
 
 ```markdown
-## 🌳 项目结构 (Project Tree)
+## 项目结构 (Project Tree)
 
 > **注意**: 此部分由 `/genesis` 维护。
 
@@ -296,17 +296,17 @@
 └── ...
 ```
 
-**更新 "🧭 导航指南"**:
+**更新 " 导航指南"**:
 
 ```markdown
-## 🧭 导航指南 (Navigation Guide)
+## 导航指南 (Navigation Guide)
 
 - **架构总览**: `.anws/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 - **ADR**: 架构决策见 `.anws/v{N}/03_ADR/` (跨系统决策的唯一记录源)
 - **详细设计**: 待 `/design-system` 执行后更新 (将填充 `.anws/v{N}/04_SYSTEM_DESIGN/`)
 - **任务清单**: 待 `/blueprint` 执行后更新 (将生成 `.anws/v{N}/05_TASKS.md`)
 
-### ADR ↔ SYSTEM_DESIGN 关系
+### ADR  SYSTEM_DESIGN 关系
 - **ADR** 记录跨系统决策 (如技术栈、认证方式)
 - **SYSTEM_DESIGN** §8 Trade-offs 引用 ADR,不复制决策内容
 - 修改 ADR 时,检查"影响范围"章节,确认引用该 ADR 的系统
@@ -350,4 +350,4 @@
 
 告知用户阶段完成，列出产出文档，并指引下一步行动（design-system 或 blueprint）。
 
-- ✅ 创建了 `.anws/v{N}/00_MANIFEST.md` - ✅ 创建了 `.anws/v{N}/06_CHANGELOG.md` - ✅ 生成了 PRD, Architecture Overview, ADRs - ✅ 更新了 AGENTS.md (当前状态、项目结构、导航指南) - ✅ 更新了 AGENTS.md AUTO:BEGIN 区块 (技术栈、系统边界、活跃 ADR) - ✅ 用户已在人类检查点确认
+- 创建了 `.anws/v{N}/00_MANIFEST.md` -  创建了 `.anws/v{N}/06_CHANGELOG.md` -  生成了 PRD, Architecture Overview, ADRs -  更新了 AGENTS.md (当前状态、项目结构、导航指南) -  更新了 AGENTS.md AUTO:BEGIN 区块 (技术栈、系统边界、活跃 ADR) -  用户已在人类检查点确认

@@ -30,7 +30,7 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 
 ---
 
-## ⚠️ CRITICAL 独立会话与上下文加载
+## CRITICAL 独立会话与上下文加载
 
 > [!IMPORTANT]
 > **为什么需要独立会话？**
@@ -38,13 +38,13 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 > 复杂项目有多个系统，建议为每个系统单独设计。
 > 我们使用**文件系统作为外部记忆**：
 > 
-> - ✅ **加载**: 根据需要加载PRD、Architecture Overview、相关ADR
-> - ✅ **灵活**: 可以加载完整文档或摘要，视情况而定
-> - ✅ **使用**: 文件系统作为"外部记忆"，不依赖会话历史
+> - **加载**: 根据需要加载PRD、Architecture Overview、相关ADR
+> - **灵活**: 可以加载完整文档或摘要，视情况而定
+> - **使用**: 文件系统作为"外部记忆"，不依赖会话历史
 
 ---
 
-## ⚠️ CRITICAL 独立会话原则
+## CRITICAL 独立会话原则
 
 > [!IMPORTANT]
 > **每个系统的设计在独立会话中完成**
@@ -271,7 +271,7 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 
 ---
 
-## Step 3: 调研 (Research via /explore) ⭐ 用户强调
+## Step 3: 调研 (Research via /explore)  用户强调
 
 **目标**: 了解业界最佳实践，避免闭门造车
 
@@ -375,7 +375,7 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 9. "数据库Schema如何设计？（如果需要）"
 10. "数据如何在组件间流动？"
 
-### 4.4 Trade-offs讨论 (⭐ Google风格)
+### 4.4 Trade-offs讨论 ( Google风格)
 11. "为什么选择方案A而不是方案B？（技术选型）"
 12. "这个设计的权衡是什么？优点和缺点？"
 13. "有哪些备选方案？为什么不选它们？"
@@ -443,11 +443,11 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 
 | 规则   | 检测项                              | 触发？ |
 | ------ | ----------------------------------- | :----: |
-| **R1** | 任何单个函数/算法伪代码 > 30 行     |  ✅/❌   |
-| **R2** | 所有代码块合计行数 > 200 行         |  ✅/❌   |
-| **R3** | 含配置常量字典且条目 > 5 个         |  ✅/❌   |
-| **R4** | 版本历史注释（`# vX.X 变更`）> 5 处 |  ✅/❌   |
-| **R5** | 预计文档总行数 > 500 行             |  ✅/❌   |
+| **R1** | 任何单个函数/算法伪代码 > 30 行     | 是/否 |
+| **R2** | 所有代码块合计行数 > 200 行         | 是/否 |
+| **R3** | 含配置常量字典且条目 > 5 个         | 是/否 |
+| **R4** | 版本历史注释（`# vX.X 变更`）> 5 处 | 是/否 |
+| **R5** | 预计文档总行数 > 500 行             | 是/否 |
 
 **决策**:
 - 任意触发 → **是**: 创建两个文件（L0 + L1）
@@ -477,7 +477,7 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 5. **接口设计 (Interface Design)** — 用**操作契约表格**代替函数伪代码（见 SKILL.md 守则7）
 6. **数据模型 (Data Model)** — 只放**属性字段声明**，不写方法体（见 SKILL.md 守则8）
 7. 技术选型 (Technology Stack)
-8. **Trade-offs & Alternatives** ⭐ 核心
+8. **Trade-offs & Alternatives**  核心
 9. 安全性考虑 (Security Considerations)
 10. 性能考虑 (Performance Considerations)
 11. 测试策略 (Testing Strategy)
@@ -492,7 +492,7 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 - §2 完整数据结构（含方法体的 @dataclass）
 - §3 核心算法伪代码（完整函数体，按操作契约表格对应）
 - §4 决策树详细逻辑（对应 L0 Mermaid 图的展开）
-- §5 边缘情况与注意事项（从旧文档 `# ⚠️ 注意` 类注释提取）
+- §5 边缘情况与注意事项（从旧文档 `#  注意` 类注释提取）
 - 版本历史表格（集中放在 L1 末尾）
 
 **关键要求**:
@@ -565,11 +565,11 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 
 **展示**:
 ```
-✅ 系统设计文档已生成:
+ 系统设计文档已生成:
   - 文件: .anws/v{N}/04_SYSTEM_DESIGN/{system-id}.md
   - 调研: .anws/v{N}/04_SYSTEM_DESIGN/_research/{system-id}-research.md
 
-📋 文档包含:
+ 文档包含:
   - 14个章节（完整版）或 11个章节（简化版）
   - 架构图 (Mermaid)
   - 接口设计（API/组件）
@@ -604,19 +604,19 @@ description: "为单个系统设计详细的技术文档。适用于架构拆解
 ---
 
 <completion_criteria>
-- ✅ 系统ID已确认
-- ✅ 上下文已加载（PRD + Architecture Overview + 相关ADR）
-- ✅ 系统理解已完成 (`sequential-thinking` 3-5 thoughts)
-- ✅ 调研已完成 (/explore)
-- ✅ 设计已完成 (`sequential-thinking` 5-7 thoughts)
-- ✅ 文档已生成 (使用模板)
-- ✅ 更新了 AGENTS.md AUTO:BEGIN 区块 (系统边界)
-- ✅ 用户已确认
+- 系统ID已确认
+- 上下文已加载（PRD + Architecture Overview + 相关ADR）
+- 系统理解已完成 (`sequential-thinking` 3-5 thoughts)
+- 调研已完成 (/explore)
+- 设计已完成 (`sequential-thinking` 5-7 thoughts)
+- 文档已生成 (使用模板)
+- 更新了 AGENTS.md AUTO:BEGIN 区块 (系统边界)
+- 用户已确认
 </completion_criteria>
 
 ---
 
-## 📚 示例提示词
+## 示例提示词
 
 **为前端系统设计**:
 `/design-system frontend-system`

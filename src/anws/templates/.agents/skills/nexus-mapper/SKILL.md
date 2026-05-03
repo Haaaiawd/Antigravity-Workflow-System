@@ -1,7 +1,7 @@
 ---
-name: nexus-mapper
+
+## name: nexus-mapper
 description: "Generate a persistent .nexus-map/ knowledge base that lets any AI session instantly understand a codebase's architecture, systems, dependencies, and change hotspots. Use when starting work on an unfamiliar repository, onboarding with AI-assisted context, preparing for a major refactoring initiative, or enabling reliable cold-start AI sessions across a team. Produces INDEX.md, systems.md, concept_model.json, git_forensics.md and more. Requires shell execution and Python 3.10+. For ad-hoc file queries or instant impact analysis during active development, use nexus-query instead."
----
 
 # nexus-mapper — AI 项目探测协议
 
@@ -11,15 +11,17 @@ description: "Generate a persistent .nexus-map/ knowledge base that lets any AI 
 
 ## 何时调用 / 何时不调用
 
-| 场景                                                                | 调用  |
-| ------------------------------------------------------------------- | :---: |
-| 用户提供本地 repo 路径，希望 AI 理解其架构                          |  是   |
-| 需要生成 `.nexus-map/INDEX.md` 供后续 AI 会话冷启动                 |  是   |
-| 用户说「帮我分析项目」「建立项目知识库」「让 AI 了解这个仓库」      |  是   |
-| 运行环境无 shell 执行能力（纯 API 调用模式，无 `run_command` 工具） |  否   |
-| 宿主机无本地 Python 3.10+                                           |  否   |
-| 目标仓库无任何已知语言源文件（`.py/.ts/.java/.go/.rs/.cpp` 等均无） |  否   |
-| 用户只想查询某个特定文件/函数 → 直接用 `view_file` / `grep_search`  |  否   |
+
+| 场景                                                | 调用  |
+| ------------------------------------------------- | --- |
+| 用户提供本地 repo 路径，希望 AI 理解其架构                        | 是   |
+| 需要生成 `.nexus-map/INDEX.md` 供后续 AI 会话冷启动           | 是   |
+| 用户说「帮我分析项目」「建立项目知识库」「让 AI 了解这个仓库」                 | 是   |
+| 运行环境无 shell 执行能力（纯 API 调用模式，无 `run_command` 工具）   | 否   |
+| 宿主机无本地 Python 3.10+                               | 否   |
+| 目标仓库无任何已知语言源文件（`.py/.ts/.java/.go/.rs/.cpp` 等均无）  | 否   |
+| 用户只想查询某个特定文件/函数 → 直接用 `view_file` / `grep_search` | 否   |
+
 
 ---
 
@@ -27,12 +29,14 @@ description: "Generate a persistent .nexus-map/ knowledge base that lets any AI 
 
 缺失项要显式告知用户；需要降级等时及时提醒用户，经过同意才能继续。
 
-| 前提              | 检查方式                                |
-| ----------------- | --------------------------------------- |
-| 目标路径存在      | `$repo_path` 可访问                     |
-| Python 3.10+      | `python --version` >= 3.10              |
-| 脚本依赖已安装    | `python -c "import tree_sitter"` 无报错 |
-| 有 shell 执行能力 | Agent 环境支持 `run_command` 工具调用   |
+
+| 前提           | 检查方式                                 |
+| ------------ | ------------------------------------ |
+| 目标路径存在       | `$repo_path` 可访问                     |
+| Python 3.10+ | `python --version` >= 3.10           |
+| 脚本依赖已安装      | `python -c "import tree_sitter"` 无报错 |
+| 有 shell 执行能力 | Agent 环境支持 `run_command` 工具调用        |
+
 
 `git` 历史是加分项，不是硬阻塞项。没有 `.git` 或历史过少时，跳过热点分析，并在输出中明确记录这是一次降级探测。
 
@@ -47,6 +51,7 @@ repo_path: 目标仓库的本地绝对路径（必填）
 **语言支持**：自动按文件扩展名 dispatch，语言配置（扩展名映射 + Tree-sitter 查询）存储在 `scripts/languages.json`。当前已接入 Python/JavaScript/TypeScript/TSX/Bash/Java/Go/Rust/C#/C/C++/Kotlin/Ruby/Swift/Scala/PHP/Lua/Elixir/GDScript/Dart/Haskell/Clojure/SQL/Proto/Solidity/Vue/Svelte/R/Perl 等 30+ 语言。
 
 **非标准语言**：若仓库含有内置未支持的语言，通过命令行参数动态补充（详见 `references/05-language-customization.md`）：
+
 - `--add-extension .templ=templ` 添加新文件扩展名映射
 - `--add-query templ struct "(component_declaration ...)"` 添加结构查询
 - `--language-config <JSON_FILE>` 复杂配置时使用 JSON 文件
@@ -104,13 +109,16 @@ repo_path: 目标仓库的本地绝对路径（必填）
 OBJECT 的存在意义是打破 REASON 的幸存者偏差。大量工程事实隐藏在目录命名和 git 热点背后，第一直觉几乎总是错的。
 
 不合格质疑（禁止提交）：
+
 ```
 Q1: 我对系统结构的把握还不够扎实
 Q2: xxx 目录的职责暂时没有直接证据
 ```
+
 问题不在措辞，而在于没有证据线索，也无法在 BENCHMARK 阶段验证。
 
 合格质疑格式：
+
 ```
 Q1: git_stats 显示 tasks/analysis_tasks.py 变更 21 次（high risk），
     但 HYPOTHESIS 认为编排入口是 evolution/detective_loop.py。
@@ -155,17 +163,20 @@ ls $repo_path/src/nexus/application/nonexist/  # [!ERROR] → 修正或删除此
 
 幂等性规则：
 
-| 状态                                 | 处理方式                                   |
-| ------------------------------------ | ------------------------------------------ |
-| `.nexus-map/` 不存在                 | 直接继续                                   |
-| `.nexus-map/` 存在且 `INDEX.md` 有效 | 询问用户：「是否覆盖？[y/n]」              |
-| `.nexus-map/` 存在但文件不完整       | 「检测到未完成分析，将重新生成」，直接继续 |
+
+| 状态                              | 处理方式                  |
+| ------------------------------- | --------------------- |
+| `.nexus-map/` 不存在               | 直接继续                  |
+| `.nexus-map/` 存在且 `INDEX.md` 有效 | 询问用户：「是否覆盖？[y/n]」     |
+| `.nexus-map/` 存在但文件不完整          | 「检测到未完成分析，将重新生成」，直接继续 |
+
 
 ---
 
 ### 守则4: INDEX.md 的角色——冷启动路由器，而非静态字典
 
 `INDEX.md` 的读者是**从未见过这个仓库的 AI**。两个硬约束：
+
 - **< 2000 tokens** — 超过就重写，不是截断
 - **结论必须具体** — 证据不足时明确写出 `evidence gap` 或 `unknown`，并说明缺了什么证据
 
@@ -230,6 +241,7 @@ ls $repo_path/src/nexus/application/nonexist/  # [!ERROR] → 修正或删除此
 避免只写：待确认 · 可能是 · 疑似 · 也许 · 待定 · 暂不清楚 · pending · maybe · possibly · TBD
 
 如果证据不足，按以下格式写：
+
 - `unknown: 未发现直接证据表明 api/ 是主入口，当前仅能确认 cli.py 被 README 引用`
 - `evidence gap: 仓库没有 git 历史，因此 hotspots 部分跳过`
 
@@ -264,6 +276,7 @@ python $SKILL_DIR/scripts/extract_ast.py <repo_path> [--max-nodes 500] \
 ```
 
 **依赖安装（首次使用）**：
+
 ```bash
 pip install -r $SKILL_DIR/scripts/requirements.txt
 ```
@@ -297,10 +310,12 @@ python $SKILL_DIR/scripts/query_graph.py <ast_nodes.json> --hub-analysis        
 python $SKILL_DIR/scripts/query_graph.py <ast_nodes.json> --summary             # 目录聚合
 ```
 
-| 阶段   | 推荐查询               | 用途                                         |
-| ------ | ---------------------- | -------------------------------------------- |
-| REASON | `--hub-analysis`       | 数据验证核心系统假说，不靠目录名猜测         |
-| OBJECT | `--impact --git-stats` | 验证边界假设，查看真实上下游依赖             |
+
+| 阶段     | 推荐查询                   | 用途                                    |
+| ------ | ---------------------- | ------------------------------------- |
+| REASON | `--hub-analysis`       | 数据验证核心系统假说，不靠目录名猜测                    |
+| OBJECT | `--impact --git-stats` | 验证边界假设，查看真实上下游依赖                      |
 | EMIT   | `--summary`, `--file`  | 生成 systems.md / dependencies.md 的数据支撑 |
+
 
 各查询模式的核心价值：`--hub-analysis` 用于 REASON 期验证架构假说；`--impact --git-stats` 用于 OBJECT 期量化边界风险；`--summary` 与 `--file` 用于 EMIT 期生成精确数据支撑。

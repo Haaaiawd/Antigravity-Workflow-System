@@ -13,6 +13,7 @@ The default model of current scripts is:
 3. If command line args too many or query too long, then fall back to `--language-config <JSON_FILE>`
 
 This means:
+
 - Does not require repo to have fixed path language config file
 - Not recommended to modify core scripts for single repo single analysis
 - New agent can directly plug additional languages into analysis flow in one command
@@ -32,6 +33,7 @@ Prioritize command line when following conditions met:
 ### Step 1: Confirm Language Name
 
 First confirm language name recognizable by `tree-sitter-language-pack` or current environment. For example:
+
 - `.templ` -> `templ`
 - `.hbs` -> `handlebars`
 - `.rego` -> `rego`
@@ -67,11 +69,13 @@ Parameter format:
 ```
 
 Where:
+
 - `<LANG>`: language name, e.g., `templ`
 - `<TYPE>`: `struct` or `imports`
 - `<QUERY_STRING>`: Tree-sitter query string
 
 Capture naming must continue to follow existing convention:
+
 - Class: `@class.def` / `@class.name`
 - Function: `@func.def` / `@func.name`
 - Import: `@mod`
@@ -113,6 +117,7 @@ python extract_ast.py <repo_path> --language-config /custom/path/to/language-con
 ```
 
 Explanation:
+
 - `extensions`: extension to language name mapping
 - `queries`: custom `struct` / `imports` query
 - `unsupported_extensions`: explicitly declare extensions still not currently supported, avoid silent skip
@@ -126,18 +131,16 @@ This JSON file is explicit input for one analysis, does not require fixed placem
 Whether command line or explicit JSON, new languages must follow same layered standard:
 
 1. `structural coverage`
-   Condition: parser loadable, and `struct` query exists
-
+  Condition: parser loadable, and `struct` query exists
 2. `module-only coverage`
-   Condition: parser loadable, but no `struct` query
-
+  Condition: parser loadable, but no `struct` query
 3. `configured-but-unavailable`
-   Condition: agent explicitly requested support for this language, but current environment cannot load parser
-
+  Condition: agent explicitly requested support for this language, but current environment cannot load parser
 4. `unsupported`
-   Condition: language still not included in this AST flow, or explicitly marked as unsupported
+  Condition: language still not included in this AST flow, or explicitly marked as unsupported
 
 Prohibited:
+
 - Write `configured-but-unavailable` as `module-only`
 - Disguise `unsupported` as "not present in repo"
 
@@ -161,3 +164,4 @@ When subsequent agent encounters an uncovered language, handle in following orde
 - For single analysis, prioritize minimum extra input, do not modify core scripts first
 - Custom query is formal input, not bypass hack
 - All new languages must follow same metadata and provenance rules
+

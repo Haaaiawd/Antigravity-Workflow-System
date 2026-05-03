@@ -94,7 +94,7 @@ CONTRACT-001: CLI / API / Interface / Config / File Format / Error Semantics / P
 
 ---
 
-## 🔍 7 Major Detection Passes
+## 7 Major Detection Passes
 
 ### Pass A: Duplication Detection
 
@@ -144,7 +144,7 @@ CONTRACT-001: CLI / API / Interface / Config / File Format / Error Semantics / P
 
 ### Pass D: Inconsistency Detection — Cross-Document Cross-Validation
 
-> ⚠️ Depends on PRD + Architecture. If unavailable, skip and note.
+>  Depends on PRD + Architecture. If unavailable, skip and note.
 
 **Goal**: Catch contradictions between PRD, Architecture, ADR and Tasks.
 
@@ -216,12 +216,12 @@ CONTRACT-001: CLI / API / Interface / Config / File Format / Error Semantics / P
 
 ---
 
-## 📊 Output Format: Task Review Report
+## Output Format: Task Review Report
 
 Generate report in following structure:
 
 ```markdown
-## 📊 Task Review Report
+## Task Review Report
 
 > **Reviewed File**: .anws/v{N}/05_TASKS.md  
 > **Reference Documents**: 01_PRD.md, 02_ARCHITECTURE_OVERVIEW.md, 03_ADR/*, 04_SYSTEM_DESIGN/*  
@@ -242,7 +242,7 @@ Generate report in following structure:
 | G Contract Coverage | — | — | — | — | — |
 | **Total** | **—** | **—** | **—** | **—** | **—** |
 
-**Overall Health**: 🟢 Healthy / 🟡 Needs Attention / 🔴 Blocked
+**Overall Health**:  Healthy /  Needs Attention /  Blocked
 
 **High-Signal Conclusions**: [Summarize most valuable issues for challenge main report in 1-3 sentences]
 
@@ -252,8 +252,8 @@ Generate report in following structure:
 
 | REQ-ID | Title | Priority | Associated Tasks | Status |
 |--------|------|:--------:|-------------------|:------:|
-| REQ-001 | ... | P0 | T2.1.1, T2.1.2 | ✅ |
-| REQ-003 | ... | P0 | — | ❌ GAP |
+| REQ-001 | ... | P0 | T2.1.1, T2.1.2 |  |
+| REQ-003 | ... | P0 | — |  GAP |
 
 **Coverage**: {covered}/{total} ({percentage}%)
 
@@ -263,8 +263,8 @@ Generate report in following structure:
 
 | US-ID | Title | Involved Systems | Associated Tasks | Independently Testable | Status |
 |-------|------|-----------------|-------------------|:---------------------:|:------:|
-| US-001 | ... | core, client | T2.1.1→T7.2.1 | ✅ | ✅ |
-| US-003 | ... | core, executor | T3.2.1 (incomplete) | ❌ | ⚠️ |
+| US-001 | ... | core, client | T2.1.1→T7.2.1 |  |  |
+| US-003 | ... | core, executor | T3.2.1 (incomplete) |  |  |
 
 ---
 
@@ -272,7 +272,7 @@ Generate report in following structure:
 
 | Term | In PRD | In Architecture | In Tasks | Status |
 |------|--------|-----------------|----------|:------:|
-| ... | "..." | "..." | "..." | ⚠️ Drift |
+| ... | "..." | "..." | "..." |  Drift |
 
 ---
 
@@ -280,9 +280,9 @@ Generate report in following structure:
 
 | Contract | Type | Implementation Handoff | Verification Handoff | Status |
 |----------|------|------------------------|----------------------|:------:|
-| `update --target` explicit selection semantics | CLI | T1.2.1 | T6.2.1 | ✅ |
-| install-lock fallback rebuild semantics | State/File Format | T4.1.1 | T6.2.1 | ✅ |
-| adapter target matrix mapping | Base Rule Layer | T2.1.1 | T6.1.1 | ✅ |
+| `update --target` explicit selection semantics | CLI | T1.2.1 | T6.2.1 |  |
+| install-lock fallback rebuild semantics | State/File Format | T4.1.1 | T6.2.1 |  |
+| adapter target matrix mapping | Base Rule Layer | T2.1.1 | T6.1.1 |  |
 
 **Design Evidence Source**: Read / Not Read `04_SYSTEM_DESIGN/*`
 
@@ -340,23 +340,23 @@ graph LR
 
 ---
 
-## 🎚️ Severity Grading
+## Severity Grading
 
 | Level | Criteria | Required Action |
 |:-----:|----------|-----------------|
-| **Critical** 🔴 | Fundamental contradiction or impossible to implement. Cannot continue without fixing. | P0 — Must fix before blueprint/forge |
-| **High** 🟠 | Serious risks with high probability of rework or failure. | P1 — Fix before forge |
-| **Medium** 🟡 | Quality risks with workarounds available. | P2 — Fix during implementation phase |
-| **Low** 🟢 | Polishing items or minor inconsistencies. | P3 — Track later |
+| **Critical**  | Fundamental contradiction or impossible to implement. Cannot continue without fixing. | P0 — Must fix before blueprint/forge |
+| **High**  | Serious risks with high probability of rework or failure. | P1 — Fix before forge |
+| **Medium**  | Quality risks with workarounds available. | P2 — Fix during implementation phase |
+| **Low**  | Polishing items or minor inconsistencies. | P3 — Track later |
 
-**Health Rules**: Critical ≥ 1 → set overall health to 🔴 Blocked. High ≥ 5 → 🟡 Needs Attention. Others → 🟢 Healthy.
+**Health Rules**: Critical ≥ 1 → set overall health to  Blocked. High ≥ 5 →  Needs Attention. Others →  Healthy.
 
 > [!NOTE]
 > When outputting, prioritize keeping Critical / High. Medium / Low only kept if they truly affect execution judgment or have stable improvement value.
 
 ---
 
-## 💡 Review Essentials
+## Review Essentials
 
 1. **Don't over-mark**: If task wording not perfect but meaning clear, at most mark LOW.
 2. **Context matters**: "Fast" in game Tick loop means completely different from "fast" in batch processing tasks.

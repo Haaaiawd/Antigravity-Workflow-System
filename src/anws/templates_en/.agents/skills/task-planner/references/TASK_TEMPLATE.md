@@ -6,7 +6,7 @@
 
 ---
 
-## 📋 Task List
+## Task List
 
 ### Legend
 - **ID**: Unique task identifier (T{System}.{Phase}.{Seq})
@@ -17,8 +17,8 @@
 - **Verification Type**: Unit test / Integration test / E2E test / Smoke test / Regression test / Manual verification / Compilation check / Lint check
 - **Verification Description**: How to verify task completion, what evidence needed
 - **Contract Handoff**: Public contracts this task implements or verifies (e.g., interfaces, CLI semantics, config structure, file format, error semantics)
-- **📎 ADR**: Associated architecture decision record
-- **📎 System**: Associated system design document
+- ** ADR**: Associated architecture decision record
+- ** System**: Associated system design document
 
 ### Generation Reminders
 - Public contracts must have at least one implementation task handoff
@@ -45,7 +45,7 @@
   - Then table fields consistent with system design
 - **Verification Type**: Integration test
 - **Verification Description**: Run migration and execute `psql -c "\d users"`, keep terminal output as evidence
-- **📎 ADR**: ADR-003 (Password storage solution)
+- ** ADR**: ADR-003 (Password storage solution)
 
 #### T1.1.1 - [P] Environment Configuration
 - **User Story**: US01
@@ -78,7 +78,7 @@
   - Then return 201 and user written to database
 - **Verification Type**: Integration test
 - **Verification Description**: Call `POST /api/register` and check response and database write result
-- **📎 ADR**: ADR-003 (Password storage solution)
+- ** ADR**: ADR-003 (Password storage solution)
 
 #### T2.1.2 - [P] JWT Token Generation
 - **User Story**: US01
@@ -93,11 +93,11 @@
   - Then all assertions pass
 - **Verification Type**: Unit test
 - **Verification Description**: Execute JWT related tests and confirm tests pass
-- **📎 ADR**: ADR-004 (JWT authentication solution)
+- ** ADR**: ADR-004 (JWT authentication solution)
 
 ---
 
-## 📊 Iteration Roadmap
+## Iteration Roadmap
 
 | Iteration | Code | Core Tasks | Exit Criteria | Estimate |
 |-----------|------|------------|---------------|----------|
@@ -124,7 +124,7 @@
   - Then return 401
 - **Verification Type**: Integration test
 - **Verification Description**: Call `/api/login` and check success and failure paths separately
-- **📎 ADR**: ADR-004 (JWT authentication solution)
+- ** ADR**: ADR-004 (JWT authentication solution)
 
 #### INT-S2 - [MILESTONE] S2 Integration Verification — Core Logic
 - **User Story**: US01
@@ -148,7 +148,7 @@
 
 ---
 
-## 🔗 Dependency Graph
+## Dependency Graph
 
 ```
 T3.1.1 (Database Schema)
@@ -162,7 +162,7 @@ T1.1.1 (Environment Configuration) [P]
 
 ---
 
-## 📊 Summary
+## Summary
 
 | Phase | Total Tasks | Parallelizable |
 |-------|-------------|---------------|
@@ -173,7 +173,7 @@ T1.1.1 (Environment Configuration) [P]
 
 ---
 
-## ✅ Acceptance Criteria
+## Acceptance Criteria
 
 Before marking blueprint as complete:
 - [ ] All tasks have unique IDs
@@ -189,16 +189,16 @@ Before marking blueprint as complete:
 
 ---
 
-## 🚫 Anti-Patterns to Avoid
+## Anti-Patterns to Avoid
 
-❌ **Bad task example**:
+ **Bad task example**:
 ```
 T001 - Build authentication system
 - Do everything authentication related
 - Make it safe and fast
 ```
 
-✅ **Good task example**:
+ **Good task example**:
 ```
 T3.1.1 - Database Schema Initialization
 - Input: `04_SYSTEM_DESIGN/database.md` §User table design
@@ -206,7 +206,7 @@ T3.1.1 - Database Schema Initialization
 - Contract Handoff: Database schema contract
 - Acceptance Criteria: Given migration complete, When view table structure, Then fields match design.
 - Verification Type: Integration test
-- 📎 ADR: ADR-003 (Password storage solution)
+- ADR: ADR-003 (Password storage solution)
 ```
 
 ---

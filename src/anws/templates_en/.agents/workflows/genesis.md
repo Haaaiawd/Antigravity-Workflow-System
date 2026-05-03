@@ -27,7 +27,7 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
 
 ---
 
-## 🚀 Pre-Check: Auto Initialization (Auto-Init)
+## Pre-Check: Auto Initialization (Auto-Init)
 
 > **Purpose**: Ensure the project is properly initialized. If AGENTS.md is missing, create it automatically.
 
@@ -38,13 +38,13 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
   - Check whether `.anws/` exists in the project root
 2. **State judgment**:
   ```
-   ├── ✅ AGENTS.md exists and .anws/ exists
+   ├──  AGENTS.md exists and .anws/ exists
    │   └── Project already initialized → go directly to Step 0
    │
-   ├── ⚠️ AGENTS.md exists but .anws/ missing
+   ├──  AGENTS.md exists but .anws/ missing
    │   └── Abnormal state → create .anws/ directory structure
    │
-   └── ❌ AGENTS.md missing
+   └──  AGENTS.md missing
        └── Brand new project → run auto initialization
   ```
 3. **Auto initialization flow** (only when AGENTS.md is missing):
@@ -57,7 +57,7 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
 
 ---
 
-## ⚠️ CRITICAL Process Constraints
+## CRITICAL Process Constraints
 
 > [!IMPORTANT]
 > **Strict execution order** (CRITICAL):
@@ -130,7 +130,7 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
   - Given-When-Then acceptance criteria
 3. **Output**: Save to `.anws/v{N}/01_PRD.md`
 
-**Human checkpoint #1** ⚠️:
+**Human checkpoint #1** :
 
 - Confirm PRD Goals & User Stories.
 
@@ -222,7 +222,7 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
   - Determine **project structure tree** (ASCII Tree format)
 5. **Output**: Save to `.anws/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 
-**Human checkpoint #2** ⚠️:
+**Human checkpoint #2** :
 
 - Confirm rationality of system decomposition.
 
@@ -268,7 +268,7 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
 
 Use `replace_file_content` or `multi_replace_file_content`:
 
-**Update "📍 Current Status"**:
+**Update " Current Status"**:
 
 ```markdown
 - **Latest Architecture Version**: `.anws/v{N}`
@@ -276,10 +276,10 @@ Use `replace_file_content` or `multi_replace_file_content`:
 - **Last Updated**: `{YYYY-MM-DD}`
 ```
 
-**Update "🌳 Project Structure"**:
+**Update " Project Structure"**:
 
 ```markdown
-## 🌳 Project Structure (Project Tree)
+## Project Structure (Project Tree)
 
 > **Note**: This section is maintained by `/genesis`.
 
@@ -292,17 +292,17 @@ Use `replace_file_content` or `multi_replace_file_content`:
 └── ...
 ```
 
-**Update "🧭 Navigation Guide"**:
+**Update " Navigation Guide"**:
 
 ```markdown
-## 🧭 Navigation Guide (Navigation Guide)
+## Navigation Guide (Navigation Guide)
 
 - **Architecture Overview**: `.anws/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 - **ADR**: See architecture decisions in `.anws/v{N}/03_ADR/` (single source of truth for cross-system decisions)
 - **Detailed Design**: To be updated after `/design-system` execution (will populate `.anws/v{N}/04_SYSTEM_DESIGN/`)
 - **Task List**: To be updated after `/blueprint` execution (will generate `.anws/v{N}/05_TASKS.md`)
 
-### ADR ↔ SYSTEM_DESIGN Relationship
+### ADR  SYSTEM_DESIGN Relationship
 - **ADR** records cross-system decisions (e.g., tech stack, auth method)
 - **SYSTEM_DESIGN** §8 Trade-offs references ADR; it does not duplicate decision content
 - When modifying ADR, check the "Impact Scope" section and confirm systems referencing this ADR
@@ -346,4 +346,4 @@ Only modify content between `<!-- AUTO:BEGIN -->` and `<!-- AUTO:END -->`; keep 
 
 Tell the user this phase is complete, list output documents, and guide the next action (design-system or blueprint).
 
-- ✅ Created `.anws/v{N}/00_MANIFEST.md` - ✅ Created `.anws/v{N}/06_CHANGELOG.md` - ✅ Generated PRD, Architecture Overview, ADRs - ✅ Updated AGENTS.md (Current Status, Project Structure, Navigation Guide) - ✅ Updated AGENTS.md AUTO:BEGIN block (Tech Stack, System Boundaries, Active ADRs) - ✅ User confirmed at human checkpoints
+- Created `.anws/v{N}/00_MANIFEST.md` -  Created `.anws/v{N}/06_CHANGELOG.md` -  Generated PRD, Architecture Overview, ADRs -  Updated AGENTS.md (Current Status, Project Structure, Navigation Guide) -  Updated AGENTS.md AUTO:BEGIN block (Tech Stack, System Boundaries, Active ADRs) -  User confirmed at human checkpoints

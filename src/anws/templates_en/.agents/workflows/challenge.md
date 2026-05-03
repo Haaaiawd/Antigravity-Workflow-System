@@ -38,7 +38,7 @@ The **specification contract** is jointly composed of the following sources:
 
 ---
 
-## ⚠️ CRITICAL Deep Thinking Requirements
+## CRITICAL Deep Thinking Requirements
 
 > [!IMPORTANT]
 > **Challenge work requires deep thinking; the thinking method is based on model capability and task complexity.**
@@ -55,12 +55,12 @@ The **specification contract** is jointly composed of the following sources:
 
 ---
 
-## ⚠️ CRITICAL Quality Requirements
+## CRITICAL Quality Requirements
 
 > [!IMPORTANT]
 > **No imagined issues allowed!**
-> - ❌ "There may be performance issues" → no evidence
-> - ✅ "According to RFC design, each request needs 3 database queries; this may become a bottleneck at 1000 concurrency" → concrete analysis
+> - "There may be performance issues" → no evidence
+> - "According to RFC design, each request needs 3 database queries; this may become a bottleneck at 1000 concurrency" → concrete analysis
 > 
 > Each challenge **must** include:
 > 1. **Specific target**: Point out where in which file/design the issue is
@@ -69,14 +69,14 @@ The **specification contract** is jointly composed of the following sources:
 
 ---
 
-## 🎚️ Severity Grading
+## Severity Grading
 
 | Level | Criteria | Required Action |
 |:----:|---------|---------|
-| **Critical** 🔴 | Fundamental contradiction or impossible to implement. Cannot proceed without fixing. | P0 — Must be fixed before blueprint/forge |
-| **High** 🟠 | Severe risk likely to cause rework or failure. | P1 — Fix before forge |
-| **Medium** 🟡 | Quality risk with workaround options. | P2 — Fix during implementation |
-| **Low** 🟢 | Polish item or minor inconsistency. | P3 — Follow up later |
+| **Critical**  | Fundamental contradiction or impossible to implement. Cannot proceed without fixing. | P0 — Must be fixed before blueprint/forge |
+| **High**  | Severe risk likely to cause rework or failure. | P1 — Fix before forge |
+| **Medium**  | Quality risk with workaround options. | P2 — Fix during implementation |
+| **Low**  | Polish item or minor inconsistency. | P3 — Follow up later |
 
 > [!NOTE]
 > When outputting reports, **prioritize keeping Critical / High**. Keep Medium / Low only when they truly affect judgment or can form stable improvement direction, to avoid report bloat.
@@ -200,8 +200,8 @@ The **specification contract** is jointly composed of the following sources:
     ```markdown
     | Failure Cause | Distorted Contract | Root Cause | Evidence | Probability |
     |---------|---------|-----------|------|:----:|
-    | Duplicate shipment | Write operation commitment | No idempotency key / no dedupe state | PRD + API design does not define retry semantics | 🔴High |
-    | Error response fork | Error contract | Default failure paths not uniformly wrapped | 401/404 returned by framework defaults | 🟡Medium |
+    | Duplicate shipment | Write operation commitment | No idempotency key / no dedupe state | PRD + API design does not define retry semantics | High |
+    | Error response fork | Error contract | Default failure paths not uniformly wrapped | 401/404 returned by framework defaults | Medium |
     ```
 
 ---
@@ -283,37 +283,37 @@ Follow **`code-reviewer`** end-to-end (static boundaries, inputs, lenses, output
 
     | Check Dimension | Core Question | Contract Location |
     |---------|---------|:-------:|
-    | **Duplicate state** | If the same request comes again, does it still honor the original commitment? | |
-    | **Failure state** | On timeout, partial failure, or external dependency failure, does the commitment still hold? | |
-    | **Default state** | Are framework default failure paths/default resource paths consistent with system contracts? | |
-    | **Runtime state** | Are scheduling, cleanup, retention, and long-running behavior closed-loop? | |
-    | **Concurrency state** | Under multi-user/concurrency conflicts, are state and side effects controllable? | |
-    | **Observation state** | Is there enough logging/audit evidence without expanding leakage surface? | |
+    | **Duplicate state** | If the same request comes again, does it still honor the original commitment? | — |
+    | **Failure state** | On timeout, partial failure, or external dependency failure, does the commitment still hold? | — |
+    | **Default state** | Are framework default failure paths/default resource paths consistent with system contracts? | — |
+    | **Runtime state** | Are scheduling, cleanup, retention, and long-running behavior closed-loop? | — |
+    | **Concurrency state** | Under multi-user/concurrency conflicts, are state and side effects controllable? | — |
+    | **Observation state** | Is there enough logging/audit evidence without expanding leakage surface? | — |
 
 2.  **Technical and runtime robustness checks**:
 
     | Check Item | Question | Contract Location |
     |---------|------|:-------:|
-    | **Transaction handling** | Are key write operations guaranteed atomic? Can mid-failure roll back? | |
-    | **Retry mechanism** | What happens when external service calls fail? Will side effects be amplified? | |
-    | **Degradation strategy** | Is there fallback when primary service is unavailable? | |
-    | **Timeout handling** | Do slow operations have timeout limits? | |
-    | **Interface definition** | Do all key APIs have complete input/output/error schemas? | |
-    | **Config management** | How are secrets/config managed? Any hardcoding? | |
-    | **Logging and monitoring** | Are key operations logged? Do logs over-record sensitive data? | |
-    | **Version control** | How are data formats/upgrades handled? | |
-    | **Prompt templates** | Are LLM prompts fully defined? | |
-    | **Tool definitions** | Does LLM Tool Use have JSON Schema? | |
+    | **Transaction handling** | Are key write operations guaranteed atomic? Can mid-failure roll back? | — |
+    | **Retry mechanism** | What happens when external service calls fail? Will side effects be amplified? | — |
+    | **Degradation strategy** | Is there fallback when primary service is unavailable? | — |
+    | **Timeout handling** | Do slow operations have timeout limits? | — |
+    | **Interface definition** | Do all key APIs have complete input/output/error schemas? | — |
+    | **Config management** | How are secrets/config managed? Any hardcoding? | — |
+    | **Logging and monitoring** | Are key operations logged? Do logs over-record sensitive data? | — |
+    | **Version control** | How are data formats/upgrades handled? | — |
+    | **Prompt templates** | Are LLM prompts fully defined? | — |
+    | **Tool definitions** | Does LLM Tool Use have JSON Schema? | — |
 
 3.  **Contract and verification-responsibility closure checks**:
 
     | Check item | Question | Contract location |
     | ---------- | -------- | ----------------- |
-    | **Contract handoff** | Does every public contract have implementation tasks carrying it? | |
-    | **Verification handoff** | Does every high-risk public contract have at least one explicit verification layer? | |
-    | **Foundational unit tests** | Do base, shared, and pure-logic layers get unit-test coverage by default—not only via high-level integration tests? | |
-    | **Error paths** | Do failure and boundary behaviors from contracts have mapped test obligations? | |
-    | **Regression duty** | Do changes impacting existing critical behaviors require minimum regression verification? | |
+    | **Contract handoff** | Does every public contract have implementation tasks carrying it? | — |
+    | **Verification handoff** | Does every high-risk public contract have at least one explicit verification layer? | — |
+    | **Foundational unit tests** | Do base, shared, and pure-logic layers get unit-test coverage by default—not only via high-level integration tests? | — |
+    | **Error paths** | Do failure and boundary behaviors from contracts have mapped test obligations? | — |
+    | **Regression duty** | Do changes impacting existing critical behaviors require minimum regression verification? | — |
 
 4.  **Record validation results** (internal analysis can be detailed; the final report keeps only a high-signal summary):
 
@@ -370,7 +370,7 @@ Save report to `{TARGET_DIR}/07_CHALLENGE_REPORT.md`
 
 ---
 
-## 📋 Issue Overview
+## Issue Overview
 
 > Resolved rounds keep summary only. Current active round keeps only high-signal issues that affect judgment.
 
@@ -378,17 +378,17 @@ Save report to `{TARGET_DIR}/07_CHALLENGE_REPORT.md`
 
 | Severity | Count | Summary | Status |
 |--------|------|------|------|
-| Critical | X | [Merged summary of Critical issues in this round] | ⏳ Pending |
-| High | X | [Merged summary of High issues in this round] | ⏳ Pending |
-| Medium | X | [Merged summary of Medium issues in this round] | ⏳ Pending |
-| Low | X | [Merged summary of Low issues in this round or omission note] | ⏳ Pending |
+| Critical | X | [Merged summary of Critical issues in this round] |  Pending |
+| High | X | [Merged summary of High issues in this round] |  Pending |
+| Medium | X | [Merged summary of Medium issues in this round] |  Pending |
+| Low | X | [Merged summary of Low issues in this round or omission note] |  Pending |
 
 ---
 
-## 📊 Review Summary
+## Review Summary
 
 **Review Mode**: `{REVIEW_MODE}`  
-**Overall Judgment**: 🟢 Can proceed / 🟡 Must fix high-priority issues first / 🔴 Not recommended to proceed  
+**Overall Judgment**:  Can proceed /  Must fix high-priority issues first /  Not recommended to proceed  
 **High-Signal Conclusions**: [Summarize the most important concerns in 2-4 sentences, without unfolding methodology]
 
 | Metric | Value |
@@ -409,7 +409,7 @@ Save report to `{TARGET_DIR}/07_CHALLENGE_REPORT.md`
 
 ---
 
-## 🔍 Core Findings List
+## Core Findings List
 
 | ID | Category | Severity | Contract/Pass | Location | Finding | Impact | Recommendation |
 |----|------|--------|-----------|------|------|------|------|
@@ -434,17 +434,17 @@ Save report to `{TARGET_DIR}/07_CHALLENGE_REPORT.md`
 
 ---
 
-## 🚦 Final Judgment
+## Final Judgment
 
-- [ ] 🟢 Project can proceed, risk is controllable
-- [ ] 🟡 Project can proceed, but P0 issues must be solved first
-- [ ] 🔴 Project requires re-evaluation
+- [ ]  Project can proceed, risk is controllable
+- [ ]  Project can proceed, but P0 issues must be solved first
+- [ ]  Project requires re-evaluation
 
 **Judgment Basis**: [Comprehensive assessment based on key issue count, severity, and impact scope]
 
 ---
 
-## 📚 Appendix (Optional)
+## Appendix (Optional)
 
 ### A. Commitment Closure and Hypothesis Validation Summary
 
@@ -475,12 +475,12 @@ Save report to `{TARGET_DIR}/07_CHALLENGE_REPORT.md`
 
 1.  **At the start of a new review round**, check whether all issues from the previous round are resolved (confirmed by user)
 2.  **If resolved** →
-    - Mark that round as ✅ in `📋 Issue Overview`
-    - **Delete that round's detailed review section** (`## 🔥 Round {N-1} Detailed Review`)
+    - Mark that round as  in ` Issue Overview`
+    - **Delete that round's detailed review section** (`##  Round {N-1} Detailed Review`)
     - Summary row in issue overview is the permanent archive of that round
 3.  **If partially resolved** →
-    - Resolved issues marked ✅ in overview
-    - Unresolved issues remain ⏳ and continue tracking in new round
+    - Resolved issues marked  in overview
+    - Unresolved issues remain  and continue tracking in new round
     - In previous round details, keep descriptions only for unresolved issues
 4.  **At any time, report has detailed content for only one round** (current active round)
 
@@ -488,27 +488,27 @@ Save report to `{TARGET_DIR}/07_CHALLENGE_REPORT.md`
 
 Resolved issues of the same severity are merged into one row, format:
 ```markdown
-| C1-C4 | 🔴 | Treaty contradictions / breach logic / upgrade formula / territory missing | ✅ Fully fixed |
+| C1-C4 |  | Treaty contradictions / breach logic / upgrade formula / territory missing |  Fully fixed |
 ```
 
 Unresolved issues remain standalone rows, format:
 ```markdown
-| R2-C1 | 🔴 | executor v2 action missing | ⏳ Pending fix |
+| R2-C1 |  | executor v2 action missing |  Pending fix |
 ```
 
 ---
 
 <completion_criteria>
-- ✅ Deeply read project design documents
-- ✅ Identified specification source set and extracted key commitment model
-- ✅ Pre-Mortem analysis has logical grounding
-- ✅ Every challenge point has evidence support
-- ✅ Commitment closure validation completed (covers at least duplicate/failure/default/runtime/concurrency/observation states)
-- ✅ Contract and verification-responsibility closure checks completed where applicable
-- ✅ Technical robustness audit completed
-- ✅ Top 3 hypotheses have been attempted for validation
-- ✅ Commitment-oriented challenges prioritized over carrier-oriented challenges
-- ✅ Challenge report format complete (including issue overview directory and code-reviewer execution status where applicable)
-- ✅ Details of resolved issues from previous round archived (overview row only)
-- ✅ User has reviewed and decided next steps
+- Deeply read project design documents
+- Identified specification source set and extracted key commitment model
+- Pre-Mortem analysis has logical grounding
+- Every challenge point has evidence support
+- Commitment closure validation completed (covers at least duplicate/failure/default/runtime/concurrency/observation states)
+- Contract and verification-responsibility closure checks completed where applicable
+- Technical robustness audit completed
+- Top 3 hypotheses have been attempted for validation
+- Commitment-oriented challenges prioritized over carrier-oriented challenges
+- Challenge report format complete (including issue overview directory and code-reviewer execution status where applicable)
+- Details of resolved issues from previous round archived (overview row only)
+- User has reviewed and decided next steps
 </completion_criteria>

@@ -28,7 +28,7 @@
 
 ---
 
-## ⚠️ CRITICAL 强约束：双级别探测
+## CRITICAL 强约束：双级别探测
 
 > [!IMPORTANT]
 > **Probe 采用双级别探测，强制调用 skill，不允许"空手探测"。**
@@ -42,10 +42,10 @@
 >
 > **强约束**：
 >
-> - ❌ **禁止**跳过 skill 调用直接写报告
-> - ❌ **禁止**用"目录扫描"替代 nexus-query
-> - ✅ **必须**至少执行轻量探测
-> - ✅ runtime-inspector 在两种级别都调用（进程边界分析不可省略）
+> - **禁止**跳过 skill 调用直接写报告
+> - **禁止**用"目录扫描"替代 nexus-query
+> - **必须**至少执行轻量探测
+> - runtime-inspector 在两种级别都调用（进程边界分析不可省略）
 
 > [!NOTE]
 > **Probe 双模式说明**:
@@ -237,7 +237,7 @@ python $SKILL_DIR/scripts/query_graph.py $AST_JSON --impact <关注模块路径>
 
 | 风险 | 严重度 | 影响 | 建议 |
 | ---- | :----: | ---- | ---- |
-| ... | 🔴/🟡/🟢 | ... | ... |
+| ... | // | ... | ... |
 ```
 
-- ✅ 确定了探测级别（轻量/深度） - ✅ 调用了 nexus-query 或 nexus-mapper - ✅ 调用了 runtime-inspector - ✅ 完成了 Gap Analysis（模式 B） - ✅ 产出了风险矩阵 - ✅ 生成了报告文件
+- 确定了探测级别（轻量/深度） -  调用了 nexus-query 或 nexus-mapper -  调用了 runtime-inspector -  完成了 Gap Analysis（模式 B） -  产出了风险矩阵 -  生成了报告文件

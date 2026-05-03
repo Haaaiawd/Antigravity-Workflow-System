@@ -13,7 +13,7 @@ Your goal is to produce clear, complete, implementable system design.
 
 ---
 
-## ⚠️ Core Principles
+## Core Principles
 
 > [!IMPORTANT]
 > **Three Pillars of Design**:
@@ -22,14 +22,14 @@ Your goal is to produce clear, complete, implementable system design.
 > 2. **Constraint Inheritance** - Inherit performance, security and other constraints from PRD and ADR, cannot relax on your own
 > 3. **Transparent Trade-offs** - Every tech selection must explain "why choose A not B"
 
-❌ **Wrong approach**:
+ **Wrong approach**:
 - Design in isolation, not researching industry best practices
 - Over-design, introducing unnecessary complexity
 - Tech selection without explaining reasons
 - Ignore performance/security constraints
 - Missing or unclear architecture diagrams
 
-✅ **Right approach**:
+ **Right approach**:
 - **Research-driven** - First use /explore to research best practices
 - **Deep thinking** - Use `sequential-thinking` skill to organize 3-7 thoughts for design
 - **Trade-offs discussion** - Google Design Docs style, explain trade-offs
@@ -38,7 +38,7 @@ Your goal is to produce clear, complete, implementable system design.
 
 ---
 
-## 🎯 Design Framework: 6D Methodology
+## Design Framework: 6D Methodology
 
 ### 1. **Discover**
 - **Input**: PRD summary + Architecture Overview + system boundaries
@@ -91,7 +91,7 @@ Your goal is to produce clear, complete, implementable system design.
 
 ---
 
-## 📁 Two-Layer Document Structure
+## Two-Layer Document Structure
 
 > [!IMPORTANT]
 > **Each system's design document uses L0 + (optional) L1 two-layer structure.**
@@ -117,19 +117,19 @@ Your goal is to produce clear, complete, implementable system design.
 
 | Content Type                     | L0 Navigation | L1 Implementation |
 | ------------------------------- | :------------: | :---------------: |
-| System goals, architecture diagram, Trade-offs |     ✅      |        ❌         |
-| Operation contract table (see Rule 7)   |     ✅      |        ❌         |
-| `@dataclass` attribute field declarations    |     ✅      |        ✅         |
-| Protocol/ABC interface signatures        |     ✅      |        ❌         |
-| Mermaid decision tree, data flow       |     ✅      |        ❌         |
-| Function body pseudocode (> 10 lines)      |     ❌      |        ✅         |
-| Config constant definition table               |     ❌      |        ✅         |
-| Version change history                 |     ❌      |        ✅         |
-| Edge cases, implementation notes       |     ❌      |        ✅         |
+| System goals, architecture diagram, Trade-offs |           |                 |
+| Operation contract table (see Rule 7)   |           |                 |
+| `@dataclass` attribute field declarations    |           |                 |
+| Protocol/ABC interface signatures        |           |                 |
+| Mermaid decision tree, data flow       |           |                 |
+| Function body pseudocode (> 10 lines)      |           |                 |
+| Config constant definition table               |           |                 |
+| Version change history                 |           |                 |
+| Edge cases, implementation notes       |           |                 |
 
 ---
 
-## 📋 Output Format: System Design Document Structure
+## Output Format: System Design Document Structure
 
 Use `.agent\skills\system-designer\references\system-design-template.md` template.
 
@@ -139,11 +139,11 @@ Use `.agent\skills\system-designer\references\system-design-template.md` templat
 1. **Overview** - System purpose, boundaries, responsibilities
 2. **Goals & Non-Goals** - Inherited from PRD
 3. **Background** - Why needed, related requirements
-4. **Architecture** ⭐ - Architecture diagram + components + data flow
-5. **Interface Design** ⭐ - Operation contract table / cross-system protocols
+4. **Architecture**  - Architecture diagram + components + data flow
+5. **Interface Design**  - Operation contract table / cross-system protocols
 6. **Data Model** - Attribute field declarations + entity relationship diagram
 7. **Tech Stack** - Core technologies + dependency libraries
-8. **Trade-offs & Alternatives** ⭐ - Why choose A not B
+8. **Trade-offs & Alternatives**  - Why choose A not B
 9. **Security** - Authentication, encryption, risk mitigation
 10. **Performance** - Goals, optimization strategies, monitoring
 11. **Testing** - Unit, integration, E2E, contract verification responsibility matrix
@@ -155,7 +155,7 @@ Use `.agent\skills\system-designer\references\system-design-template.md` templat
 
 ---
 
-## 🛡️ Designer Rules
+## Designer Rules
 
 ### Rule 1: Research First
 **Rule**: Before designing any system, **must** first research industry best practices.
@@ -204,13 +204,13 @@ Performance and security (bottlenecks, risks, optimization)
 ```markdown
 ### Decision X: [Decision Title]
 
-**Option A: [Option A] (✅ Selected)**
-- ✅ Pros: [List pros]
-- ❌ Cons: [List cons]
+**Option A: [Option A] ( Selected)**
+- Pros: [List pros]
+- Cons: [List cons]
 
 **Option B: [Option B]**
-- ✅ Pros: [List pros]
-- ❌ Cons: [List cons]
+- Pros: [List pros]
+- Cons: [List cons]
 
 **Decision**: [Why choose A? What are key reasons?]
 ```
@@ -219,14 +219,14 @@ Performance and security (bottlenecks, risks, optimization)
 ```markdown
 ### Decision 1: Why PostgreSQL not MongoDB?
 
-**Option A: PostgreSQL (✅ Selected)**
-- ✅ ACID guarantee, strong consistency
-- ✅ Team familiar with SQL
-- ❌ Horizontal scaling not as good as NoSQL
+**Option A: PostgreSQL ( Selected)**
+- ACID guarantee, strong consistency
+- Team familiar with SQL
+- Horizontal scaling not as good as NoSQL
 
 **Option B: MongoDB**
-- ✅ Flexible Schema
-- ❌ We need strong consistency
+- Flexible Schema
+- We need strong consistency
 
 **Decision**: Choose PostgreSQL, because user authentication needs strong consistency, more important than Schema flexibility.
 ```
@@ -316,8 +316,8 @@ interface User {
 
 | Operation                   | [REQ-XXX] | Preconditions               | Cost/Input | Output/Side Effects                        |      Implementation Detail       |
 | -------------------------- | :-------: | -------------------------- | --------- | ----------------------------------------- | :-------------------------------: |
-| `embark(unit, port)`       | [REQ-012] | Land unit; has port; hasn't acted | 3★        | Generate Boat, carry unit; original unit disappears | [§3.1](./detail.md) |
-| `disembark(boat, pos)`     | [REQ-012] | boat has load; target is land | 0★        | Release unit to pos; boat disassembles     | [§3.2](./detail.md) |
+| `embark(unit, port)`       | [REQ-012] | Land unit; has port; hasn't acted | 3        | Generate Boat, carry unit; original unit disappears | [§3.1](./detail.md) |
+| `disembark(boat, pos)`     | [REQ-012] | boat has load; target is land | 0        | Release unit to pos; boat disassembles     | [§3.2](./detail.md) |
 ```
 
 **Fill guidelines**:
@@ -379,7 +379,7 @@ flowchart TD
 
 ---
 
-## 📊 Quality Checklist
+## Quality Checklist
 
 After completing system design document, use this checklist for self-check:
 
@@ -413,7 +413,7 @@ After completing system design document, use this checklist for self-check:
 
 ---
 
-## 💡 Common Scenarios and Best Practices
+## Common Scenarios and Best Practices
 
 ### Scenario 1: Design Frontend System
 **Core focus**:
@@ -488,7 +488,7 @@ After completing system design document, use this checklist for self-check:
 
 ---
 
-## 🚀 Quick Start Example
+## Quick Start Example
 
 **Task**: Design backend API system documentation
 
@@ -531,4 +531,4 @@ Use template to fill 14 chapters → save to:
 **Remember**: Good design stands on the shoulders of giants.  
 Research industry best practices, think deeply about trade-offs, document clearly.
 
-Happy Designing! 🎨
+Happy Designing! 

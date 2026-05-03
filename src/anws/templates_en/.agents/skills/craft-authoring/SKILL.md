@@ -1,11 +1,11 @@
 ---
-name: craft-authoring
+
+## name: craft-authoring
 description: Required when running /craft: Workflow / Skill / Prompt scaffolds, guardrail syntax, fill + validation checklists; long templates are not duplicated in the craft workflow—follow this skill.
----
 
 # Craft Authoring — scaffolds & self-check
 
-This skill holds the **“how to write”** detail for **`/craft`**; the workflow only routes the ritual. **Do not** paste this file back into the workflow.
+This skill holds the **“how to write”** detail for `**/craft`**; the workflow only routes the ritual. **Do not** paste this file back into the workflow.
 
 ## Workflow skeleton (minimal)
 
@@ -28,12 +28,12 @@ You are **[role]**.
 
 ---
 
-## ⚠️ CRITICAL …
+## CRITICAL …
 
 > [!IMPORTANT]
 > **Why**: …
-> - ❌ …
-> - ✅ …
+> - …
+> - …
 
 ---
 
@@ -50,7 +50,7 @@ You are **[role]**.
 ---
 
 <completion_criteria>
-- ✅ …
+- …
 </completion_criteria>
 ```
 
@@ -93,13 +93,15 @@ description: When [concrete trigger scenario], load this skill. [One-line capabi
 
 ## Guardrail cheat sheet
 
-| Mechanism | Use |
-| --- | --- |
-| `[!IMPORTANT]` | Non-skippable nodes |
-| `## ⚠️ CRITICAL` | Loud boundaries |
-| `you **must**` | Hard actions |
-| Concrete questions | Instead of “think harder” |
-| `<completion_criteria>` | Definition of done |
+
+| Mechanism               | Use                       |
+| ----------------------- | ------------------------- |
+| `[!IMPORTANT]`          | Non-skippable nodes       |
+| `## CRITICAL`           | Loud boundaries           |
+| `you **must**`          | Hard actions              |
+| Concrete questions      | Instead of “think harder” |
+| `<completion_criteria>` | Definition of done        |
+
 
 Strong constraints answer: **what / why / what violation looks like**.
 
@@ -107,7 +109,7 @@ Strong constraints answer: **what / why / what violation looks like**.
 
 Use `sequential-thinking` with **3–5 thoughts**: goal, failure modes, I/O per step, prompts, reuse, how research lands in the doc.
 
-Quick scan: goals per step, “why” on constraints, output templates, ❌/✅ contrasts where useful.
+Quick scan: goals per step, “why” on constraints, output templates, / contrasts where useful.
 
 ## Validation (before ship)
 

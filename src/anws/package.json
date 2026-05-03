@@ -1,6 +1,6 @@
 {
   "name": "@haaaiawd/anws",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Anws — A spec-driven workflow framework for AI-assisted development. Empowers prompt engineers to build production-ready software through structured PRD → Architecture → Task decomposition. Works with Claude Code, GitHub Copilot, Cursor, Windsurf, and any tool that reads AGENTS.md.",
   "keywords": [
     "anws",

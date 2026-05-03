@@ -2,7 +2,7 @@
 
 > **File Type**: L1 implementation layer · **Mapped L0**: [`{system-id}.md`](./{system-id}.md)
 > This file is loaded only when explicitly referenced by a `/forge` task. For daily reading and task planning, prioritize L0.
-> **⚠️ Island Check**: Every section in this file must have a corresponding hyperlink entry in L0; isolated content is forbidden.
+> ** Island Check**: Every section in this file must have a corresponding hyperlink entry in L0; isolated content is forbidden.
 
 ---
 
@@ -140,10 +140,10 @@ def plan_or_decide(...):
 ### §5.1 {Specific Case}
 
 ```python
-# ❌ Incorrect approach
+# Incorrect approach
 # cloned_unit.embarked_unit = unit.embarked_unit  # shallow copy -> state contamination!
 
-# ✅ Correct approach
+# Correct approach
 # cloned_unit.embarked_unit = deepcopy(unit.embarked_unit) if unit.embarked_unit else None
 ```
 
@@ -166,7 +166,7 @@ def make_test_world(size=8) -> World:
 
 ---
 
-<!-- ⚠️ AGENT Usage Guide
+<!--  AGENT Usage Guide
 
 When to create this file: when any L0 split rule R1-R5 is triggered.
   R1 single code block > 30 lines
@@ -182,6 +182,6 @@ Island check: every new section added here must also add a hyperlink anchor at c
   §2 data structures  — full classes with method bodies
   §3 algorithm pseudocode — numbered by function order (§3.1, §3.2 ...)
   §4 decision tree    — expansion of L0 Mermaid diagrams
-  §5 edge cases  — extracted from "# ⚠️ note" style code comments
+  §5 edge cases  — extracted from "#  note" style code comments
   §6 test helpers  — optional
 -->

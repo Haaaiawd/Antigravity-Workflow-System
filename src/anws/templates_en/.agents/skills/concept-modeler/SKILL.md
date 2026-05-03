@@ -1,7 +1,7 @@
 ---
-name: concept-modeler
+
+## name: concept-modeler
 description: Use when user requirements are fuzzy and terminology is unclear. Clarify domain concepts through interactive follow-up questions, extracting entities, flows, and dark matter. Invoked by /genesis Step 1.
----
 
 # Domain Modeler
 
@@ -16,11 +16,13 @@ This skill turns user "feeling words" into a clear domain model through **intera
 **What this skill is**: Interact with users to clarify fuzzy requirements and establish a domain model (entities, flows, dark matter).
 
 **When to invoke**:
+
 - `/genesis` Step 1: requirement clarification phase
 - User requirements contain fuzzy terms ("sync", "list", "manage")
 - Need to establish a Ubiquitous Language
 
 **When not to invoke**:
+
 - Requirements are already clear and terms are already defined
 - Pure technical implementation discussion (no domain modeling needed)
 
@@ -44,12 +46,14 @@ This skill turns user "feeling words" into a clear domain model through **intera
 > [!IMPORTANT]
 > You **must** scan user requirements first and identify ambiguity in these categories:
 >
-> | Category | Check Question |
-> | :--- | :--- |
-> | **Entity ambiguity** | What is "list"? `Wishlist`? `ShoppingCart`? `TodoList`? |
-> | **Verb ambiguity** | Is "sync" one-way or two-way? real-time or batch? failure strategy? |
-> | **Dark matter** | User only describes happy path -- error handling? persistence? authentication? |
-> | **Boundary ambiguity** | Who can access? data scale? concurrency requirements? |
+>
+> | Category               | Check Question                                                                 |
+> | ---------------------- | ------------------------------------------------------------------------------ |
+> | **Entity ambiguity**   | What is "list"? `Wishlist`? `ShoppingCart`? `TodoList`?                        |
+> | **Verb ambiguity**     | Is "sync" one-way or two-way? real-time or batch? failure strategy?            |
+> | **Dark matter**        | User only describes happy path -- error handling? persistence? authentication? |
+> | **Boundary ambiguity** | Who can access? data scale? concurrency requirements?                          |
+>
 
 **Internal output**: Generate a candidate question queue (max 5), sorted by impact. **Do not output the queue**.
 
@@ -61,6 +65,7 @@ This skill turns user "feeling words" into a clear domain model through **intera
 
 > [!IMPORTANT]
 > **Questioning rules:**
+>
 > - Ask at most **5 questions**
 > - Each question must be **multiple-choice** or **short answer (<=5 words)**
 > - Output only **one question** each turn
@@ -95,6 +100,7 @@ Format: short answer (<=5 words). Say "yes" or "suggestion" to accept, or provid
 #### 2.3 Stop conditions
 
 Stop asking when:
+
 - All critical ambiguities are clarified
 - User says "done", "okay", or "continue"
 - 5 questions have been asked
@@ -109,6 +115,7 @@ Stop asking when:
 > **Update immediately after each accepted answer**; do not wait until all questions finish.
 
 **Update rules**:
+
 1. Entity clarification -> update `entities` list
 2. Verb clarification -> update `flows` list
 3. Dark matter identified -> update `missing_components` list
@@ -159,18 +166,13 @@ Stop asking when:
 
 ## Completion Criteria
 
-<completion_criteria>
-- ✅ Key ambiguous terms clarified (recorded in glossary)
-- ✅ Core entities and relations identified
-- ✅ Dark-matter components omitted by users identified
-- ✅ Domain model saved to `.anws/v{N}/concept_model.json`
-- ✅ User confirms terminology understanding is correct
-</completion_criteria>
+- Key ambiguous terms clarified (recorded in glossary) - Core entities and relations identified - Dark-matter components omitted by users identified - Domain model saved to `.anws/v{N}/concept_model.json` - User confirms terminology understanding is correct
 
 ---
 
 ## Collaboration
 
-* **Before**: Fuzzy requirement description provided by user
-* **After**: `spec-writer` generates PRD based on clarified requirements
-* **Synergy**: Your domain model provides clear terminology foundation for subsequent architecture design
+- **Before**: Fuzzy requirement description provided by user
+- **After**: `spec-writer` generates PRD based on clarified requirements
+- **Synergy**: Your domain model provides clear terminology foundation for subsequent architecture design
+

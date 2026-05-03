@@ -14,11 +14,11 @@
 > **Document Layering Explanation**
 > - **This file (L0 Navigation Layer)**: Architecture diagrams, operation contracts, design decisions. For quick understanding and task planning. Prohibited from placing config dictionaries, algorithm pseudocode and method bodies.
 > - **[{system-id}.detail.md](./{system-id}.detail.md) (L1 Implementation Layer)**: Complete pseudocode, config constants, edge cases. Load only when explicitly referenced by `/forge` tasks.
-> - **L1 Anchor Principle ⚠️**: Every section in L1 must have a corresponding hyperlink entry in this file. Strictly prohibited from having "orphaned content" in L1 that is completely unmentioned in L0.
+> - **L1 Anchor Principle **: Every section in L1 must have a corresponding hyperlink entry in this file. Strictly prohibited from having "orphaned content" in L1 that is completely unmentioned in L0.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 |   §   | Chapter                                                         | Key Content                                                    |
 | :---: | --------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -48,7 +48,7 @@
 [What problem does this system solve? Why is it needed?]
 
 ### 1.2 System Boundary
-<!-- ⚠️ CRITICAL: Clearly define boundaries to avoid unclear responsibilities -->
+<!--  CRITICAL: Clearly define boundaries to avoid unclear responsibilities -->
 
 - **Input**: [What does the system receive? From where?]
 - **Output**: [What does the system produce? For whom?]
@@ -104,7 +104,7 @@
 ## 4. Architecture
 
 ### 4.1 Architecture Diagram
-<!-- ⚠️ CRITICAL: Use Mermaid or image to display system architecture -->
+<!--  CRITICAL: Use Mermaid or image to display system architecture -->
 
 ```mermaid
 graph TD
@@ -152,7 +152,7 @@ sequenceDiagram
 
 ## 5. Interface Design
 
-<!-- ⚠️ L0 writing principles:
+<!--  L0 writing principles:
   - Backend API: Only place endpoint paths + request/response structure summary (no need for complete JSON examples)
   - Agent/Game systems: Use "operation contract table" instead of function pseudocode
   - Complete parameter details, error code lists → {system}.detail.md §3
@@ -160,13 +160,13 @@ sequenceDiagram
 
 ### 5.1 Operation Contracts
 
-<!-- ⭐ Core format: Use table instead of function pseudocode. Each row covers one atomic operation. -->
+<!--  Core format: Use table instead of function pseudocode. Each row covers one atomic operation. -->
 <!-- "detail link" fills in the corresponding § section number of {system}.detail.md -->
 
 | Operation                 | [REQ-XXX] | Preconditions     | Cost/Input | Output/Side Effects  |      Implementation Detail       |
 | ------------------------ | :-------: | ----------------- | ---------- | -------------------- | :-------------------------------: |
-| `operation_a(param)`     | [REQ-001] | Condition 1; Condition 2 | cost★     | State change description | [§3.1](./detail.md) |
-| `operation_b(param)`     | [REQ-002] | Condition 1        | cost★     | State change description | [§3.2](./detail.md) |
+| `operation_a(param)`     | [REQ-001] | Condition 1; Condition 2 | cost     | State change description | [§3.1](./detail.md) |
+| `operation_b(param)`     | [REQ-002] | Condition 1        | cost     | State change description | [§3.2](./detail.md) |
 
 > **Fill instructions**:
 > - **Operation**: Use function signature style `func_name(key_params)`, parameters only write key input types, no type annotations
@@ -199,12 +199,12 @@ class ISystemName(Protocol):
 
 ## 6. Data Model
 
-<!-- ⚠️ L0 writing principles — strictly follow:
-  ✅ Allowed: @dataclass attribute field declarations
-  ✅ Allowed: Protocol style method signatures (def foo(self, x: T) -> R: ...)
-  ❌ Prohibited: Any method bodies (even if only 2 lines)
-  ❌ Prohibited: Comment-style method lists (# def foo... this kind)
-  ❌ Prohibited: Config constant dictionaries (UNIT_CONFIG = {...})
+<!--  L0 writing principles — strictly follow:
+   Allowed: @dataclass attribute field declarations
+   Allowed: Protocol style method signatures (def foo(self, x: T) -> R: ...)
+   Prohibited: Any method bodies (even if only 2 lines)
+   Prohibited: Comment-style method lists (# def foo... this kind)
+   Prohibited: Config constant dictionaries (UNIT_CONFIG = {...})
   → Above content all goes into {system}.detail.md §1 and §2. And based on "L1 anchor principle", you must use Markdown hyperlinks here to indicate where they are in L1, for example:
   *(Complete config constant dictionary see [{system}.detail.md §1](./{system}.detail.md))*
 -->
@@ -266,7 +266,7 @@ classDiagram
 ---
 
 ## 8. Trade-offs & Alternatives
-<!-- ⚠️ CRITICAL: Google Design Docs style - explain why choose A not B -->
+<!--  CRITICAL: Google Design Docs style - explain why choose A not B -->
 
 > [!IMPORTANT]
 > **ADR Reference Rule (unidirectional reference chain)**
@@ -280,7 +280,7 @@ classDiagram
 >
 > **Self-check example**:
 >
-> ❌ **Wrong** - Copy ADR content:
+>  **Wrong** - Copy ADR content:
 > ```markdown
 > ### 8.1 Database selection
 > We choose PostgreSQL because:
@@ -290,7 +290,7 @@ classDiagram
 > (These reasons already recorded in ADR-001, should not copy)
 > ```
 >
-> ✅ **Correct** - Reference ADR:
+>  **Correct** - Reference ADR:
 > ```markdown
 > ### 8.1 Database selection
 > > **Decision source**: [ADR-001: Tech Stack Selection](../03_ADR/ADR_001_TECH_STACK.md)
@@ -316,16 +316,16 @@ classDiagram
 
 <!-- If this decision only affects this system, detail here -->
 
-**Option A: [Name] (✅ Selected)**
-- ✅ **Pros**: 
+**Option A: [Name] ( Selected)**
+- **Pros**: 
   - ...
-- ❌ **Cons**:
+- **Cons**:
   - ...
 
 **Option B: [Name]**
-- ✅ **Pros**:
+- **Pros**:
   - ...
-- ❌ **Cons**:
+- **Cons**:
   - ...
 
 **Decision**: Choose [Option A], because [core reason].
@@ -348,13 +348,13 @@ classDiagram
 <!-- Example: System-specific decision -->
 ### 8.y Example: Caching Strategy (System Decision)
 
-**Option A: Redis (✅ Selected)**
-- ✅ High performance, team familiar
-- ❌ Requires additional ops
+**Option A: Redis ( Selected)**
+- High performance, team familiar
+- Requires additional ops
 
 **Option B: In-memory cache**
-- ✅ Simple
-- ❌ Does not support distributed
+- Simple
+- Does not support distributed
 
 **Decision**: Choose Redis, because this system needs to support multi-instance deployment.
 
@@ -581,7 +581,7 @@ classDiagram
 
 ---
 
-<!-- ⚠️ AGENT Usage Guide
+<!--  AGENT Usage Guide
 
 L0 writing nine principles:
 1. Navigation layer positioning — Do not show implementation details, for quick understanding and task planning

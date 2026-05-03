@@ -57,7 +57,7 @@ This template is used to record major architecture decisions. Each ADR should fo
 - [Link or citation]
 
 ## Impact Scope
-<!-- ⚠️ Record which systems reference this ADR to trace impact when modified -->
+<!--  Record which systems reference this ADR to trace impact when modified -->
 
 This ADR is referenced by the following systems:
 - [{System Name}](../04_SYSTEM_DESIGN/{System Name}.md) - §8 Trade-offs

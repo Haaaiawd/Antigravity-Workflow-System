@@ -28,7 +28,7 @@ You are the user's **scout**, providing intelligence support for major decisions
 
 ---
 
-## ⚠️ CRITICAL Strong Constraint: Two-Level Probing
+## CRITICAL Strong Constraint: Two-Level Probing
 
 > [!IMPORTANT]
 > **Probe uses two-level probing. Skill calls are mandatory; "bare-hand probing" is not allowed.**
@@ -42,10 +42,10 @@ You are the user's **scout**, providing intelligence support for major decisions
 >
 > **Strong constraints**:
 >
-> - ❌ **Forbidden** to skip skill calls and write report directly
-> - ❌ **Forbidden** to replace nexus-query with "directory scanning"
-> - ✅ **Must** execute at least light probing
-> - ✅ runtime-inspector must be called at both levels (process boundary analysis is non-optional)
+> - **Forbidden** to skip skill calls and write report directly
+> - **Forbidden** to replace nexus-query with "directory scanning"
+> - **Must** execute at least light probing
+> - runtime-inspector must be called at both levels (process boundary analysis is non-optional)
 
 > [!NOTE]
 > **Probe dual-mode description**:
@@ -237,7 +237,7 @@ python $SKILL_DIR/scripts/query_graph.py $AST_JSON --impact <focus-module-path>
 
 | Risk | Severity | Impact | Recommendation |
 | ---- | :----: | ---- | ---- |
-| ... | 🔴/🟡/🟢 | ... | ... |
+| ... | // | ... | ... |
 ```
 
-- ✅ Probing level determined (light/deep) - ✅ Called nexus-query or nexus-mapper - ✅ Called runtime-inspector - ✅ Completed Gap Analysis (Mode B) - ✅ Produced risk matrix - ✅ Generated report file
+- Probing level determined (light/deep) -  Called nexus-query or nexus-mapper -  Called runtime-inspector -  Completed Gap Analysis (Mode B) -  Produced risk matrix -  Generated report file

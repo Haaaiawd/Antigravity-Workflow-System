@@ -60,18 +60,18 @@ Score each candidate (1-5) with this matrix:
 
 | Dimension | Suggested Weight | Evaluation Question |
 |------|:--------:|---------|
-| **Requirements fit** | ★★★★★ | Can it implement all core features? |
-| **Scalability** | ★★★★ | Can it support 10x growth? |
-| **Performance** | ★★★★ | Can it meet latency/throughput targets? |
-| **Security** | ★★★★ | Built-in security features? Compliance support? |
-| **Team skill fit** | ★★★★★ | Team familiarity? Learning curve? |
-| **Talent market** | ★★★ | Is hiring easy? |
-| **Development velocity** | ★★★★ | Can iteration be fast? |
-| **TCO** | ★★★★ | Dev + ops + license cost? |
-| **Ecosystem** | ★★★ | Library/tool richness? Problem-solving speed? |
-| **Long-term maintenance** | ★★★ | Tech lifespan? LTS support? |
-| **Integration capability** | ★★★ | Integration with existing/third-party systems? |
-| **AI readiness** | ★★ | Ease of AI/LLM integration? |
+| **Requirements fit** | — | Can it implement all core features? |
+| **Scalability** | — | Can it support 10x growth? |
+| **Performance** | — | Can it meet latency/throughput targets? |
+| **Security** | — | Built-in security features? Compliance support? |
+| **Team skill fit** | — | Team familiarity? Learning curve? |
+| **Talent market** | — | Is hiring easy? |
+| **Development velocity** | — | Can iteration be fast? |
+| **TCO** | — | Dev + ops + license cost? |
+| **Ecosystem** | — | Library/tool richness? Problem-solving speed? |
+| **Long-term maintenance** | — | Tech lifespan? LTS support? |
+| **Integration capability** | — | Integration with existing/third-party systems? |
+| **AI readiness** | — | Ease of AI/LLM integration? |
 
 ### Step 4: Trade-off Analysis
 

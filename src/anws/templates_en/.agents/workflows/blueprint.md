@@ -20,7 +20,7 @@ Read the latest architecture version (`.anws/v{N}`) and decompose it into an **e
 
 ---
 
-## ⚠️ CRITICAL Preconditions
+## CRITICAL Preconditions
 
 > [!IMPORTANT]
 > **Blueprint must be based on a specific architecture version**
@@ -118,7 +118,7 @@ Execution requirements:
   - **Description**: What exactly needs to be done
   - **Input**: Design doc references + outputs from prerequisite tasks (must include at least one doc reference)
   - **Output**: Produced files/components/interfaces
-  - **📎 Reference**: ADR_XXX_*.md or System Design section (if any)
+  - ** Reference**: ADR_XXX_*.md or System Design section (if any)
   - **Acceptance Criteria**:
     - Given [precondition]
     - When [action]
@@ -176,7 +176,7 @@ Execution requirements:
 ### Sprint Roadmap Format
 
 ```markdown
-## 📊 Sprint Roadmap
+## Sprint Roadmap
 
 | Sprint | Codename | Core Tasks | Exit Criteria | Estimate |
 |--------|------|---------|---------|------|
@@ -250,35 +250,35 @@ graph TD
 ### Contract Coverage Overlay Format
 
 ```markdown
-## 🔐 Contract Coverage Overlay
+## Contract Coverage Overlay
 
 | Contract | Type | Implementation Carry-over | Verification Carry-over | Status |
 |----------|------|--------------------------|-------------------------|:----:|
-| `update --target` explicit selection semantics | CLI | T1.2.1 | T6.2.1 | ✅ |
-| install-lock fallback rebuild semantics | File/State Format | T4.1.1 | T6.2.1 | ✅ |
+| `update --target` explicit selection semantics | CLI | T1.2.1 | T6.2.1 |  |
+| install-lock fallback rebuild semantics | File/State Format | T4.1.1 | T6.2.1 |  |
 ```
 
 ### User Story View Format
 
 ```markdown
-## 🎯 User Story Overlay
+## User Story Overlay
 
 ### US-001: [Title] (P1)
 **Related Tasks**: T2.1.1 → T2.1.2 → T7.2.1 → T6.1.2
 **Critical Path**: T2.1.1 → T2.1.2 → T7.2.1
-**Independently Testable**: ✅ Demoable by end of S1
-**Coverage Status**: ✅ Complete
+**Independently Testable**:  Demoable by end of S1
+**Coverage Status**:  Complete
 
 ### US-003: [Title] (P2)
 **Related Tasks**: T3.2.1
 **Critical Path**: T3.1.1 → T3.2.1
-**Independently Testable**: ❌ Missing T4.x linkage
-**Coverage Status**: ⚠️ Incomplete — missing executor-side tasks
+**Independently Testable**:  Missing T4.x linkage
+**Coverage Status**:  Incomplete — missing executor-side tasks
 ```
 
 ### Coverage GAP Handling
 
-- If any US is incomplete → mark `⚠️` in Overlay and add missing tasks in the task list
+- If any US is incomplete → mark `` in Overlay and add missing tasks in the task list
 - If all tasks of a US are in late Sprints → suggest moving some tasks earlier for early validation
 - Added tasks must follow the Step 2 task format template
 
@@ -295,23 +295,23 @@ graph TD
     - Last updated: `{Today}`
     - Write initial wave recommendation so `/forge` can start directly:
     ```markdown
-    ### 🌊 Wave 1 — {first-batch objective of S1}
+    ###  Wave 1 — {first-batch objective of S1}
     T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
     ```
 
 ---
 
 ## Checklist
-- ✅ Does every Sprint have exit criteria and INT integration validation tasks?
-- ✅ Does 05_TASKS.md include all WBS tasks?
-- ✅ Does every task include Context and Acceptance Criteria?
-- ✅ Are task inputs/outputs aligned (interface traceability)?
-- ✅ Are all public contracts carried by implementation tasks and verification points?
-- ✅ Do base layer low-dependency logic defaults get unit test carry-over, covering main branches/boundaries/error paths?
-- ✅ Was a Mermaid dependency graph generated?
-- ✅ Has User Story Overlay been generated and coverage gaps filled?
-- ✅ Has Contract Coverage Overlay been generated if public contracts exist?
-- ✅ Has AGENTS.md been updated (including initial wave recommendation)?
+- Does every Sprint have exit criteria and INT integration validation tasks?
+- Does 05_TASKS.md include all WBS tasks?
+- Does every task include Context and Acceptance Criteria?
+- Are task inputs/outputs aligned (interface traceability)?
+- Are all public contracts carried by implementation tasks and verification points?
+- Do base layer low-dependency logic defaults get unit test carry-over, covering main branches/boundaries/error paths?
+- Was a Mermaid dependency graph generated?
+- Has User Story Overlay been generated and coverage gaps filled?
+- Has Contract Coverage Overlay been generated if public contracts exist?
+- Has AGENTS.md been updated (including initial wave recommendation)?
 
 ---
 
@@ -319,18 +319,18 @@ graph TD
 
 **Show statistics**:
 ```markdown
-✅ Blueprint phase completed!
+ Blueprint phase completed!
 
-📊 Task statistics:
+ Task statistics:
   - Total tasks: {N}
   - P0 tasks: {X}
   - P1 tasks: {Y}
   - P2 tasks: {Z}
   - Total estimated effort: {T}h
 
-📁 Deliverable: {TARGET_DIR}/05_TASKS.md
+ Deliverable: {TARGET_DIR}/05_TASKS.md
 
-📋 Next actions:
+ Next actions:
   1. Execute P0 tasks in dependency order
   2. After each completed task, mark [x] and run validation
 ```
@@ -355,14 +355,14 @@ Write under `### Current Task Status`:
 ---
 
 <completion_criteria>
-- ✅ Located latest architecture version `v{N}`
-- ✅ Task list `05_TASKS.md` generated
-- ✅ Every Level 3 task includes validation instructions
-- ✅ Inter-task inputs/outputs aligned (interface traceability)
-- ✅ Every Sprint has exit criteria and INT integration validation task
-- ✅ Mermaid dependency graph generated
-- ✅ User Story Overlay generated and coverage completeness verified
-- ✅ AGENTS.md updated (including initial wave recommendation)
-- ✅ AGENTS.md AUTO:BEGIN block updated (Current Task Status)
-- ✅ User confirmed
+- Located latest architecture version `v{N}`
+- Task list `05_TASKS.md` generated
+- Every Level 3 task includes validation instructions
+- Inter-task inputs/outputs aligned (interface traceability)
+- Every Sprint has exit criteria and INT integration validation task
+- Mermaid dependency graph generated
+- User Story Overlay generated and coverage completeness verified
+- AGENTS.md updated (including initial wave recommendation)
+- AGENTS.md AUTO:BEGIN block updated (Current Task Status)
+- User confirmed
 </completion_criteria>

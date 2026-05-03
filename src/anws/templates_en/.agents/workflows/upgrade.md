@@ -25,7 +25,7 @@ After `anws update` completes, read the latest upgrade record in `.anws/changelo
 
 ---
 
-## ⚠️ CRITICAL Execution Order
+## CRITICAL Execution Order
 
 > [!IMPORTANT]
 > Must strictly execute in order Step 0 → Step 1 → Step 2 → Step 3 → Step 4.
@@ -103,7 +103,7 @@ Use the following classification rules:
 
 ---
 
-## Step 3: Human Checkpoint ⚠️
+## Step 3: Human Checkpoint 
 
 > [!IMPORTANT]
 > No file writing is allowed without explicit user approval.
@@ -111,7 +111,7 @@ Use the following classification rules:
 You must show the user the following:
 
 ```markdown
-⚠️ Human Checkpoint — Upgrade Plan Confirmation
+ Human Checkpoint — Upgrade Plan Confirmation
 
 **Latest changelog**: `.anws/changelog/vX.Y.Z.md`
 **Current architecture version**: `.anws/v{N}`
@@ -130,7 +130,7 @@ You must show the user the following:
 - Which paragraphs require AI inference
 - Which business constants will be protected from modification
 
-Please confirm: ✅ Approve and route / ❌ Reject / ✏️ Adjust
+Please confirm:  Approve and route /  Reject /  Adjust
 ```
 
 ---
@@ -183,10 +183,10 @@ After routing, output to user:
 ---
 
 <completion_criteria>
-- ✅ Latest `.anws/changelog/vX.Y.Z.md` has been read
-- ✅ Upgrade classification completed
-- ✅ Recommended route output (`/change` / `/genesis`)
-- ✅ Upgrade plan shown and user approval obtained
-- ✅ Switched to reading target workflow before execution
-- ✅ Subsequent write operations are governed by target workflow specs
+- Latest `.anws/changelog/vX.Y.Z.md` has been read
+- Upgrade classification completed
+- Recommended route output (`/change` / `/genesis`)
+- Upgrade plan shown and user approval obtained
+- Switched to reading target workflow before execution
+- Subsequent write operations are governed by target workflow specs
 </completion_criteria>
