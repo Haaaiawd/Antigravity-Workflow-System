@@ -1,14 +1,8 @@
-
-
-
-
 [License: MIT](https://opensource.org/licenses/MIT)
 [Version](https://github.com/Haaaiawd/ANWS/releases)
 [Targets](https://github.com/Haaaiawd/ANWS)
 
 [English](./README.md) | [中文](./README_CN.md)
-
-
 
 ---
 
@@ -59,17 +53,17 @@ Anws 用以下机制应对这些问题：
 
 ---
 
-## v2.2.5 更新概要
+## v2.2.4 更新概要
 
-**v2.2.5** 强化 `**e2e-testing-guide`**（中/英）：**PRD 追溯矩阵（RTM）**、分步测试流程、`**PARTIAL_PASS`** / `**INCONCLUSIVE`（Maybe）**、`**JourneyScore`（0–3）**、整体门禁建议，以及更完整的 **E2E Verification** 输出结构。`**/forge` §3.4.6** 与上述状态/打分约定对齐。完整说明见 **[RELEASE_NOTES.md](../RELEASE_NOTES.md)**。
+**v2.2.4**（本轮模板与技能统一算在这一版，不再单独抬版本号）：**`/forge`（中/英）** 明确 **Wave 内建结构**——**阶段 A** 逐任务 §3.1–3.6 + **阶段 B** 波末整波 **`code-reviewer` §3.4.5**；**Step 4 §4.0** 硬门禁后才允许波次结算；§3.4.5/3.4.6 文案去重，避免把「波末合拢」误写成「每任务二选一」。**`e2e-testing-guide`（中/英）** 要求 **PRD 追溯矩阵（RTM）**、分步结论、**`PARTIAL_PASS`** / **`INCONCLUSIVE`（Maybe）**、**`JourneyScore`（0–3）**、可选整体分与结构化 **E2E Verification**；**§3.4.6** 与上述状态/打分对齐。更早版本见 [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases)。
 
 ## v2.2.2 更新概要
 
 **v2.2.2** 以 `**/forge` 交付链**为主轴：`**/forge自动`** 保留波次检查点并以 `**AUTO**` 签名连续推进；`**code-reviewer**` 采用 **波次级频控**（默认在 **每 Wave 最后一个任务** 集中跑一次，**约每 2～3 个 Wave** 兜底补跑—非默认每任务必跑）；`**e2e-testing-guide`** **先指南**、有浏览器工具再实机，无工具则 **guide-only**，不得无证据冒充「已测」。`**/change`** 只做文档与任务回流—**不运行 `code-reviewer`**（静态忠实度在 `**/forge` 3.4.5** 与 `**/challenge`**）。
 
-**v2.2.0** 带来闭环 **challenge**、跨工作流契约闭合、`**code-reviewer`** 静态证据层、forge 读取 challenge 报告门禁与 `**e2e-testing-guide**`。完整记录见 **[RELEASE_NOTES.md](../RELEASE_NOTES.md)** · [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases)。
+**v2.2.0** 带来闭环 **challenge**、跨工作流契约闭合、**`code-reviewer`** 静态证据层、forge 读取 challenge 报告门禁与 **`e2e-testing-guide`**。更早版本见 [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases)。
 
-**v2.0.0** 为协议级 Major（统一 `**.anws/`**、受控 `**AGENTS.md**`、多目标投放）。详见 **[RELEASE_NOTES.md](../RELEASE_NOTES.md)**。
+**v2.0.0** 为协议级 Major（统一 **`.anws/`**、受控 **`AGENTS.md`**、多目标投放）。同上链接可查历史版本说明。
 
 ---
 
@@ -122,12 +116,9 @@ anws update
 
 **深度思考与架构设计**  
 
-
 **交互式需求对齐**  
 
-
 **自主调用技能执行**  
-
 
 ---
 
@@ -178,9 +169,6 @@ anws update
 
 ---
 
-
-
 **为懂代码的架构师，和会思考的 AI 而生。**
 
 *好的架构不是写出来的，而是设计出来的。*
-
