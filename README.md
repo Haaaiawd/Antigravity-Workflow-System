@@ -1,9 +1,10 @@
+
 <div align="center">
 
 <img src="assets/logo-cli.png" width="260" alt="Anws">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v2.2.1-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
+[![License: MIT](https://opensource.org/licenses/MIT)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-v2.2.2-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
 [![Targets](https://img.shields.io/badge/Targets-Windsurf%20%7C%20Claude%20Code%20%7C%20Copilot%20%7C%20Cursor%20%7C%20Codex%20Preview%20%7C%20OpenCode%20%7C%20Trae%20%7C%20Qoder%20%7C%20Kilo%20Code-blueviolet)](https://github.com/Haaaiawd/ANWS)
 
 [English](./README.md) | [中文](./README_CN.md)
@@ -39,13 +40,10 @@ Modern AI coding sessions fail in predictable ways:
 
 - **Architecture drift**
   - different sessions generate incompatible structures
-
 - **Context amnesia**
   - a fresh chat loses system decisions, trade-offs, and task state
-
 - **Planning collapse**
   - code gets written before requirements and interfaces are stabilized
-
 - **Unsafe upgrades**
   - workflow files change over time, but existing projects cannot be updated cleanly
 
@@ -58,80 +56,13 @@ Anws addresses those problems with:
 
 ---
 
-## What's New in v2.2.0
+## What's New in v2.2.2
 
-`v2.2.0` closes the loop between design review, task review, implementation, and upgrade safety.
+**v2.2.2** centers the **`/forge`** chain: **`/forge` AUTO** keeps checkpoint ceremony with **`AUTO`** signatures; **`code-reviewer`** follows **wave cadence** (typically **once per wave** at the wave’s last task, with a **~2–3 wave** catch-up if long skipped—not after every task by default); **`e2e-testing-guide`** is **guide first**, then live browser steps when tooling exists—otherwise **guide-only**, never claim “tested” without evidence. **`/change`** handles doc/task backflow only—it **does not run `code-reviewer`** (static fidelity stays in **`/forge` §3.4.5** and **`/challenge`**).
 
-- **Closed-loop challenge review**
-  - `/challenge` now combines `design-reviewer`, `task-reviewer`, and `code-reviewer`
-  - implementation drift is reviewed against PRD, Architecture, ADR, System Design, and `05_TASKS.md`
-  - findings are written into `07_CHALLENGE_REPORT.md` with contract-first severity semantics
+**v2.2.0** shipped closed-loop **challenge**, explicit contract closure, **`code-reviewer`** as static evidence, forge challenge-report gates, and **`e2e-testing-guide`**. Full history: **[RELEASE_NOTES.md](../RELEASE_NOTES.md)** · [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases).
 
-- **Code fidelity evidence layer**
-  - new `code-reviewer` skill checks Contract Drift, Task Drift, Test Drift, Missing Change Backflow, and foundational test gaps
-  - the review is static and evidence-based, so it does not pretend runtime validation has passed
-
-- **Contract closure across workflows**
-  - `blueprint`, `task-planner`, `task-reviewer`, `challenge`, `change`, and `forge` now carry public contract coverage explicitly
-  - API, CLI, config, file format, error, persistence, and verification responsibilities are tracked as first-class workflow concerns
-
-- **Forge verification gate**
-  - `/forge` reads the latest `07_CHALLENGE_REPORT.md` before implementation work continues
-  - unresolved Critical findings block forge; unresolved High findings require explicit human sign-off
-  - high-risk implementation waves can run `code-reviewer` before manual verification
-  - when UI or E2E paths matter, **`e2e-testing-guide`** structures manual or browser-assisted acceptance (skills degrade when no browser tooling is available)
-
----
-
-## What's New in v2.0.0
-
-`v2.0.0` is a **major release**. It is not just a template refresh; it upgrades the project protocol.
-
-- **Unified architecture root**
-  - move from split legacy roots to `.anws/`
-  - standardize versioned docs and changelog storage
-
-- **Controlled `AGENTS.md` updates**
-  - marker-based merge for modern files
-  - automatic migration for recognized legacy files
-  - safe preservation for unrecognized legacy files
-
-- **Multi-target projection model**
-  - one canonical source
-  - multiple target IDE layouts
-  - no fake sharing of physical files across targets
-
-- **Codex projection strategy update**
-  - Codex is now treated as **Preview**
-  - because Codex prompts are no longer available, Anws now packages workflow guidance into `.codex/skills/anws-system/`
-  - `SKILL.md` is the navigation shell for the bundle
-  - workflow details, including `/quickstart`, now live under `references/*.md`
-
-- **Trae / Qoder / Kilo Code support**
-  - Trae follows the same skills-only bundle family as Codex via `.trae/skills/anws-system/`
-  - Qoder adds native `.qoder/commands/` + `.qoder/skills/`
-  - Kilo Code adds native `.kilocode/workflows/` + `.kilocode/skills/`
-
-- **OpenCode support**
-  - adds native projection support for `.opencode/commands/` and `.opencode/skills/`
-  - `init`, `update`, manifest ownership, drift detection, and diff flows all understand OpenCode
-
-- **Stronger `anws update` semantics**
-  - install-lock aware
-  - directory-scan fallback
-  - drift detection
-  - target-by-target update summary
-
-- **Built-in ecosystem integration**
-  - integrates `nexus-skills`
-  - adopts `nexus-mapper` as the structural analysis backbone for `/probe`
-  - completes the workflow rename from legacy `/scout` to `/probe`
-
-- **Branded CLI experience**
-  - unified logo
-  - confirmation UI
-  - changelog generation
-  - release-oriented terminal output
+**v2.0.0** was the protocol-level major (unified **`.anws/`**, controlled **`AGENTS.md`**, multi-target projection). See **[RELEASE_NOTES.md](../RELEASE_NOTES.md)** for the complete major changelog.
 
 ---
 
@@ -147,7 +78,6 @@ anws init
 
 - **Requirement**
   - Node.js `>= 18`
-
 - **Install behavior**
   - `anws init` installs one or more target projections into their native folders
   - example: `anws init --target windsurf,opencode`
@@ -161,183 +91,27 @@ anws update
 
 - **Update flags**
   - `anws update --check` and `anws update --target` are removed; run `anws update` once to refresh all matched targets
-
 - **State source**
   - `anws update` reads `.anws/install-lock.json`
   - if the lock is missing or invalid, it falls back to directory scan
   - if lock drift is detected, directory scan becomes the effective source for the current update
   - a real `anws update` can rebuild `.anws/install-lock.json` from detected targets when fallback is active
-
 - **`AGENTS.md` behavior**
   - marker-based file -> update stable sections, preserve `AUTO` block
   - recognized legacy file -> migrate into new marker-based structure
   - unrecognized legacy file -> warn and preserve unchanged
-
 - **Legacy migration**
   - if a project still has `.agent/`, the CLI can guide migration to `.agents/`
   - after successful migration, interactive mode can also ask whether to delete the old `.agent/`
-
 - **Upgrade record**
   - every successful update refreshes `.anws/changelog/`
   - target state is written back to `.anws/install-lock.json`
 
 ---
 
-## Migration Notes for Existing Users
+## Feature demos
 
-If you used older Anws / Antigravity layouts, `v2.0.0` matters because:
-
-- **Directory protocol changed**
-  - old references to `genesis/` and `anws/changelog/` are replaced by `.anws/`
-
-- **`AGENTS.md` is no longer “always skip”**
-  - it is now a controlled managed file with merge / migrate / preserve semantics
-
-- **Target installation is explicit**
-  - Anws now models target IDEs as first-class projections
-
-If you maintain old docs or release notes, update those references before publishing new project templates.
-
----
-
-## Compatibility
-
-Anws keeps a **single canonical workflow / skill source**, then projects it into the native directory structure expected by each tool.
-Every supported target now receives:
-
-- a root `AGENTS.md`
-- a target-native `skills/` projection
-- one target-native workflow entry surface, depending on the tool:
-  - `workflows`
-  - `commands`
-  - `prompts`
-  - aggregated `skills` for Codex / Trae skills-only bundles
-
-| Environment | Status | Layout |
-| --- | --- | --- |
-| **Windsurf** | ✅ Full Support | `AGENTS.md` + `.windsurf/workflows/` + `.windsurf/skills/` |
-| **Antigravity** | ✅ Full Support | `.agents/workflows/` + `.agents/skills/` + `AGENTS.md` |
-| **Claude Code** | ✅ Full Support | `AGENTS.md` + `.claude/commands/` + `.claude/skills/` |
-| **GitHub Copilot** | ✅ Full Support | `AGENTS.md` + `.github/prompts/` + `.github/skills/` |
-| **Cursor** | ✅ Supported | `AGENTS.md` + `.cursor/commands/` + `.cursor/skills/` |
-| **Codex** | ⚠️ Preview | `AGENTS.md` + `.codex/skills/anws-system/` + `.codex/skills/<skill>/` |
-| **OpenCode** | ✅ Supported | `AGENTS.md` + `.opencode/commands/` + `.opencode/skills/` |
-| **Trae** | ✅ Supported | `AGENTS.md` + `.trae/skills/anws-system/` + `.trae/skills/<skill>/` |
-| **Qoder** | ✅ Supported | `AGENTS.md` + `.qoder/commands/` + `.qoder/skills/` |
-| **Kilo Code** | ✅ Supported | `AGENTS.md` + `.kilocode/workflows/` + `.kilocode/skills/` |
-
----
-
-## Recommended Workflow
-
-Use Anws as a lifecycle, not just a folder pack.
-
-| Command | Purpose | Input | Output |
-| --- | --- | --- | --- |
-| **`/quickstart`** | Route the user through the correct workflow path | Auto-detected state | Full orchestration |
-| `/genesis` | Start from zero with PRD and architecture | Vague idea | PRD, architecture, ADRs |
-| `/probe` | Analyze a legacy codebase before change | Existing code | Risk report |
-| `/design-system` | Design one system in depth | Architecture overview | System design doc |
-| `/challenge` | Review design, tasks, and implementation fidelity with adversarial pressure | Docs / tasks / code | Challenge report |
-| `/blueprint` | Break architecture into executable work | PRD + architecture | `05_TASKS.md` |
-| `/forge` | Turn approved tasks into code with challenge-report and contract gates | Tasks + review state | Working implementation |
-| `/change` | Modify an existing task only | Small scoped change | Updated task/design docs |
-| `/explore` | Research ambiguous or strategic topics | Topic | Exploration report |
-| `/craft` | Create workflows, skills, and prompts | Creation request | Reusable assets |
-| `/upgrade` | Route post-update upgrade work | Update changelog | Change or genesis path |
-
----
-
-## Core Principles
-
-### 1. Versioned Architecture
-
-- architecture is **evolved**, not silently edited
-- major structural changes move from `.anws/v1` to `.anws/v2`
-- ADRs preserve the reason behind the shape of the system
-
-### 2. Filesystem as Memory
-
-- `AGENTS.md` is the recovery anchor
-- `.anws/v{N}/` stores durable architecture context
-- `.anws/changelog/` records upgrade history for future sessions
-
-### 3. Thinking Before Coding
-
-- workflows force staged reasoning before implementation
-- the built-in `sequential-thinking` skill standardizes deep analysis
-- review steps catch drift before and during implementation: `/challenge` may invoke **code-reviewer** (static implementation evidence); `/forge` runs it as a pre-commit fidelity gate; browser/E2E acceptance may use **e2e-testing-guide**
-- each IDE receives the same projected assets; subagents and browser tooling are optional—skills must degrade gracefully (same-agent execution or guide-only)
-
----
-
-## Project Layout
-
-```bash
-your-project/
-├── .anws/
-│   ├── install-lock.json
-│   ├── changelog/
-│   └── v{N}/
-├── AGENTS.md
-├── .windsurf/
-│   ├── workflows/
-│   └── skills/
-├── .agents/
-│   ├── workflows/
-│   └── skills/
-├── .cursor/
-│   ├── commands/
-│   └── skills/
-├── .claude/
-│   ├── commands/
-│   └── skills/
-├── .github/
-│   ├── prompts/
-│   └── skills/
-├── .opencode/
-│   ├── commands/
-│   └── skills/
-├── .qoder/
-│   ├── commands/
-│   └── skills/
-├── .kilocode/
-│   ├── workflows/
-│   └── skills/
-├── .trae/
-│   └── skills/
-│       ├── anws-system/
-│       │   ├── SKILL.md
-│       │   └── references/
-│       └── <skill>/
-│           └── SKILL.md
-└── .codex/
-    ├── skills/
-    │   ├── anws-system/
-    │   │   ├── SKILL.md
-    │   │   └── references/
-    │   └── <skill>/
-    │       └── SKILL.md
-```
-
-> One source model. Multiple target layouts. Explicit ownership on disk.
-
----
-
-## Built with Itself
-
-Anws is dogfooded on its own development.
-
-- **Architecture design**
-  - the CLI itself was designed through `/genesis`
-
-- **Task decomposition**
-  - implementation work was planned through `/blueprint`
-
-- **Execution**
-  - code and doc changes were driven through `/forge`
-
-This repository is both the product and a working reference implementation.
+What using Anws looks like in practice: architecture-first **`/genesis`**, **human-in-the-loop** requirement alignment, and **skill** orchestration.
 
 **Deep Thinking & Architecture Design**  
 <img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis Workflow">
@@ -347,6 +121,43 @@ This repository is both the product and a working reference implementation.
 
 **Autonomous Skill Invocation**  
 <img src="assets/自主调用skills.jpg" width="800" alt="Skills Execution">
+
+---
+
+## Philosophy
+
+**1. Docs first—specs keep you in command**  
+PRD, architecture, tasks, and design land in the repo before code does—so the project doesn’t drift in aimless “vibe runs.” Scope and progress live in `.anws/`, `05_TASKS.md`, and **`AGENTS.md`**: you stay **in control of the system**, not whichever chat window is open.
+
+**2. Full autonomy inside the rails**  
+**`/forge` AUTO** is delegation with checkpoints: keep moving inside agreed contracts. **Code review**, **e2e-testing-guide**, and the rest of the template gates keep runs **auditable** and **bounded**. When a wave is executing, it’s reasonable to **walk away—coffee, a walk**—because confidence comes from the spec and gates, not from staring at the model.
+
+**Iteration is the product**  
+**`/challenge`** isn’t a one-time rubber stamp; it’s repeated adversarial passes. **Good products and clear ideas are sharpened over cycles**—same as real shipping: each round pulls design, tasks, and implementation back into alignment.
+
+---
+
+## Recommended Workflow
+
+Use Anws as a lifecycle, not just a folder pack.
+
+
+| Command           | Purpose                                                                     | Input                 | Output                   |
+| ----------------- | --------------------------------------------------------------------------- | --------------------- | ------------------------ |
+| **`/quickstart`** | Route the user through the correct workflow path                            | Auto-detected state   | Full orchestration       |
+| `/genesis`        | Start from zero with PRD and architecture                                   | Vague idea            | PRD, architecture, ADRs  |
+| `/probe`          | Analyze a legacy codebase before change                                     | Existing code         | Risk report              |
+| `/design-system`  | Design one system in depth                                                  | Architecture overview | System design doc        |
+| `/challenge`      | Review design, tasks, and implementation fidelity with adversarial pressure | Docs / tasks / code   | Challenge report         |
+| `/blueprint`      | Break architecture into executable work                                     | PRD + architecture    | `05_TASKS.md`            |
+| `/forge`          | Turn approved tasks into code with challenge-report and contract gates      | Tasks + review state  | Working implementation   |
+| `/change`         | In-version task/contract tweaks (controlled expansion: few new tasks)       | Small scoped change   | Updated task/design docs |
+| `/explore`        | Research ambiguous or strategic topics                                      | Topic                 | Exploration report       |
+| `/craft`          | Create workflows, skills, and prompts                                       | Creation request      | Reusable assets          |
+| `/upgrade`        | Route post-update upgrade work                                              | Update changelog      | Change or genesis path   |
+
+
+---
 
 ## Contributing
 

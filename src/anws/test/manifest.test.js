@@ -94,6 +94,7 @@ test('resource registry exposes workflows and skills', () => {
   assert(workflows.some((item) => item.id === 'genesis'));
   assert(skills.some((item) => item.id === 'spec-writer'));
   assert(skills.some((item) => item.id === 'code-reviewer'));
+  assert(skills.some((item) => item.id === 'craft-authoring'));
 });
 
 test('all supported targets expose the expected projection shapes', () => {

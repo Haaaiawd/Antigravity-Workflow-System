@@ -46,11 +46,11 @@ description: 当用户在 skills-only 环境中需要判断应该从哪个 anws 
 - `references/forge.md`
   - 用途：按 `05_TASKS.md` 执行编码；在验证与提交之间调用 **code-reviewer**（静态忠实度）及按需 **`e2e-testing-guide`**（浏览器/E2E 指南或实测）
 - `references/change.md`
-  - 用途：只微调已有任务定义，不创建新任务，不推进实现状态
+  - 用途：在当前版本前提不变时微调任务/契约/验证承接；允许 **受控扩展** 下与用户原话或 `/forge` 回流对应的 **少量新任务**；**禁止**回填 `- [x]`、**禁止**运行或替代 **`code-reviewer`**
 - `references/explore.md`
   - 用途：做调研、探索、方案发散与收敛
 - `references/craft.md`
-  - 用途：创建新的 workflow、skill 或 prompt
+  - 用途：创建 workflow / skill / prompt；长模板、防护写法与自检清单在 **`craft-authoring`** skill（与 `/craft` 配套，路径随 target 投影到 `skills/craft-authoring/SKILL.md`）
 - `references/upgrade.md`
   - 用途：处理 `anws update` 之后的升级编排
 
@@ -71,13 +71,13 @@ description: 当用户在 skills-only 环境中需要判断应该从哪个 anws 
 2. 检查 `.anws/v{N}/05_TASKS.md` 是否存在且任务已定义
 3. 若缺任务清单，不得直接实现，先回到 `blueprint` 或 `genesis`
 4. 若任务含 **E2E / 浏览器手动验证**：在执行路径上读取 **`e2e-testing-guide`** skill（同目录 `skills/e2e-testing-guide/SKILL.md`）；投影环境下路径以目标 IDE 的 `skills/` 为准
-5. 在提交前需要静态契约核对时：读取 **`code-reviewer`** skill；无子代理时由当前会话按 skill 执行（检查清单相同）
+5. 在提交前需要静态契约核对时：读取 **`code-reviewer`** skill。**若宿主支持子代理**（如 Task、并行子会话等）→ **优先委派子代理**按该 skill 专职执行（隔离上下文，输出结构以 skill 为准）。**若无子代理能力** → 由**当前会话**按同一 skill 完整执行（检查清单、证据与输出要求不得缩水）。
 
-### Route 3: 请求是“微调现有任务 / 修正文案 / 调整验收标准”
+### Route 3: 请求是“微调现有任务 / 修正文案 / 调整验收标准 / 受控补任务”
 
 1. 读取 `references/change.md`
-2. 确认只修改已有任务，不新增任务
-3. 若需要新增任务或超出 PRD，改走 `genesis`
+2. 判断变更是否仍属 `/change` 权限（含 **Q8 少量新任务**、契约/验证补全）；若已改动需求/架构/ADR **前提** → `genesis`
+3. **受控扩展**允许少量新任务（须可追溯用户原话或 forge 回流）；**凭空加需求**或版本前提断裂 → `genesis`
 
 ### Route 4: 请求是“新项目 / 大重构 / 新版本 / 架构升级”
 

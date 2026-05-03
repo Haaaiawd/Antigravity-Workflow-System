@@ -48,8 +48,8 @@ const RESOURCE_REGISTRY = [
   { id: 'task-reviewer', type: 'skill', source: '.agents/skills/task-reviewer/SKILL.md', fileName: 'task-reviewer/SKILL.md' },
   { id: 'tech-evaluator', type: 'skill', source: '.agents/skills/tech-evaluator/SKILL.md', fileName: 'tech-evaluator/SKILL.md' },
   { id: 'tech-evaluator-adr-template', type: 'skill', source: '.agents/skills/tech-evaluator/references/ADR_TEMPLATE.md', fileName: 'tech-evaluator/references/ADR_TEMPLATE.md' },
-  { id: 'code-reviewer', type: 'skill', source: '.agents/skills/code-reviewer/SKILL.md', fileName: 'code-reviewer/SKILL.md' },
-  { id: 'e2e-testing-guide', type: 'skill', source: '.agents/skills/e2e-testing-guide/SKILL.md', fileName: 'e2e-testing-guide/SKILL.md' }
+  { id: 'e2e-testing-guide', type: 'skill', source: '.agents/skills/e2e-testing-guide/SKILL.md', fileName: 'e2e-testing-guide/SKILL.md' },
+  { id: 'craft-authoring', type: 'skill', source: '.agents/skills/craft-authoring/SKILL.md', fileName: 'craft-authoring/SKILL.md' }
 ];
 
 function toArray(value) {
