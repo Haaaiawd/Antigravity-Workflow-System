@@ -37,24 +37,24 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 ## CRITICAL Permission Boundaries
 
 > [!IMPORTANT]
-> **`/forge` permissions are strictly scoped**:
+> `**/forge` permissions are strictly scoped**:
 >
 >
 > | Capability                                                                 | Allowed | Forbidden |
 > | -------------------------------------------------------------------------- | ------- | --------- |
-> | Write business code under `src/`                                           | Yes | |
-> | Write unit tests                                                           | Yes | |
-> | Update checkboxes in `05_TASKS.md`                                         | Yes | |
-> | Run tests and lint                                                         | Yes | |
-> | Git commit completed tasks                                                 | Yes | |
-> | Update current status in `AGENTS.md`                                       | Yes | |
-> | **Modify any design docs under `.anws/`**                                  | | Yes |
-> | **Create features not present in TASKS.md**                                | | Yes |
-> | **Downgrade or skip acceptance criteria**                                  | | Yes |
-> | **Introduce third-party dependencies not approved by ADR**                 | | Yes |
-> | **Modify existing public interfaces (unless explicitly required by task)** | | Yes |
-> | **"By the way" optimize/refactor code outside task scope**                 | | Yes |
-> | **Add or modify undefined public contracts without routing to /change**    | | Yes |
+> | Write business code under `src/`                                           | Yes     |           |
+> | Write unit tests                                                           | Yes     |           |
+> | Update checkboxes in `05_TASKS.md`                                         | Yes     |           |
+> | Run tests and lint                                                         | Yes     |           |
+> | Git commit completed tasks                                                 | Yes     |           |
+> | Update current status in `AGENTS.md`                                       | Yes     |           |
+> | **Modify any design docs under `.anws/`**                                  |         | Yes       |
+> | **Create features not present in TASKS.md**                                |         | Yes       |
+> | **Downgrade or skip acceptance criteria**                                  |         | Yes       |
+> | **Introduce third-party dependencies not approved by ADR**                 |         | Yes       |
+> | **Modify existing public interfaces (unless explicitly required by task)** |         | Yes       |
+> | **"By the way" optimize/refactor code outside task scope**                 |         | Yes       |
+> | **Add or modify undefined public contracts without routing to /change**    |         | Yes       |
 >
 
 ---
@@ -79,15 +79,15 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 > **In the following situations, you must stop coding immediately and report to user**:
 >
 >
-> | Conflict Type                                            | Handling Method                                                       |
-> | -------------------------------------------------------- | --------------------------------------------------------------------- |
-> | Contradictions between documents                         |  Stop → list contradictions → user fixes via `/change`              |
-> | Task description ambiguous/incomplete                    |  Stop → list questions → user confirms or supplements via `/change` |
-> | Outputs from prerequisite tasks do not match expectation |  Stop → report differences → user decides                           |
-> | Design found to be unimplementable                       |  Stop → record reasons → suggest user run `/challenge`              |
-> | New dependency needed but not ADR-approved               |  Stop → explain reason → user decides whether to create new ADR     |
-> | Required system design docs do not exist                 |  Stop → guide user to run `/design-system`                          |
-> | **Undefined but required public contract discovered**    |  Stop → generate backflow explanation → route to `/change`          |
+> | Conflict Type                                            | Handling Method                                                    |
+> | -------------------------------------------------------- | ------------------------------------------------------------------ |
+> | Contradictions between documents                         | Stop → list contradictions → user fixes via `/change`              |
+> | Task description ambiguous/incomplete                    | Stop → list questions → user confirms or supplements via `/change` |
+> | Outputs from prerequisite tasks do not match expectation | Stop → report differences → user decides                           |
+> | Design found to be unimplementable                       | Stop → record reasons → suggest user run `/challenge`              |
+> | New dependency needed but not ADR-approved               | Stop → explain reason → user decides whether to create new ADR     |
+> | Required system design docs do not exist                 | Stop → guide user to run `/design-system`                          |
+> | **Undefined but required public contract discovered**    | Stop → generate backflow explanation → route to `/change`          |
 >
 >
 > **Core principle: Better to stop and ask than to guess.**
@@ -131,7 +131,7 @@ You are the user's **faithful executor**, not a creator with free improvisation.
   - `main` only saves verified, stable states
   - All normal development defaults to completion on `feature/`*; unless it's a single-file minor fix, do not modify directly on `main`
   - If currently on `main` and this is not a single-file minor fix → create and switch to `feature/{topic-slug}`
-  - If currently on `feature/*` and still belongs to same delivery theme → continue on current branch, do not repeatedly open new branches for task patching, contract patching, or test patching
+  - If currently on `feature/`* and still belongs to same delivery theme → continue on current branch, do not repeatedly open new branches for task patching, contract patching, or test patching
   - If currently on `feature/*` and theme unchanged, even after `/change` round-trip, continue using the same branch
   - Only when `/genesis` triggers or version premise changes do old `feature/*` freeze; new version should start a new `feature/*` from latest `main`
   - If a protection point is needed before entering `/change`, can create a checkpoint commit on current `feature/*`: `checkpoint: before {topic}`
@@ -255,10 +255,12 @@ Signature rules:
 
 Treat **one Wave** as a **two-phase pipeline** (both live inside Step 3; **do not enter Step 4** until satisfied):
 
-| Phase | What | Done when |
-| --- | --- | --- |
-| **A. Per-task loop** | For each task in the wave, run **§3.1 → §3.6** | Acceptance + verification evidence + commits landed; `05_TASKS.md` updated per rules |
+
+| Phase                                          | What                                                                                                                                                    | Done when                                                                                                                                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **A. Per-task loop**                           | For each task in the wave, run **§3.1 → §3.6**                                                                                                          | Acceptance + verification evidence + commits landed; `05_TASKS.md` updated per rules                                                      |
 | **B. Wave closure (built-in `code-reviewer`)** | After **§3.4 automated checks** pass on the **last task of the wave**, run **§3.4.5 once** over **implementation changes merged in this wave** (rollup) | **§3.4.5 executed with review output** (or a **documented** skip/backlog window per `code-reviewer` skill); **silent omission forbidden** |
+
 
 > **Note**: Phase B is **not** an optional appendix—it is a **fixed part of the Wave**, aligned with the `Wave` block you maintain in `AGENTS.md`. Mid-wave tasks still **do not repeat** §3.4.5, but the **end-of-wave pass is mandatory**. Cross-check **Step 4 §4.0**: settlement is blocked until this is satisfied.
 
@@ -339,8 +341,8 @@ If task depends on completed prerequisites, inspect relevant existing code to un
 > **Validation type determines validation method and evidence requirements**:
 >
 >
-> | Validation Type         | Validation Method                                         | Evidence Requirement                                | Mark |
-> | ----------------------- | --------------------------------------------------------- | --------------------------------------------------- | ---- |
+> | Validation Type         | Validation Method                                         | Evidence Requirement                                | Mark        |
+> | ----------------------- | --------------------------------------------------------- | --------------------------------------------------- | ----------- |
 > | **Unit Test**           | Run `npm test` or equivalent command                      | Terminal output: `X passed, 0 failed`               | Pass / Fail |
 > | **Integration Test**    | Run integration test script                               | Terminal output or logs                             | Pass / Fail |
 > | **E2E Test**            | Run E2E test script                                       | Test report or screenshots                          | Pass / Fail |
@@ -348,7 +350,7 @@ If task depends on completed prerequisites, inspect relevant existing code to un
 > | **Regression Test**     | Run minimum regression test set for affected capabilities | Explicitly list re-verification scope + test output | Pass / Fail |
 > | **Compile Check**       | Run `npm run build` or equivalent command                 | Terminal output: `Build succeeded`                  | Pass / Fail |
 > | **Lint Check**          | Run `npm run lint` or equivalent command                  | Terminal output: `0 problems`                       | Pass / Fail |
-> | **Manual Verification** | Manual inspection | User confirmation | Pending |
+> | **Manual Verification** | Manual inspection                                         | User confirmation                                   | Pending     |
 >
 
 ```markdown
@@ -382,10 +384,10 @@ Run checks according to task `**Validation Type**` and `**Validation Instruction
 
 ### 3.4.5 / 3.4.6 cadence (supplement)
 
-> **3.4.5**: Where the end-of-wave **`code-reviewer`** rollup sits is already defined in Step 3 **“Wave built-in structure”, Phase B**; **waivers, intensity, evidence** follow the **`code-reviewer`** skill only. This block adds **non-duplicative** extras:
+> **3.4.5**: Where the end-of-wave `**code-reviewer`** rollup sits is already defined in Step 3 **“Wave built-in structure”, Phase B**; **waivers, intensity, evidence** follow the `**code-reviewer`** skill only. This block adds **non-duplicative** extras:
 >
 > - **Fallback**: if **~2–3 consecutive waves** miss the end-of-wave **3.4.5** rollup, run a **catch-up** before next wave **Step 1** or at the end of the prior wave **Step 4** (per skill).
-> - **Exceptions** (may run an extra **3.4.5** right after **this** task): explicit **per-task deep review**; **high public-contract risk**; long **`/forge` AUTO** sessions need denser checks — still obey the skill.
+> - **Exceptions** (may run an extra **3.4.5** right after **this** task): explicit **per-task deep review**; **high public-contract risk**; long `**/forge` AUTO** sessions need denser checks — still obey the skill.
 >
 > **3.4.6 (`e2e-testing-guide`) + browser tooling** (independent of 3.4.5; may still trigger **per task**):
 >
@@ -397,21 +399,21 @@ Run checks according to task `**Validation Type**` and `**Validation Instruction
 
 ### 3.4.5 Static Fidelity Check
 
-(When to run and whether it can be skipped: **Step 3 “Wave built-in structure”, Phase B + Step 4 §4.0**; this section only defines **how** to run **`code-reviewer`**.)
+(When to run and whether it can be skipped: **Step 3 “Wave built-in structure”, Phase B + Step 4 §4.0**; this section only defines **how** to run `**code-reviewer`**.)
 
-Follow the **`code-reviewer`** skill end-to-end (inputs, lenses, outputs, skip protocol).
+Follow the `**code-reviewer**` skill end-to-end (inputs, lenses, outputs, skip protocol).
 
 **Execution**: Prefer a **subagent** when the host supports one (Task / parallel sessions, etc.); otherwise run **in this session**—same skill, no watered-down review.
 
-**Routing**: Critical / High → **`/change`** if resolvable within the current version; else **`/genesis`** if premises break. If clear → **3.4.6** (if triggered) or **3.5**.
+**Routing**: Critical / High → `**/change`** if resolvable within the current version; else `**/genesis**` if premises break. If clear → **3.4.6** (if triggered) or **3.5**.
 
 ---
 
 ### 3.4.6 Browser & E2E Verification Guide
 
-Follow the **`e2e-testing-guide`** skill end-to-end (triggers, guide-only mode, evidence rules).
+Follow the `**e2e-testing-guide`** skill end-to-end (triggers, guide-only mode, evidence rules, **PRD traceability / scoring / status codes**).
 
-Verification is **user-journey** oriented: steps, assertions, evidence, and `PASS` / `FAIL` / `BLOCKED` / `NOT RUN` rules follow the skill.
+Verification is **user-journey** oriented: steps, assertions, evidence, and `PASS` / `PARTIAL_PASS` / `FAIL` / `BLOCKED` / `NOT_RUN` / `INCONCLUSIVE` (maybe) plus **JourneyScore** rules follow the skill.
 
 If host has browser automation: **guide first, then live steps (authorized)**; without tools, guide-only — never pretend tests ran.
 
@@ -424,15 +426,15 @@ If not triggered → `E2E guide skipped` + one-line reason → **3.5**.
 **Checklist** (answer each item):
 
 
-| #   | Check Item                                                                                                    | Pass? |
-| --- | ------------------------------------------------------------------------------------------------------------- | ----- |
+| #   | Check Item                                                                                                    | Pass?    |
+| --- | ------------------------------------------------------------------------------------------------------------- | -------- |
 | 1   | Are code interfaces consistent with SYSTEM_DESIGN definitions?                                                | Yes / No |
 | 2   | No dependencies introduced without ADR approval?                                                              | Yes / No |
 | 3   | No features added outside task scope?                                                                         | Yes / No |
 | 4   | Code style consistent with project and lint passes?                                                           | Yes / No |
 | 5   | All acceptance criteria verified and passed?                                                                  | Yes / No |
 | 6   | All executable acceptance criteria backed by adequate evidence (terminal / logs / screenshots as applicable)? | Yes / No |
-| 7   | Acceptance criteria requiring manual confirmation marked as pending (explicit)                                                   | Yes / No |
+| 7   | Acceptance criteria requiring manual confirmation marked as pending (explicit)                                | Yes / No |
 
 
 - If all checklist items pass → continue to 3.6
@@ -473,7 +475,7 @@ If not triggered → `E2E guide skipped` + one-line reason → **3.5**.
 
 Before continuing, **must** satisfy:
 
-- **§3.4.5 complete**: this wave already ran the rollup **`code-reviewer`** after the **last task** (see Step 3 **“Wave built-in structure”, Phase B** and **§3.4.5**), with auditable output; **or**
+- **§3.4.5 complete**: this wave already ran the rollup `**code-reviewer`** after the **last task** (see Step 3 **“Wave built-in structure”, Phase B** and **§3.4.5**), with auditable output; **or**
 - **Documented waiver**: per `code-reviewer` skip protocol, record reason, owner, and **when** catch-up will run (e.g. before next wave Step 1).
 
 **If not satisfied → do not** treat the wave as settled, **do not** proceed to **§4.1 onward** as normal settlement—return to Step 3 and finish **§3.4.5** first.
