@@ -4,7 +4,7 @@
 <img src="assets/logo-cli.png" width="260" alt="Anws">
 
 [![License: MIT](https://opensource.org/licenses/MIT)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v2.2.2-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
+[![Version](https://img.shields.io/badge/version-v2.2.4-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
 [![Targets](https://img.shields.io/badge/Targets-Windsurf%20%7C%20Claude%20Code%20%7C%20Copilot%20%7C%20Cursor%20%7C%20Codex%20Preview%20%7C%20OpenCode%20%7C%20Trae%20%7C%20Qoder%20%7C%20Kilo%20Code-blueviolet)](https://github.com/Haaaiawd/ANWS)
 
 [English](./README.md) | [中文](./README_CN.md)
@@ -55,6 +55,10 @@ Anws addresses those problems with:
 - **Controlled update semantics** for `AGENTS.md`, installed targets, and upgrade history
 
 ---
+
+## What's New in v2.2.4
+
+**v2.2.4** updates **`/forge`** (zh/en): embed **`code-reviewer` (§3.4.5)** in the **Wave** as **Phase B** after the per-task loop, and add **Step 4 §4.0** as a **hard gate** before wave settlement. Full notes: **[RELEASE_NOTES.md](../RELEASE_NOTES.md)**.
 
 ## What's New in v2.2.2
 

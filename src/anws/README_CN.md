@@ -3,7 +3,7 @@
 <img src="assets/logo-cli.png" width="260" alt="Anws">
 
 [![License: MIT](https://opensource.org/licenses/MIT)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v2.2.2-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
+[![Version](https://img.shields.io/badge/version-v2.2.4-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
 [![Targets](https://img.shields.io/badge/Targets-Windsurf%20%7C%20Claude%20Code%20%7C%20Copilot%20%7C%20Cursor%20%7C%20Codex%20Preview%20%7C%20OpenCode%20%7C%20Trae%20%7C%20Qoder%20%7C%20Kilo%20Code-blueviolet)](https://github.com/Haaaiawd/ANWS)
 
 [English](./README.md) | [中文](./README_CN.md)
@@ -58,6 +58,10 @@ Anws 用以下机制应对这些问题：
   - 对 `AGENTS.md`、已安装 targets、升级历史进行显式管理
 
 ---
+
+## v2.2.4 更新概要
+
+**v2.2.4** 更新 **`/forge`**（中/英）：将 **`code-reviewer`（§3.4.5）** 内嵌为 **Wave 阶段 B**，并在 **Step 4 §4.0** 设硬门禁后才允许波次结算。完整说明见 **[RELEASE_NOTES.md](../RELEASE_NOTES.md)**。
 
 ## v2.2.2 更新概要
 

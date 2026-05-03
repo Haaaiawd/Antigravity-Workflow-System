@@ -246,12 +246,23 @@ Signature rules:
 
 ## Step 3: Task Execution Loop
 
-**Goal**: Complete tasks in the wave one by one: think → code → verify → commit.
+**Goal**: Complete tasks in the wave one by one: think → code → verify → commit; and **embed** a wave-level static review so agents do not “get in flow” and skip `code-reviewer`.
 
 > [!IMPORTANT]
 > **Strictly follow the process below for each task; no skipping steps.**
 
-For each task in this wave, execute the following loop:
+### Wave built-in structure (Wave = task loop + closure review)
+
+Treat **one Wave** as a **two-phase pipeline** (both live inside Step 3; **do not enter Step 4** until satisfied):
+
+| Phase | What | Done when |
+| --- | --- | --- |
+| **A. Per-task loop** | For each task in the wave, run **§3.1 → §3.6** | Acceptance + verification evidence + commits landed; `05_TASKS.md` updated per rules |
+| **B. Wave closure (built-in `code-reviewer`)** | After **§3.4 automated checks** pass on the **last task of the wave**, run **§3.4.5 once** over **implementation changes merged in this wave** (rollup) | **§3.4.5 executed with review output** (or a **documented** skip/backlog window per `code-reviewer` skill); **silent omission forbidden** |
+
+> **Note**: Phase B is **not** an optional appendix—it is a **fixed part of the Wave**, aligned with the `Wave` block you maintain in `AGENTS.md`. Mid-wave tasks still **do not repeat** §3.4.5, but the **end-of-wave pass is mandatory**. Cross-check **Step 4 §4.0**: settlement is blocked until this is satisfied.
+
+For each task in this wave, execute the following loop (Phase A):
 
 ---
 
@@ -367,21 +378,16 @@ Run checks according to task `**Validation Type**` and `**Validation Instruction
 > - If a task declares smoke test or regression test, but `Validation Instructions` cannot guide execution, treat as incomplete validation definition, first fix task definition or route back to `/change`
 
 - If any automated validation type does not pass → **fix and re-verify**, no skipping allowed
-- If all automated validation types pass → apply **§3.4.5 / §3.4.6 cadence** below to decide whether to run **3.4.5 / 3.4.6** on **this task**, then proceed **3.5 → 3.6**. If skipped/deferred, record rationale on the task or wave notes (consistent with each **skill** skip protocol).
+- If all automated validation types pass → **§3.4.6**: if the skill triggers, run **3.4.6** below; if not, one-line reason → **3.5 → 3.6**. **§3.4.5 wave rollup** is **not** a per-task toggle here—where it runs and the hard gate are **Step 3 “Wave built-in structure”, Phase B**, **§3.4.5** below, and **Step 4 §4.0**.
 
-### 3.4.5 / 3.4.6 Cadence (defaults)
+### 3.4.5 / 3.4.6 cadence (supplement)
 
-> [!IMPORTANT]
-> **`code-reviewer` (3.4.5) is not forced after every task by default** (reduce noise / wasted context). **`e2e-testing-guide` (3.4.6) cadence is independent of 3.4.5** — if the skill triggers for a UI/E2E-heavy task, run **3.4.6** even when it is **not** the last task in the wave.
+> **3.4.5**: Where the end-of-wave **`code-reviewer`** rollup sits is already defined in Step 3 **“Wave built-in structure”, Phase B**; **waivers, intensity, evidence** follow the **`code-reviewer`** skill only. This block adds **non-duplicative** extras:
 >
-> **3.4.5 (`code-reviewer`) default cadence**:
+> - **Fallback**: if **~2–3 consecutive waves** miss the end-of-wave **3.4.5** rollup, run a **catch-up** before next wave **Step 1** or at the end of the prior wave **Step 4** (per skill).
+> - **Exceptions** (may run an extra **3.4.5** right after **this** task): explicit **per-task deep review**; **high public-contract risk**; long **`/forge` AUTO** sessions need denser checks — still obey the skill.
 >
-> - **Primary path**: After automated checks  on the **last task of the wave**, run **3.4.5 once** for the whole wave’s landed changes.
-> - **Earlier tasks in the wave**: usually **skip** 3.4.5 and go to **3.5 → 3.6**; if skipped, note rationale (e.g. `3.4.5 deferred — wave cadence`).
-> - **Fallback**: If **~2–3 consecutive waves** ran without **3.4.5**, run a catch-up pass before the next wave **Step 1** or at the end of the prior wave **Step 4** (scope/evidence per skill).
-> - **Exceptions** (may run 3.4.5 immediately after the task): explicit **per-task static review**; **high public-contract risk**; long **`/forge` AUTO** sessions need denser checks — still obey the **`code-reviewer`** skill skip/intensity rules.
->
-> **3.4.6 (`e2e-testing-guide`) + browser tooling**:
+> **3.4.6 (`e2e-testing-guide`) + browser tooling** (independent of 3.4.5; may still trigger **per task**):
 >
 > - Skill not triggered → skip + one-line reason → **3.5**.
 > - **Browser automation available**: follow skill order — **Testing Guide first**, then **real browser steps with user authorization**.
@@ -391,19 +397,19 @@ Run checks according to task `**Validation Type**` and `**Validation Instruction
 
 ### 3.4.5 Static Fidelity Check
 
-(Run on this task per cadence, or defer to the wave’s last task / fallback catch-up — see above.)
+(When to run and whether it can be skipped: **Step 3 “Wave built-in structure”, Phase B + Step 4 §4.0**; this section only defines **how** to run **`code-reviewer`**.)
 
-Follow the `**code-reviewer`** skill end-to-end (inputs, lenses, outputs, skip protocol).
+Follow the **`code-reviewer`** skill end-to-end (inputs, lenses, outputs, skip protocol).
 
 **Execution**: Prefer a **subagent** when the host supports one (Task / parallel sessions, etc.); otherwise run **in this session**—same skill, no watered-down review.
 
-**Routing**: Critical / High → **`/change`** if convergable in-version; else **`/genesis`** if premises break. If clear → **3.4.6** (if triggered) or **3.5**.
+**Routing**: Critical / High → **`/change`** if resolvable within the current version; else **`/genesis`** if premises break. If clear → **3.4.6** (if triggered) or **3.5**.
 
 ---
 
 ### 3.4.6 Browser & E2E Verification Guide
 
-Follow the `**e2e-testing-guide`** skill end-to-end (triggers, guide-only mode, evidence rules).
+Follow the **`e2e-testing-guide`** skill end-to-end (triggers, guide-only mode, evidence rules).
 
 Verification is **user-journey** oriented: steps, assertions, evidence, and `PASS` / `FAIL` / `BLOCKED` / `NOT RUN` rules follow the skill.
 
@@ -462,6 +468,15 @@ If not triggered → `E2E guide skipped` + one-line reason → **3.5**.
 ## Step 4: Wave Settlement
 
 **Goal**: Settle current wave, update status, prepare next step.
+
+### 4.0 Wave closure gate (hard)
+
+Before continuing, **must** satisfy:
+
+- **§3.4.5 complete**: this wave already ran the rollup **`code-reviewer`** after the **last task** (see Step 3 **“Wave built-in structure”, Phase B** and **§3.4.5**), with auditable output; **or**
+- **Documented waiver**: per `code-reviewer` skip protocol, record reason, owner, and **when** catch-up will run (e.g. before next wave Step 1).
+
+**If not satisfied → do not** treat the wave as settled, **do not** proceed to **§4.1 onward** as normal settlement—return to Step 3 and finish **§3.4.5** first.
 
 ### 4.1 Update status
 
@@ -540,8 +555,7 @@ chore(wave): settle wave {N} progress
 
 - All acceptance criteria of each task passed
 - All compliance checks of each task passed
-- **3.4.5**: `code-reviewer` executed per wave-end / ~2–3 wave fallback / skill exceptions, or skip/defer rationale recorded on task or wave notes
-- **3.4.6**: `e2e-testing-guide` per skill triggers; with browser tools → guide then live; else guide-only; if not triggered, document reason
+- **3.4.5 / 3.4.6**: aligned with **Step 3 Phase B, §3.4.5–3.4.6, Step 4 §4.0**; any skipped item needs a **skill-compliant** reason or catch-up plan (no silent gaps)
 - All code committed to git with message including Task ID
 - `05_TASKS.md` checkboxes updated
 - `AGENTS.md` current status updated
