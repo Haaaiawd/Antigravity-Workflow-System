@@ -1,8 +1,14 @@
-[License: MIT](https://opensource.org/licenses/MIT)
-[Version](https://github.com/Haaaiawd/ANWS/releases)
-[Targets](https://github.com/Haaaiawd/ANWS)
+<div align="center">
+
+<img src="assets/logo-cli.png" width="260" alt="Anws">
+
+[![License: MIT](https://opensource.org/licenses/MIT)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-v2.2.2-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
+[![Targets](https://img.shields.io/badge/Targets-Windsurf%20%7C%20Claude%20Code%20%7C%20Copilot%20%7C%20Cursor%20%7C%20Codex%20Preview%20%7C%20OpenCode%20%7C%20Trae%20%7C%20Qoder%20%7C%20Kilo%20Code-blueviolet)](https://github.com/Haaaiawd/ANWS)
 
 [English](./README.md) | [中文](./README_CN.md)
+
+</div>
 
 ---
 
@@ -53,17 +59,13 @@ Anws 用以下机制应对这些问题：
 
 ---
 
-## v2.2.4 更新概要
-
-**v2.2.4**（本轮模板与技能统一算在这一版，不再单独抬版本号）：**`/forge`（中/英）** 明确 **Wave 内建结构**——**阶段 A** 逐任务 §3.1–3.6 + **阶段 B** 波末整波 **`code-reviewer` §3.4.5**；**Step 4 §4.0** 硬门禁后才允许波次结算；§3.4.5/3.4.6 文案去重，避免把「波末合拢」误写成「每任务二选一」。**`e2e-testing-guide`（中/英）** 要求 **PRD 追溯矩阵（RTM）**、分步结论、**`PARTIAL_PASS`** / **`INCONCLUSIVE`（Maybe）**、**`JourneyScore`（0–3）**、可选整体分与结构化 **E2E Verification**；**§3.4.6** 与上述状态/打分对齐。更早版本见 [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases)。
-
 ## v2.2.2 更新概要
 
-**v2.2.2** 以 `**/forge` 交付链**为主轴：`**/forge自动`** 保留波次检查点并以 `**AUTO**` 签名连续推进；`**code-reviewer**` 采用 **波次级频控**（默认在 **每 Wave 最后一个任务** 集中跑一次，**约每 2～3 个 Wave** 兜底补跑—非默认每任务必跑）；`**e2e-testing-guide`** **先指南**、有浏览器工具再实机，无工具则 **guide-only**，不得无证据冒充「已测」。`**/change`** 只做文档与任务回流—**不运行 `code-reviewer`**（静态忠实度在 `**/forge` 3.4.5** 与 `**/challenge`**）。
+**v2.2.2** 以 **`/forge` 交付链**为主轴：**`/forge自动`** 保留波次检查点并以 **`AUTO`** 签名连续推进；**`code-reviewer`** 采用 **波次级频控**（默认在 **每 Wave 最后一个任务** 集中跑一次，**约每 2～3 个 Wave** 兜底补跑—非默认每任务必跑）；**`e2e-testing-guide`** **先指南**、有浏览器工具再实机，无工具则 **guide-only**，不得无证据冒充「已测」。**`/change`** 只做文档与任务回流—**不运行 `code-reviewer`**（静态忠实度在 **`/forge` 3.4.5** 与 **`/challenge`**）。
 
-**v2.2.0** 带来闭环 **challenge**、跨工作流契约闭合、**`code-reviewer`** 静态证据层、forge 读取 challenge 报告门禁与 **`e2e-testing-guide`**。更早版本见 [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases)。
+**v2.2.0** 带来闭环 **challenge**、跨工作流契约闭合、**`code-reviewer`** 静态证据层、forge 读取 challenge 报告门禁与 **`e2e-testing-guide`**。完整记录见 **[RELEASE_NOTES.md](../RELEASE_NOTES.md)** · [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases)。
 
-**v2.0.0** 为协议级 Major（统一 **`.anws/`**、受控 **`AGENTS.md`**、多目标投放）。同上链接可查历史版本说明。
+**v2.0.0** 为协议级 Major（统一 **`.anws/`**、受控 **`AGENTS.md`**、多目标投放）。详见 **[RELEASE_NOTES.md](../RELEASE_NOTES.md)**。
 
 ---
 
@@ -97,7 +99,7 @@ anws update
   - 若 lock 缺失或损坏，则回退为目录扫描
   - 若检测到 lock drift，则本轮 update 以目录扫描结果作为有效来源
   - 当 fallback 生效时，真实执行 `anws update` 可以根据检测结果重建 `.anws/install-lock.json`
-- `**AGENTS.md` 更新规则**
+- **`AGENTS.md` 更新规则**
   - 带标识文件 -> 更新稳定区，保留 `AUTO` 区块
   - 可识别 legacy 文件 -> 自动迁移到新结构
   - 不可识别 legacy 文件 -> 警告并原样保留
@@ -112,26 +114,29 @@ anws update
 
 ## 功能演示
 
-实际跑 Anws 时的界面：`**/genesis`** 式的架构推演、**人机对齐**需求细节、以及 **skill** 编排执行。
+实际跑 Anws 时的界面：**`/genesis`** 式的架构推演、**人机对齐**需求细节、以及 **skill** 编排执行。
 
 **深度思考与架构设计**  
+<img src="assets/genesis工作流演示.jpg" width="800" alt="Genesis 工作流">
 
 **交互式需求对齐**  
+<img src="assets/与人类交互确认细节.jpg" width="800" alt="与人类交互确认细节">
 
 **自主调用技能执行**  
+<img src="assets/自主调用skills.jpg" width="800" alt="自主调用 skills">
 
 ---
 
 ## 哲学理念
 
 **1. 文档先行，规格驾驭一切**  
-先把 PRD、架构、任务与设计说清楚、写进仓库，再谈写代码——避免项目在漫无目的的「一轮轮 vibe」里越堆越偏。边界与进度落在 `.anws/`、`05_TASKS.md` 与 `**AGENTS.md`** 里：你要的是**对项目的掌控感**，而不是被当场会话牵着走。
+先把 PRD、架构、任务与设计说清楚、写进仓库，再谈写代码——避免项目在漫无目的的「一轮轮 vibe」里越堆越偏。边界与进度落在 `.anws/`、`05_TASKS.md` 与 **`AGENTS.md`** 里：你要的是**对项目的掌控感**，而不是被当场会话牵着走。
 
 **2. 规范之下，完全放行**  
-`**/forge自动`** 体现的是：在既定检查点与契约之内，把推进权交给流程；同时用 **code review**、**e2e-testing-guide** 等与模板对齐的门禁，把运行约束在可审计、可追溯的轨道上。机器按规范跑的时候，你完全可以**离开屏幕喝杯咖啡、出去走走**——安心来自 rails，不是盯屏盯出来的侥幸。
+**`/forge自动`** 体现的是：在既定检查点与契约之内，把推进权交给流程；同时用 **code review**、**e2e-testing-guide** 等与模板对齐的门禁，把运行约束在可审计、可追溯的轨道上。机器按规范跑的时候，你完全可以**离开屏幕喝杯咖啡、出去走走**——安心来自 rails，不是盯屏盯出来的侥幸。
 
 **迭代才见真章**  
-`**/challenge`** 不是盖一次章就完事，而是一轮轮对抗式审查与收敛：**好的产品、清楚的 idea，往往是在一次次质疑与打磨里变得过硬**——就像真实世界的产品迭代：每一轮都让设计、任务与实现更加对齐。
+**`/challenge`** 不是盖一次章就完事，而是一轮轮对抗式审查与收敛：**好的产品、清楚的 idea，往往是在一次次质疑与打磨里变得过硬**——就像真实世界的产品迭代：每一轮都让设计、任务与实现更加对齐。
 
 ---
 
@@ -142,7 +147,7 @@ anws update
 
 | 命令                | 用途                           | 输入           | 输出                        |
 | ----------------- | ---------------------------- | ------------ | ------------------------- |
-| `**/quickstart`** | 智能分流到正确工作流路径                 | 自动识别状态       | 全流程编排                     |
+| **`/quickstart`** | 智能分流到正确工作流路径                 | 自动识别状态       | 全流程编排                     |
 | `/genesis`        | 从零开始建立 PRD 与架构               | 模糊想法         | PRD、架构、ADR                |
 | `/probe`          | 在变更前分析遗留系统                   | 现有代码         | 风险报告                      |
 | `/design-system`  | 为单个系统做深入设计                   | 架构概览         | 系统设计文档                    |
@@ -169,6 +174,10 @@ anws update
 
 ---
 
+<div align="center">
+
 **为懂代码的架构师，和会思考的 AI 而生。**
 
 *好的架构不是写出来的，而是设计出来的。*
+
+</div>

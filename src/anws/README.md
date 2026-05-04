@@ -4,7 +4,7 @@
 <img src="assets/logo-cli.png" width="260" alt="Anws">
 
 [![License: MIT](https://opensource.org/licenses/MIT)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v2.2.4-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
+[![Version](https://img.shields.io/badge/version-v2.2.2-7FB5B6)](https://github.com/Haaaiawd/ANWS/releases)
 [![Targets](https://img.shields.io/badge/Targets-Windsurf%20%7C%20Claude%20Code%20%7C%20Copilot%20%7C%20Cursor%20%7C%20Codex%20Preview%20%7C%20OpenCode%20%7C%20Trae%20%7C%20Qoder%20%7C%20Kilo%20Code-blueviolet)](https://github.com/Haaaiawd/ANWS)
 
 [English](./README.md) | [中文](./README_CN.md)
@@ -56,17 +56,13 @@ Anws addresses those problems with:
 
 ---
 
-## What's New in v2.2.4
-
-**v2.2.4** updates **`/forge`** (zh/en): **Wave** = **Phase A** (per-task §3.1–3.6) + **Phase B** (wave-end **`code-reviewer` §3.4.5**), **Step 4 §4.0** hard gate before settlement, and **deduped** §3.4.5/§3.4.6 cadence copy so rollup timing is not confused with per-task choices. **`e2e-testing-guide`** (zh/en) adds **PRD RTM**, step-level verdicts, **`PARTIAL_PASS`** / **`INCONCLUSIVE` (maybe)**, **`JourneyScore` (0–3)**, optional **overall** score for release hints, and richer report sections; **§3.4.6** matches that contract.
-
 ## What's New in v2.2.2
 
 **v2.2.2** centers the **`/forge`** chain: **`/forge` AUTO** keeps checkpoint ceremony with **`AUTO`** signatures; **`code-reviewer`** follows **wave cadence** (typically **once per wave** at the wave’s last task, with a **~2–3 wave** catch-up if long skipped—not after every task by default); **`e2e-testing-guide`** is **guide first**, then live browser steps when tooling exists—otherwise **guide-only**, never claim “tested” without evidence. **`/change`** handles doc/task backflow only—it **does not run `code-reviewer`** (static fidelity stays in **`/forge` §3.4.5** and **`/challenge`**).
 
-**v2.2.0** shipped closed-loop **challenge**, explicit contract closure, **`code-reviewer`** as static evidence, forge challenge-report gates, and **`e2e-testing-guide`**. Older releases: [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases).
+**v2.2.0** shipped closed-loop **challenge**, explicit contract closure, **`code-reviewer`** as static evidence, forge challenge-report gates, and **`e2e-testing-guide`**. Full history: **[RELEASE_NOTES.md](../RELEASE_NOTES.md)** · [GitHub Releases](https://github.com/Haaaiawd/ANWS/releases).
 
-**v2.0.0** was the protocol-level major (unified **`.anws/`**, controlled **`AGENTS.md`**, multi-target projection). Same link for full semver history.
+**v2.0.0** was the protocol-level major (unified **`.anws/`**, controlled **`AGENTS.md`**, multi-target projection). See **[RELEASE_NOTES.md](../RELEASE_NOTES.md)** for the complete major changelog.
 
 ---
 

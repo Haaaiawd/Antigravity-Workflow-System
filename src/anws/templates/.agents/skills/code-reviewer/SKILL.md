@@ -2,7 +2,7 @@
 
 ## name: code-reviewer
 
-description: 纯静态「契约忠实度 / 实现侧证据」审查：对照 PRD、ADR、系统设计与 05_TASKS，围绕契约闭合、任务兑现、架构健康、安全边界、验证证据与回流一致性产出可追溯结论；供 /challenge（CODE/FULL）与 /forge（3.4.5）共用。
+description: 纯静态「契约忠实度 / 实现侧证据」审查：对照 PRD、ADR、系统设计与 05_TASKS，围绕契约闭合、任务兑现、架构健康、安全边界、验证证据与回流一致性产出可追溯结论；供 /challenge（CODE/FULL）与 /forge（Step 1 §1.4 波前）共用。
 
 # Code Reviewer — 实现侧证据层
 
@@ -24,7 +24,7 @@ description: 纯静态「契约忠实度 / 实现侧证据」审查：对照 PRD
 ## 激活时机
 
 - `**/challenge`**：`REVIEW_MODE` = `CODE` / `FULL`，或从 design/task 审查**自适应升级**到实现侧。
-- `**/forge`**：Step **3.4.5** 提交前门禁（默认 **波次级频控**，见 `forge` workflow）。
+- `**/forge`**：**Step 1 §1.4 波前**门禁（默认**每新波一次**，进入 Step 2 之前；豁免与跳过见 `forge` workflow）。
 
 ## 执行形态（宿主能力）
 

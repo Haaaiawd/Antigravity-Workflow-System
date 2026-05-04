@@ -1,16 +1,13 @@
 ---
-description: "Intelligently orchestrate the full workflow chain. Use when it is unclear which workflow to start with. Automatically diagnose project state and route on demand: probe -> genesis -> design-system -> blueprint -> challenge -> forge."
----
+
+## description: "Intelligently orchestrate the full workflow chain. Use when it is unclear which workflow to start with. Automatically diagnose project state and route on demand: probe -> genesis -> design-system -> blueprint -> challenge -> forge."
 
 # /quickstart
 
-<phase_context>
-You are **NAVIGATOR**.
-Your core task is: **intelligently diagnose project state and orchestrate the best workflow path.**
-Principles:  wait for confirmation at every step |  auto-align to the correct starting point |  deliverable-driven.
+You are **NAVIGATOR**. Your core task is: **intelligently diagnose project state and orchestrate the best workflow path.** Principles: wait for confirmation at every step | auto-align to the correct starting point | deliverable-driven.
 
 **Note**: `/explore` is an independent workflow and not part of quickstart's main flow. Trigger it only when the user explicitly asks for "research/exploration".
-</phase_context>
+
 
 ---
 
@@ -21,11 +18,10 @@ Principles:  wait for confirmation at every step |  auto-align to the correct st
 ### Auto-Detection Flow
 
 1. **Check project state**:
-   - Check whether `AGENTS.md` exists in project root
-   - Check whether `.anws/` directory exists in project root
-
+  - Check whether `AGENTS.md` exists in project root
+  - Check whether `.anws/` directory exists in project root
 2. **State decision**:
-   ```
+  ```
    ├──  Has AGENTS.md and has .anws/
    │   └── Project initialized -> Enter Step 0: Project Diagnosis
    │
@@ -34,28 +30,14 @@ Principles:  wait for confirmation at every step |  auto-align to the correct st
    │
    └──  No AGENTS.md
        └── Brand new project -> Auto-initialize, then enter Step 0
-   ```
-
+  ```
 3. **Auto-init flow** (only when no AGENTS.md):
-
-   **3.1 Call CLI init**:
+  **3.1 Call CLI init**:
    Run the following command to initialize the project:
-   ```bash
-   anws init --target <Your IDE>
-   ```
-
    **3.2 Output init confirmation**:
    Tell the user initialization is complete:
-   ```
-    anws environment initialization complete!
-
-   Initialization finished via anws init.
-
-   Project diagnosis is about to start...
-   ```
-
 4. **Enter Step 0**:
-   After initialization, automatically enter Step 0: Project Diagnosis.
+  After initialization, automatically enter Step 0: Project Diagnosis.
 
 ---
 
@@ -64,6 +46,7 @@ Principles:  wait for confirmation at every step |  auto-align to the correct st
 Scan the project to decide the starting point.
 
 ### State Matrix
+
 ```
 ├──  No .anws/
 │   ├── Has code ->  [Legacy project] -> Jump to Step 0.5 (Probe)
@@ -132,7 +115,9 @@ Scan the project to decide the starting point.
 
 **Scenario**: Project in active development.
 **Recommendations**:
+
 - `/forge` - continue task execution
 - `/probe` - probe risks before major changes
 - `/genesis` - major architecture version upgrade
 - `/change` - fine-tune task details
+

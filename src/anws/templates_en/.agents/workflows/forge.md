@@ -27,7 +27,7 @@ Faithfully forge design documents into runnable code. You do not make design dec
 - **Docs are contracts** — Spec documents are authoritative and must not be violated
 - **Wave execution** — 2-5 tasks per wave: load → code → verify → commit
 - **Stop on doubt** — Stop immediately when issues are found; no guessing, no rushing
-- **Signature mechanism** — Every wave start must go through a checkpoint; normal mode waits for user signature, `/forge AUTO` mode records as `AUTO`
+- **Signature mechanism** — Every wave start must go through a checkpoint; **normal mode** requires **per-wave user approval** of the task mix before coding; `/forge AUTO` records as `AUTO` for continuous progression (see Step 1 **Mode boundary**)
 
 **Your relationship with the user**:
 You are the user's **faithful executor**, not a creator with free improvisation.
@@ -110,11 +110,7 @@ You are the user's **faithful executor**, not a creator with free improvisation.
   - `{TARGET_DIR}/04_SYSTEM_DESIGN/` exists and is non-empty
   - If missing: " Recommended to run `/design-system` first. Missing detailed design may reduce implementation quality."
 5. **If required files are missing**: Throw error and suggest running `/genesis` + `/blueprint`.
-6. **Challenge gate check**:
-  - If `{TARGET_DIR}/07_CHALLENGE_REPORT.md` exists, must read latest review results first
-  - If **unresolved Critical** exists → **immediately block**, do not enter `/forge`
-  - If **unresolved High** exists → only allow explicit user sign-off; AUTO mode cannot auto-pass
-  - If no unresolved high-severity issues → continue
+6. **`07_CHALLENGE_REPORT.md` (if present)**: read outcomes first; **unresolved Critical** → **stop**—do not continue this workflow into coding; **unresolved High** → explicit user sign-off only (AUTO cannot substitute). Semantics match **`/challenge`**—**not repeated here**.
 7. **Resume-from-breakpoint determination**:
   - Read `Wave` block in `AGENTS.md`
   - If wave info exists:
@@ -132,13 +128,16 @@ You are the user's **faithful executor**, not a creator with free improvisation.
   - All normal development defaults to completion on `feature/`*; unless it's a single-file minor fix, do not modify directly on `main`
   - If currently on `main` and this is not a single-file minor fix → create and switch to `feature/{topic-slug}`
   - If currently on `feature/`* and still belongs to same delivery theme → continue on current branch, do not repeatedly open new branches for task patching, contract patching, or test patching
-  - If currently on `feature/*` and theme unchanged, even after `/change` round-trip, continue using the same branch
-  - Only when `/genesis` triggers or version premise changes do old `feature/*` freeze; new version should start a new `feature/*` from latest `main`
+  - If currently on `feature/`* and theme unchanged, even after `/change` round-trip, continue using the same branch
+  - Only when `/genesis` triggers or version premise changes do old `feature/`* freeze; new version should start a new `feature/`* from latest `main`
   - If a protection point is needed before entering `/change`, can create a checkpoint commit on current `feature/*`: `checkpoint: before {topic}`
 
 > [!IMPORTANT]
 > **Git judgment mantra**:
 > Same theme = same branch, `/change` = same branch, `/genesis` = new branch; development on `feature/`*, stable results to `main`, tags only on `main`.
+
+> [!IMPORTANT]
+> **AUTO and presence**: In **AUTO mode**, assume the user **may be away** (coffee break, offline). Except **`07_CHALLENGE_REPORT` unresolved Critical** in Step 0, **hard block from pre-wave `code-reviewer` (§1.4)**, **manual verification** requiring final user sign-off, and the **AUTO must-stop** list in **Step 4.4**, **do not** ask things like “confirm this wave’s task mix?” or “continue next wave?”—show the Wave recommendation, sign **`AUTO`**, then run **§1.4 → Step 2**. Use **normal mode** if a human should steer each wave.
 
 ---
 
@@ -147,9 +146,12 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 **Goal**: Select a set of executable tasks from the task list to form a "wave".
 
 > [!IMPORTANT]
-> **You cannot decide wave content by yourself. You must get signature before starting.**
+> **Mode boundary (CRITICAL)**
 >
-> **Why?** The user has final decision authority over project priorities and execution cadence; `/forge AUTO` only changes signature from user to `AUTO`, not delete the checkpoint.
+> - **Normal mode (default)**: Same as the original checkpoint semantics—**each wave** in Step 1: **show Wave recommendation → user confirms and approves this wave’s task mix (signature) →** then write the `Wave` block in `AGENTS.md` and run **§1.4**; after Step 4 settlement, if tasks remain, **the next wave** again requires Step 1 **show + wait for user approval**—do **not** start the next wave’s coding without approval. Step 4.4’s “do not ask to continue next wave” applies **only to AUTO**; it does **not** remove normal-mode per-wave approval.
+> - **AUTO mode** (`/forge AUTO` or explicit request for auto continuous progression): Checkpoint logic remains, but the signer is `AUTO`; **do not** use chit-chat confirmations (“happy with this wave?” / “continue next wave?”)—see **Step 0 “AUTO and presence”** and **Step 4.4**.
+>
+> **Why?** Priorities and task boundaries must be auditable; normal mode keeps a **human per wave**, AUTO relies on hard stop conditions instead of in-seat confirmations.
 
 ### 1.1 Scan executable tasks
 
@@ -195,18 +197,35 @@ Confirm this wave? Or adjust task combination?
 T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 ```
 
-Then enter Step 2.
+Signature rules (aligned with **Mode boundary**):
 
-Signature rules:
+- **Normal mode** → user **explicitly approves** this wave’s Wave (may adjust task mix first; sign when final) → write `Wave` block in `AGENTS.md` → then run **§1.4**. **Forbidden** to write `Wave` or enter Step 2/3 before approval.
+- **AUTO mode** → after showing the Wave recommendation, **immediately** record this wave as signed `AUTO` and run **§1.4** (**do not** interrupt to ask whether the task mix is “OK”).
 
-- Normal mode → wait for user signature
-- AUTO mode → retain wave display, record signature as `AUTO`, then continue execution
+### 1.4 Pre-wave static review (`code-reviewer`, default every wave)
+
+**When**: After **Wave {N}** is written to `AGENTS.md` and **Step 1 signature** is satisfied, **before Step 2**.
+
+**Resume-from-breakpoint**: If Step 0 sends you straight to Step 3 to finish the **same** wave, that wave was already approved at Step 1 when it started—**do not** re-run §1.4 for the same wave. If you cannot confirm §1.4 ever ran for this wave (must have review output or a legal waiver on record), **return to Step 1** to re-sign the wave and complete §1.4, then Step 2/3.
+
+**Default**: Every **new** wave (including the next wave after normal-mode user approval) **must** run one round of **`code-reviewer`** against **all commits on the current working branch up to wave start** vs PRD / Architecture / ADR / System Design / **`05_TASKS.md`** (including contracts for tasks about to run in this wave), so coding does not start on a wrong assumption.
+
+**Skip only with a documented reason** (Wave notes or equivalent persistence):
+
+1. **Nothing to review yet**: Under the repo’s implementation root (e.g. `src/`), there is **no reviewable, Sprint/wave-relevant landed code** yet (docs-only, bootstrap, not started)—**do not** run a hollow ritual pass.
+2. **User explicitly disables all static review**: User **explicitly** says “no code review / skip all `code-reviewer`”—for the rest of the session **do not** invoke **`code-reviewer`**; go straight to **Step 2**; persist **`CODE_REVIEW_DISABLED_BY_USER`** in `AGENTS.md` or next to Wave until revoked. **Never** skip pre-wave review on your own without that statement.
+
+**Execution**: Follow **`code-reviewer`** skill end-to-end; prefer a **subagent** when available.
+
+**Gate routing**: Critical / High per skill → **`/change`** / **`/genesis`**; **do not** enter Step 2 while blocking issues remain (**including AUTO**—must stop).
+
+Then enter **Step 2**.
 
 ---
 
 ## Step 2: Context Loading
 
-**Goal**: Load only documents needed by this wave, not one more.
+**Goal**: Load only documents needed by this wave, not one more. **Prerequisite**: **§1.4** completed or legally waived (above); otherwise do not start loading for implementation work.
 
 > [!IMPORTANT]
 > **Only load docs required by current wave. Do not over-load "just in case."**
@@ -246,23 +265,22 @@ Signature rules:
 
 ## Step 3: Task Execution Loop
 
-**Goal**: Complete tasks in the wave one by one: think → code → verify → commit; and **embed** a wave-level static review so agents do not “get in flow” and skip `code-reviewer`.
+**Goal**: Complete each task in the wave (think → code → verify → commit).
 
 > [!IMPORTANT]
 > **Strictly follow the process below for each task; no skipping steps.**
 
-### Wave built-in structure (Wave = task loop + closure review)
+### Wave built-in structure (Wave = pre-wave gate + task loop)
 
-Treat **one Wave** as a **two-phase pipeline** (both live inside Step 3; **do not enter Step 4** until satisfied):
+Treat **one Wave** as a **pre-wave static gate + per-task loop** (Step 3 holds only the latter; **do not enter Step 4** until satisfied):
 
 
 | Phase                                          | What                                                                                                                                                    | Done when                                                                                                                                 |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **A. Per-task loop**                           | For each task in the wave, run **§3.1 → §3.6**                                                                                                          | Acceptance + verification evidence + commits landed; `05_TASKS.md` updated per rules                                                      |
-| **B. Wave closure (built-in `code-reviewer`)** | After **§3.4 automated checks** pass on the **last task of the wave**, run **§3.4.5 once** over **implementation changes merged in this wave** (rollup) | **§3.4.5 executed with review output** (or a **documented** skip/backlog window per `code-reviewer` skill); **silent omission forbidden** |
+| **0. Pre-wave (`code-reviewer`)**              | After **Step 1 signature**, **before Step 2**; see **§1.4**                                                                                              | Auditable review output, or a **documented** waiver per **`code-reviewer`** skill; **no silent skip**                                      |
+| **A. Per-task loop**                           | For each task, run **§3.1 → §3.6** (**last task**: after §3.4, run **§3.4.6**)                                                                           | Acceptance + verification evidence + commits landed; `05_TASKS.md` updated per rules                                                      |
 
-
-> **Note**: Phase B is **not** an optional appendix—it is a **fixed part of the Wave**, aligned with the `Wave` block you maintain in `AGENTS.md`. Mid-wave tasks still **do not repeat** §3.4.5, but the **end-of-wave pass is mandatory**. Cross-check **Step 4 §4.0**: settlement is blocked until this is satisfied.
+> **One line**: **§1.4** aligns with **Step 4 §4.0** (done or waived before Step 2).
 
 For each task in this wave, execute the following loop (Phase A):
 
@@ -380,44 +398,20 @@ Run checks according to task `**Validation Type**` and `**Validation Instruction
 > - If a task declares smoke test or regression test, but `Validation Instructions` cannot guide execution, treat as incomplete validation definition, first fix task definition or route back to `/change`
 
 - If any automated validation type does not pass → **fix and re-verify**, no skipping allowed
-- If all automated validation types pass → **§3.4.6**: if the skill triggers, run **3.4.6** below; if not, one-line reason → **3.5 → 3.6**. **§3.4.5 wave rollup** is **not** a per-task toggle here—where it runs and the hard gate are **Step 3 “Wave built-in structure”, Phase B**, **§3.4.5** below, and **Step 4 §4.0**.
+- If all automated validation types pass:
+  - **Not the last task in this wave** → **3.5 → 3.6** (do **not** run **§3.4.6** here).
+  - **Last task in this wave** → **§3.4.6 (below)** → **3.5 → 3.6**.
 
-### 3.4.5 / 3.4.6 cadence (supplement)
+### 3.4.6 Wave-end E2E (fixed: `e2e-testing-guide` → browser)
 
-> **3.4.5**: Where the end-of-wave `**code-reviewer`** rollup sits is already defined in Step 3 **“Wave built-in structure”, Phase B**; **waivers, intensity, evidence** follow the `**code-reviewer`** skill only. This block adds **non-duplicative** extras:
->
-> - **Fallback**: if **~2–3 consecutive waves** miss the end-of-wave **3.4.5** rollup, run a **catch-up** before next wave **Step 1** or at the end of the prior wave **Step 4** (per skill).
-> - **Exceptions** (may run an extra **3.4.5** right after **this** task): explicit **per-task deep review**; **high public-contract risk**; long `**/forge` AUTO** sessions need denser checks — still obey the skill.
->
-> **3.4.6 (`e2e-testing-guide`) + browser tooling** (independent of 3.4.5; may still trigger **per task**):
->
-> - Skill not triggered → skip + one-line reason → **3.5**.
-> - **Browser automation available**: follow skill order — **Testing Guide first**, then **real browser steps with user authorization**.
-> - **No browser tools**: **guide-only**; do not claim E2E/smoke passed without evidence.
+Run **only** on the **last task** of the wave, after that task’s **§3.4** (automated side) passes. Static fidelity already ran in **§1.4 pre-wave** or was waived—**do not** run **`code-reviewer`** again here.
 
----
-
-### 3.4.5 Static Fidelity Check
-
-(When to run and whether it can be skipped: **Step 3 “Wave built-in structure”, Phase B + Step 4 §4.0**; this section only defines **how** to run `**code-reviewer`**.)
-
-Follow the `**code-reviewer**` skill end-to-end (inputs, lenses, outputs, skip protocol).
-
-**Execution**: Prefer a **subagent** when the host supports one (Task / parallel sessions, etc.); otherwise run **in this session**—same skill, no watered-down review.
-
-**Routing**: Critical / High → `**/change`** if resolvable within the current version; else `**/genesis**` if premises break. If clear → **3.4.6** (if triggered) or **3.5**.
-
----
-
-### 3.4.6 Browser & E2E Verification Guide
-
-Follow the `**e2e-testing-guide`** skill end-to-end (triggers, guide-only mode, evidence rules, **PRD traceability / scoring / status codes**).
-
-Verification is **user-journey** oriented: steps, assertions, evidence, and `PASS` / `PARTIAL_PASS` / `FAIL` / `BLOCKED` / `NOT_RUN` / `INCONCLUSIVE` (maybe) plus **JourneyScore** rules follow the skill.
-
-If host has browser automation: **guide first, then live steps (authorized)**; without tools, guide-only — never pretend tests ran.
-
-If not triggered → `E2E guide skipped` + one-line reason → **3.5**.
+1. If **any** task in this wave’s `05_TASKS.md` lists **E2E** or **manual** validation (or equivalent UI proof):
+   - **Must** prompt the user to choose (unless already declared):
+     - **Closure A**: rely on **§1.4 `code-reviewer` completed** (or documented waiver) + this task’s **§3.4** only—**no** E2E report + **no** browser pass; if UI acceptance remains unproven, record **risk + reason** in the wave/session notes.
+     - **Closure B**: first produce the **E2E Verification** doc strictly via **`e2e-testing-guide`** (guide + tables only; verdict meanings are the **`<!-- -->` comments** in that skill’s **Required output**—**`PASS` / `PARTIAL_PASS` / `FAIL` only**); then, with user authorization, use host **browser tools** to execute the guide and **fill Evidence / verdict columns**.
+2. If the wave has **no** such validation types → one line `§3.4.6 skipped — no E2E/manual in wave` → **3.5**.
+3. **No browser tools**: deliver the skill document only, mark `guide-only`, never claim live `PASS`.
 
 ---
 
@@ -473,12 +467,12 @@ If not triggered → `E2E guide skipped` + one-line reason → **3.5**.
 
 ### 4.0 Wave closure gate (hard)
 
-Before continuing, **must** satisfy:
+Proceed to **§4.1+** only if **all** hold:
 
-- **§3.4.5 complete**: this wave already ran the rollup `**code-reviewer`** after the **last task** (see Step 3 **“Wave built-in structure”, Phase B** and **§3.4.5**), with auditable output; **or**
-- **Documented waiver**: per `code-reviewer` skip protocol, record reason, owner, and **when** catch-up will run (e.g. before next wave Step 1).
+1. **§1.4**: **`code-reviewer`** finished before **Step 2** for this wave (auditable), or a **documented** waiver per **`code-reviewer`** skill (including **`CODE_REVIEW_DISABLED_BY_USER`** / **nothing to review yet**).
+2. **Step 3**: **Every** task in the wave is complete; **last task** **§3.4.6** handled per **Closure A/B** or skipped (no E2E/manual in wave), and **§3.5 / §3.6** done.
 
-**If not satisfied → do not** treat the wave as settled, **do not** proceed to **§4.1 onward** as normal settlement—return to Step 3 and finish **§3.4.5** first.
+**If not satisfied → do not** proceed to **§4.1+**; return to **Step 1** (missing §1.4) or **Step 3** (incomplete tasks).
 
 ### 4.1 Update status
 
@@ -520,16 +514,17 @@ chore(wave): settle wave {N} progress
 
 **Signature checkpoint** :
 
-- Unfinished tasks remain → ask: "Continue next wave?"; normal mode waits for user signature, AUTO mode signs with `AUTO` and continues → back to **Step 1**
+- Unfinished tasks remain → **Normal mode**: show next-wave recommendation and wait for user signature → back to **Step 1**. **AUTO mode**: **do not** ask “continue next wave?”—go back to **Step 1** and sign **`AUTO`** for the next wave (show recommendation only).
 - Current Sprint all tasks completed → enter **Step 5**
 - Blocking issues exist → guide user to run corresponding workflow for fixes
 
 > [!IMPORTANT]
-> **AUTO mode stop conditions**:
+> **AUTO mode stop conditions** (**only** these plus equivalent hard blocks already stated above—**do not** extend to “opinion” pauses):
 >
 > - Hit manual verification and need user final confirmation
 > - `/change` assessment finds must upgrade to `/genesis`
 > - Other workflows require user to make new version-level decisions
+> - **§1.4 pre-wave `code-reviewer`** leaves **unresolved Critical / High** with no actionable fix path in-session per skill (route **`/change`** / **`/genesis`** or explicit user risk acceptance—**stop** if not explicitly accepted)
 >
 > Hitting any of these conditions, AUTO must immediately stop and wait for user approval.
 
@@ -557,9 +552,9 @@ chore(wave): settle wave {N} progress
 
 - All acceptance criteria of each task passed
 - All compliance checks of each task passed
-- **3.4.5 / 3.4.6**: aligned with **Step 3 Phase B, §3.4.5–3.4.6, Step 4 §4.0**; any skipped item needs a **skill-compliant** reason or catch-up plan (no silent gaps)
+- **§1.4 / §3.4.6**: **§4.0** satisfied; §1.4 pre-wave review or legal waiver persisted; §3.4.6 handled per **Closure A/B** (A requires noted risk), or wave had no E2E/manual validation
 - All code committed to git with message including Task ID
 - `05_TASKS.md` checkboxes updated
 - `AGENTS.md` current status updated
-- User confirmed wave completion
+- User confirmed wave completion, or **AUTO** settlement signature per rules
 

@@ -15,7 +15,7 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
 - **Docs first** - Code implements documents, not the other way around
 - **Product first** - PRD before tech, requirements before solutions
 - **System decomposition** - Identify independent systems and separate concerns
-- **Git branch switching** - `/genesis` represents version premise change; old `feature/`* should freeze, new version should start a new `feature/*` from latest `main`
+- **Git branch switching** - `/genesis` represents version premise change; old `feature/`* should freeze, new version should start a new `feature/`* from latest `main`
 
 **Output Goal (Versioned)**:
 
@@ -83,9 +83,9 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
     - If `v1`, `v2` exist -> target is `v3`.
 3. **Prepare workspace**:
   - **Case A (new project)**:
-    Create directory structure: `.anws/v1/03_ADR` and `.anws/v1/04_SYSTEM_DESIGN`
+  Create directory structure: `.anws/v1/03_ADR` and `.anws/v1/04_SYSTEM_DESIGN`
     - **Case B (iterative update)**:
-    Create directory `.anws/v{N+1}` (e.g., v3), copy `.anws/v{N}/*` into the new directory, and clean old task files (e.g., `.anws/v{N}/05_TASKS.md`)
+    Create directory `.anws/v{N+1}` (e.g., v3), copy `.anws/v{N}/`* into the new directory, and clean old task files (e.g., `.anws/v{N}/05_TASKS.md`)
 4. **Initialize version file**:
   Create `.anws/v{N}/00_MANIFEST.md`:
 5. **Initialize changelog**:
@@ -347,3 +347,4 @@ Only modify content between `<!-- AUTO:BEGIN -->` and `<!-- AUTO:END -->`; keep 
 Tell the user this phase is complete, list output documents, and guide the next action (design-system or blueprint).
 
 - Created `.anws/v{N}/00_MANIFEST.md` -  Created `.anws/v{N}/06_CHANGELOG.md` -  Generated PRD, Architecture Overview, ADRs -  Updated AGENTS.md (Current Status, Project Structure, Navigation Guide) -  Updated AGENTS.md AUTO:BEGIN block (Tech Stack, System Boundaries, Active ADRs) -  User confirmed at human checkpoints
+

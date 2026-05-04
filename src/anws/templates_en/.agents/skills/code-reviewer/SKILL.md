@@ -1,7 +1,7 @@
 ---
 
 ## name: code-reviewer
-description: Pure static fidelity / implementation-side evidence review against PRD, ADR, System Design, and 05_TASKS—cover contract closure, task fulfillment, architecture fit, safety boundaries, verification evidence, and backflow/handoff consistency with traceable findings; shared by /challenge (CODE/FULL) and /forge (3.4.5).
+description: Pure static fidelity / implementation-side evidence review against PRD, ADR, System Design, and 05_TASKS—cover contract closure, task fulfillment, architecture fit, safety boundaries, verification evidence, and backflow/handoff consistency with traceable findings; shared by /challenge (CODE/FULL) and /forge (Step 1 §1.4 pre-wave).
 
 # Code Reviewer — implementation-side evidence layer
 
@@ -23,7 +23,7 @@ Use **Critical / High / Medium / Low** (same as `/challenge`). **Critical** = sh
 ## When to activate
 
 - **`/challenge`**: `REVIEW_MODE` = `CODE` / `FULL`, or **adaptive escalation** from design/task review to implementation-side evidence.
-- **`/forge`**: Step **3.4.5** pre-commit gate (default **wave cadence**—see `forge` workflow).
+- **`/forge`**: **Step 1 §1.4 pre-wave** gate (default **once per new wave**, before Step 2; waivers/skips—see `forge` workflow).
 
 ## Execution model (host capabilities)
 
