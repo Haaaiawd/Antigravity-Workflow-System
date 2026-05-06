@@ -24,7 +24,7 @@ Assume the reader is a **first-time human user**, not an automation script. The 
 
 ## When to use
 
-- `05_TASKS.md` lists **E2E** or **manual** validation, or the change touches UI/navigation/forms/auth flows that need real UI proof.
+- `05A_TASKS.md` lists **E2E** or **manual** validation, or `05B_VERIFICATION_PLAN.md` requires real-machine/UI evidence, or the change touches UI/navigation/forms/auth flows that need real UI proof.
 - The user asks for a testing guide, E2E report, or browser checklist.
 
 ---
@@ -43,7 +43,7 @@ Assume the reader is a **first-time human user**, not an automation script. The 
 
 ### 1. Load context
 
-Task + `05_TASKS.md`, `01_PRD.md` (or PRD paths from **`Input`**), routes/pages notes, run instructions, accounts/roles. Missing URL/account → **Blockers**.
+Task + `05A_TASKS.md`, `05B_VERIFICATION_PLAN.md`, `01_PRD.md` (or PRD paths from **`Input`**), routes/pages notes, run instructions, accounts/roles. Missing URL/account → **Blockers**.
 
 ### 2. PRD traceability matrix (RTM)
 

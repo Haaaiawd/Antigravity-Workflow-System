@@ -44,7 +44,7 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 > | -------------------------------------------------------------------------- | ------- | --------- |
 > | Write business code under `src/`                                           | Yes     |           |
 > | Write unit tests                                                           | Yes     |           |
-> | Update checkboxes in `05_TASKS.md`                                         | Yes     |           |
+> | Update checkboxes in `05A_TASKS.md`                                        | Yes     |           |
 > | Run tests and lint                                                         | Yes     |           |
 > | Git commit completed tasks                                                 | Yes     |           |
 > | Update current status in `AGENTS.md`                                       | Yes     |           |
@@ -105,7 +105,8 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 3. **Check required files**:
   - `{TARGET_DIR}/01_PRD.md` exists
   - `{TARGET_DIR}/02_ARCHITECTURE_OVERVIEW.md` exists
-  - `{TARGET_DIR}/05_TASKS.md` exists
+  - `{TARGET_DIR}/05A_TASKS.md` exists
+  - `{TARGET_DIR}/05B_VERIFICATION_PLAN.md` exists
 4. **Check recommended files** (warn if missing):
   - `{TARGET_DIR}/04_SYSTEM_DESIGN/` exists and is non-empty
   - If missing: " Recommended to run `/design-system` first. Missing detailed design may reduce implementation quality."
@@ -114,7 +115,7 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 7. **Resume-from-breakpoint determination**:
   - Read `Wave` block in `AGENTS.md`
   - If wave info exists:
-    - Check wave task list against checkboxes in `05_TASKS.md`
+    - Check wave task list against checkboxes in `05A_TASKS.md`
     - If unfinished tasks exist → **resume from breakpoint** → jump to Step 3 and continue unfinished tasks
     - If all finished → **new wave** → continue Step 1
   - If none exists → **new start** → continue Step 1
@@ -137,7 +138,7 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 > Same theme = same branch, `/change` = same branch, `/genesis` = new branch; development on `feature/`*, stable results to `main`, tags only on `main`.
 
 > [!IMPORTANT]
-> **AUTO and presence**: In **AUTO mode**, assume the user **may be away** (coffee break, offline). Except **`07_CHALLENGE_REPORT` unresolved Critical** in Step 0, **hard block from pre-wave `code-reviewer` (§1.4)**, **manual verification** requiring final user sign-off, and the **AUTO must-stop** list in **Step 4.4**, **do not** ask things like “confirm this wave’s task mix?” or “continue next wave?”—show the Wave recommendation, sign **`AUTO`**, then run **§1.4 → Step 2**. Use **normal mode** if a human should steer each wave.
+> **AUTO and presence**: In **AUTO mode**, assume the user **may be away** (coffee break, offline). Except **`07_CHALLENGE_REPORT` unresolved Critical** in Step 0, **hard block from wave-end `code-reviewer` (§3.4.5)**, **manual verification** requiring final user sign-off, and the **AUTO must-stop** list in **Step 4.4**, **do not** ask things like “confirm this wave’s task mix?” or “continue next wave?”—show the Wave recommendation, sign **`AUTO`**, then enter **Step 2**. Use **normal mode** if a human should steer each wave.
 
 ---
 
@@ -148,14 +149,14 @@ You are the user's **faithful executor**, not a creator with free improvisation.
 > [!IMPORTANT]
 > **Mode boundary (CRITICAL)**
 >
-> - **Normal mode (default)**: Same as the original checkpoint semantics—**each wave** in Step 1: **show Wave recommendation → user confirms and approves this wave’s task mix (signature) →** then write the `Wave` block in `AGENTS.md` and run **§1.4**; after Step 4 settlement, if tasks remain, **the next wave** again requires Step 1 **show + wait for user approval**—do **not** start the next wave’s coding without approval. Step 4.4’s “do not ask to continue next wave” applies **only to AUTO**; it does **not** remove normal-mode per-wave approval.
+> - **Normal mode (default)**: Same as the original checkpoint semantics—**each wave** in Step 1: **show Wave recommendation → user confirms and approves this wave’s task mix (signature) →** then write the `Wave` block in `AGENTS.md`, then enter **Step 2**; after Step 4 settlement, if tasks remain, **the next wave** again requires Step 1 **show + wait for user approval**—do **not** start the next wave’s coding without approval. Step 4.4’s “do not ask to continue next wave” applies **only to AUTO**; it does **not** remove normal-mode per-wave approval.
 > - **AUTO mode** (`/forge AUTO` or explicit request for auto continuous progression): Checkpoint logic remains, but the signer is `AUTO`; **do not** use chit-chat confirmations (“happy with this wave?” / “continue next wave?”)—see **Step 0 “AUTO and presence”** and **Step 4.4**.
 >
 > **Why?** Priorities and task boundaries must be auditable; normal mode keeps a **human per wave**, AUTO relies on hard stop conditions instead of in-seat confirmations.
 
 ### 1.1 Scan executable tasks
 
-Read `{TARGET_DIR}/05_TASKS.md` and find all tasks meeting these conditions:
+Read `{TARGET_DIR}/05A_TASKS.md` and find all tasks meeting these conditions:
 
 - `- [ ]` unfinished
 - Dependent tasks (from `**Dependencies`** field) are all completed `- [x]`
@@ -199,33 +200,14 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 Signature rules (aligned with **Mode boundary**):
 
-- **Normal mode** → user **explicitly approves** this wave’s Wave (may adjust task mix first; sign when final) → write `Wave` block in `AGENTS.md` → then run **§1.4**. **Forbidden** to write `Wave` or enter Step 2/3 before approval.
-- **AUTO mode** → after showing the Wave recommendation, **immediately** record this wave as signed `AUTO` and run **§1.4** (**do not** interrupt to ask whether the task mix is “OK”).
-
-### 1.4 Pre-wave static review (`code-reviewer`, default every wave)
-
-**When**: After **Wave {N}** is written to `AGENTS.md` and **Step 1 signature** is satisfied, **before Step 2**.
-
-**Resume-from-breakpoint**: If Step 0 sends you straight to Step 3 to finish the **same** wave, that wave was already approved at Step 1 when it started—**do not** re-run §1.4 for the same wave. If you cannot confirm §1.4 ever ran for this wave (must have review output or a legal waiver on record), **return to Step 1** to re-sign the wave and complete §1.4, then Step 2/3.
-
-**Default**: Every **new** wave (including the next wave after normal-mode user approval) **must** run one round of **`code-reviewer`** against **all commits on the current working branch up to wave start** vs PRD / Architecture / ADR / System Design / **`05_TASKS.md`** (including contracts for tasks about to run in this wave), so coding does not start on a wrong assumption.
-
-**Skip only with a documented reason** (Wave notes or equivalent persistence):
-
-1. **Nothing to review yet**: Under the repo’s implementation root (e.g. `src/`), there is **no reviewable, Sprint/wave-relevant landed code** yet (docs-only, bootstrap, not started)—**do not** run a hollow ritual pass.
-2. **User explicitly disables all static review**: User **explicitly** says “no code review / skip all `code-reviewer`”—for the rest of the session **do not** invoke **`code-reviewer`**; go straight to **Step 2**; persist **`CODE_REVIEW_DISABLED_BY_USER`** in `AGENTS.md` or next to Wave until revoked. **Never** skip pre-wave review on your own without that statement.
-
-**Execution**: Follow **`code-reviewer`** skill end-to-end; prefer a **subagent** when available.
-
-**Gate routing**: Critical / High per skill → **`/change`** / **`/genesis`**; **do not** enter Step 2 while blocking issues remain (**including AUTO**—must stop).
-
-Then enter **Step 2**.
+- **Normal mode** → user **explicitly approves** this wave’s Wave (may adjust task mix first; sign when final) → write `Wave` block in `AGENTS.md` → enter **Step 2**. **Forbidden** to write `Wave` or enter Step 2/3 before approval.
+- **AUTO mode** → after showing the Wave recommendation, **immediately** record this wave as signed `AUTO` and enter **Step 2** (**do not** interrupt to ask whether the task mix is “OK”).
 
 ---
 
 ## Step 2: Context Loading
 
-**Goal**: Load only documents needed by this wave, not one more. **Prerequisite**: **§1.4** completed or legally waived (above); otherwise do not start loading for implementation work.
+**Goal**: Load only documents needed by this wave, not one more.
 
 > [!IMPORTANT]
 > **Only load docs required by current wave. Do not over-load "just in case."**
@@ -270,19 +252,19 @@ Then enter **Step 2**.
 > [!IMPORTANT]
 > **Strictly follow the process below for each task; no skipping steps.**
 
-### Wave built-in structure (Wave = pre-wave gate + task loop)
+### Wave built-in structure (Wave = per-task loop + wave-end closure)
 
-Treat **one Wave** as a **pre-wave static gate + per-task loop** (Step 3 holds only the latter; **do not enter Step 4** until satisfied):
+Treat **one Wave** as **per-task loop (Phase A) + last-task wave-end closure (Phase B)** (**do not enter Step 4** until satisfied):
 
 
 | Phase                                          | What                                                                                                                                                    | Done when                                                                                                                                 |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **0. Pre-wave (`code-reviewer`)**              | After **Step 1 signature**, **before Step 2**; see **§1.4**                                                                                              | Auditable review output, or a **documented** waiver per **`code-reviewer`** skill; **no silent skip**                                      |
-| **A. Per-task loop**                           | For each task, run **§3.1 → §3.6** (**last task**: after §3.4, run **§3.4.6**)                                                                           | Acceptance + verification evidence + commits landed; `05_TASKS.md` updated per rules                                                      |
+| **A. Per-task loop**                           | **Non-last tasks**: **§3.1 → §3.6** (includes §3.4; **no** §3.4.5 / §3.4.6 / §3.4.5.1). **Last task**: **§3.1 → §3.4** → **§3.4.5** → **§3.4.6** → **§3.4.5.1** → **§3.6** | Acceptance + commits landed; `05A_TASKS.md` updated; **§3.4.5 / §3.4.6 / §3.4.5.1** closed or waived on last task                         |
+| **B. Wave-end closure**                        | **Last task only**: **§3.4.5** (`code-reviewer`) → **§3.4.6** → **§3.4.5.1** (minimal delivery index) → **§3.6**                                   | Same hard gate as **Step 4 §4.0**                                                                                                                                        |
 
-> **One line**: **§1.4** aligns with **Step 4 §4.0** (done or waived before Step 2).
+> **One line**: **`code-reviewer` body** follows the **`code-reviewer`** skill (shared with **`/challenge`**); **§3.4.5.1** is **`/forge` only**—a minimal index table, **not** a substitute for the skill report.
 
-For each task in this wave, execute the following loop (Phase A):
+For each task in this wave, execute the loop per Phase A / B above:
 
 ---
 
@@ -399,40 +381,52 @@ Run checks according to task `**Validation Type**` and `**Validation Instruction
 
 - If any automated validation type does not pass → **fix and re-verify**, no skipping allowed
 - If all automated validation types pass:
-  - **Not the last task in this wave** → **3.5 → 3.6** (do **not** run **§3.4.6** here).
-  - **Last task in this wave** → **§3.4.6 (below)** → **3.5 → 3.6**.
+  - **Not the last task in this wave** → **3.6** (do **not** run **§3.4.5 / §3.4.6 / §3.4.5.1** here).
+  - **Last task in this wave** → **§3.4.5 (below)** → **§3.4.6 (below)** → **§3.4.5.1 (below)** → **3.6**.
+
+### 3.4.5 Wave-end static review (`code-reviewer`)
+
+**When**: **Last task only**, after that task’s **§3.4** (automated side) is fully green, **before §3.4.6**.
+
+Follow the **`code-reviewer`** skill end-to-end for the **full review body** (same evidence/Lens rules as **`/challenge`**—do **not** shorten because this is `/forge`); prefer a **subagent** when available.
+
+**Waiver (must be persisted on Wave notes or equivalent)**: user explicitly says “no code review / skip all `code-reviewer`” → mark **`CODE_REVIEW_DISABLED_BY_USER`**.
+
+**Gate routing**: Critical / High per skill → **`/change`** / **`/genesis`**; **do not** proceed to **§3.4.6**, **§3.4.5.1**, or **§3.6** while blocking issues remain (**including AUTO**—must stop).
 
 ### 3.4.6 Wave-end E2E (fixed: `e2e-testing-guide` → browser)
 
-Run **only** on the **last task** of the wave, after that task’s **§3.4** (automated side) passes. Static fidelity already ran in **§1.4 pre-wave** or was waived—**do not** run **`code-reviewer`** again here.
+Run **only** on the **last task**, after **§3.4.5** is satisfied or waived. **Do not** run **`code-reviewer`** again here.
 
-1. If **any** task in this wave’s `05_TASKS.md` lists **E2E** or **manual** validation (or equivalent UI proof):
+1. If **any** task in this wave’s `05A_TASKS.md` lists **E2E** or **manual** validation (or equivalent UI proof):
    - **Must** prompt the user to choose (unless already declared):
-     - **Closure A**: rely on **§1.4 `code-reviewer` completed** (or documented waiver) + this task’s **§3.4** only—**no** E2E report + **no** browser pass; if UI acceptance remains unproven, record **risk + reason** in the wave/session notes.
+     - **Closure A**: rely on **§3.4.5 `code-reviewer` completed** (or documented waiver) + this task’s **§3.4** only—**no** E2E report + **no** browser pass; if UI acceptance remains unproven, record **risk + reason** in the wave/session notes.
      - **Closure B**: first produce the **E2E Verification** doc strictly via **`e2e-testing-guide`** (guide + tables only; verdict meanings are the **`<!-- -->` comments** in that skill’s **Required output**—**`PASS` / `PARTIAL_PASS` / `FAIL` only**); then, with user authorization, use host **browser tools** to execute the guide and **fill Evidence / verdict columns**.
-2. If the wave has **no** such validation types → one line `§3.4.6 skipped — no E2E/manual in wave` → **3.5**.
+2. If the wave has **no** such validation types → one line `§3.4.6 skipped — no E2E/manual in wave` (still continue to **§3.4.5.1**).
 3. **No browser tools**: deliver the skill document only, mark `guide-only`, never claim live `PASS`.
 
----
+### 3.4.5.1 `/forge` minimal delivery index (**not** the `code-reviewer` report)
 
-### 3.5 Compliance Check
+**When**: After **§3.4.6**, before **§3.6 Commit** (last-task path only).
 
-**Checklist** (answer each item):
+**Nature**: **Not** the review body; **must not** replace **`code-reviewer`** skill output. This is a **`/forge`-only cover index** (fixed columns—no long prose).
 
+```markdown
+## Wave {N} delivery index (/forge minimal)
 
-| #   | Check Item                                                                                                    | Pass?    |
-| --- | ------------------------------------------------------------------------------------------------------------- | -------- |
-| 1   | Are code interfaces consistent with SYSTEM_DESIGN definitions?                                                | Yes / No |
-| 2   | No dependencies introduced without ADR approval?                                                              | Yes / No |
-| 3   | No features added outside task scope?                                                                         | Yes / No |
-| 4   | Code style consistent with project and lint passes?                                                           | Yes / No |
-| 5   | All acceptance criteria verified and passed?                                                                  | Yes / No |
-| 6   | All executable acceptance criteria backed by adequate evidence (terminal / logs / screenshots as applicable)? | Yes / No |
-| 7   | Acceptance criteria requiring manual confirmation marked as pending (explicit)                                | Yes / No |
+| Field | Value |
+| ----- | ----- |
+| Wave | {N} |
+| Task IDs | T…, T… |
+| Branch @ HEAD | `feature/…` @ `<short SHA>` |
+| `code-reviewer` | Done / waived: `CODE_REVIEW_DISABLED_BY_USER` |
+| Review body pointer | Heading or first line of the `code-reviewer` block above / `N/A — USER_OPT_OUT` |
+| §3.4.6 E2E | Done / skipped / N/A |
+| OK to enter Step 4 | Yes / No |
+```
 
-
-- If all checklist items pass → continue to 3.6
-- If any checklist item fails → **fix**
+> [!IMPORTANT]
+> **Delivery completeness**: **OK to enter Step 4 = Yes** only if: `code-reviewer` ran with auditable output **or** **`CODE_REVIEW_DISABLED_BY_USER`** is recorded, **and** all six rows are filled. Otherwise the wave delivery is **incomplete**—**do not** enter **Step 4.1+**. **Never** skip **`code-reviewer`** without explicit user opt-out.
 
 ---
 
@@ -448,7 +442,7 @@ Run **only** on the **last task** of the wave, after that task’s **§3.4** (au
   - Example: `fix(challenge): T4.2.3 — severity semantics alignment`
 2. **Task completion persistence** (immediate write-back):
   > [!IMPORTANT]
-  > **For each completed and verified task, write back to `05_TASKS.md` immediately**.
+  > **For each completed and verified task, write back to `05A_TASKS.md` immediately**.
   > This is the core progress persistence mechanism — even if AI context is lost or session crashes,
   > the next load of TASKS.md still shows exact progress.
   > Combined with AGENTS.md Wave block, this forms a **two-layer recovery mechanism**: coarse-grained (Wave) + fine-grained (Task checkbox).
@@ -456,7 +450,7 @@ Run **only** on the **last task** of the wave, after that task’s **§3.4** (au
   - Locate and update status strictly by **Task ID**; fuzzy match by title is forbidden
   - Change corresponding task from `- [ ]` to `- [x]`
   - Do not modify tasks that are unfinished, unverified, or outside current wave
-  - Ensure written-back `05_TASKS.md` matches actual progress
+  - Ensure written-back `05A_TASKS.md` matches actual progress
 3. **Continue to next task** → return to 3.1
 
 ---
@@ -469,10 +463,10 @@ Run **only** on the **last task** of the wave, after that task’s **§3.4** (au
 
 Proceed to **§4.1+** only if **all** hold:
 
-1. **§1.4**: **`code-reviewer`** finished before **Step 2** for this wave (auditable), or a **documented** waiver per **`code-reviewer`** skill (including **`CODE_REVIEW_DISABLED_BY_USER`** / **nothing to review yet**).
-2. **Step 3**: **Every** task in the wave is complete; **last task** **§3.4.6** handled per **Closure A/B** or skipped (no E2E/manual in wave), and **§3.5 / §3.6** done.
+1. **§3.4.5 / §3.4.5.1 / §3.4.6**: On the **last-task** path, **`code-reviewer`** completed (auditable) or **`CODE_REVIEW_DISABLED_BY_USER`** recorded; **§3.4.6** handled per **Closure A/B** or skipped; **§3.4.5.1** minimal delivery index filled with **OK to enter Step 4 = Yes**.
+2. **Step 3**: **Every** task in the wave is complete, and **§3.6** (per-task commit + `05_TASKS` write-back) done.
 
-**If not satisfied → do not** proceed to **§4.1+**; return to **Step 1** (missing §1.4) or **Step 3** (incomplete tasks).
+**If not satisfied → do not** proceed to **§4.1+**; return to **Step 3** to finish wave-end closure.
 
 ### 4.1 Update status
 
@@ -489,15 +483,18 @@ T{X.Y.Z}, T{X.Y.Z}, T{X.Y.Z}
 
 ### 4.2 Wave review
 
-Briefly report to user:
+Report using the **Wave completion template** (align with `AGENTS.md` / session log); **must include** the full **§3.4.5.1** minimal delivery index table (paste whole table—**do not** paste the full `code-reviewer` body here):
 
 ```markdown
-## Wave {N} Completed
+## 🌊 Wave {N} Completed
 
 **Completed**: T{X.Y.Z}, T{X.Y.Z}, ...
-**Verification Status**: All passed / Partially passed
-**Issues Found** (if any): ...
+**Verification status**: All passed / Partially passed
+**Code review (findings & fixes)**: Highest severity: none / Low / Medium / High / Critical; fixed this wave: …; open follow-ups: none / … (**review body pointer**: §3.4.5 output block heading or first line; if waived write `CODE_REVIEW_DISABLED_BY_USER`)
+**Issues found** (if any): ...
 **Blockers** (if any): ...
+
+(paste §3.4.5.1 “Wave {N} delivery index” table)
 ```
 
 ### 4.3 Git commit status update
@@ -524,7 +521,7 @@ chore(wave): settle wave {N} progress
 > - Hit manual verification and need user final confirmation
 > - `/change` assessment finds must upgrade to `/genesis`
 > - Other workflows require user to make new version-level decisions
-> - **§1.4 pre-wave `code-reviewer`** leaves **unresolved Critical / High** with no actionable fix path in-session per skill (route **`/change`** / **`/genesis`** or explicit user risk acceptance—**stop** if not explicitly accepted)
+> - **§3.4.5 wave-end `code-reviewer`** leaves **unresolved Critical / High** with no actionable fix path in-session per skill (route **`/change`** / **`/genesis`** or explicit user risk acceptance—**stop** if not explicitly accepted)
 >
 > Hitting any of these conditions, AUTO must immediately stop and wait for user approval.
 
@@ -551,10 +548,10 @@ chore(wave): settle wave {N} progress
 ---
 
 - All acceptance criteria of each task passed
-- All compliance checks of each task passed
-- **§1.4 / §3.4.6**: **§4.0** satisfied; §1.4 pre-wave review or legal waiver persisted; §3.4.6 handled per **Closure A/B** (A requires noted risk), or wave had no E2E/manual validation
+- **§3.4.5 / §3.4.5.1 / §3.4.6**: **§4.0** satisfied; wave-end `code-reviewer` or **`CODE_REVIEW_DISABLED_BY_USER`** persisted; §3.4.5.1 index complete; §3.4.6 handled per **Closure A/B** (A requires noted risk), or wave had no E2E/manual validation
+- **Step 4.2**: reported with **Wave completion template** (includes **Code review (findings & fixes)** + delivery index table)
 - All code committed to git with message including Task ID
-- `05_TASKS.md` checkboxes updated
+- `05A_TASKS.md` checkboxes updated
 - `AGENTS.md` current status updated
 - User confirmed wave completion, or **AUTO** settlement signature per rules
 

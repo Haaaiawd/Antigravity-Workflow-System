@@ -93,7 +93,7 @@ Scan the project to decide the starting point.
 
 ## Step 4: Blueprint
 
-**Goal**: Run `/blueprint`. Decompose architecture into executable `05_TASKS.md`.
+**Goal**: Run `/blueprint`. Decompose architecture into executable `05A_TASKS.md` and `05B_VERIFICATION_PLAN.md`.
 **Deliverables**: WBS task list + Sprint planning.
 
 ---

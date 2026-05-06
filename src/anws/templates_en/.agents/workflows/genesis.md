@@ -85,7 +85,7 @@ Transform the user's vague ideas into a **clear documentation foundation**, comp
   - **Case A (new project)**:
   Create directory structure: `.anws/v1/03_ADR` and `.anws/v1/04_SYSTEM_DESIGN`
     - **Case B (iterative update)**:
-    Create directory `.anws/v{N+1}` (e.g., v3), copy `.anws/v{N}/`* into the new directory, and clean old task files (e.g., `.anws/v{N}/05_TASKS.md`)
+    Create directory `.anws/v{N+1}` (e.g., v3), copy `.anws/v{N}/`* into the new directory, and clean old task files (e.g., `.anws/v{N}/05A_TASKS.md`, `.anws/v{N}/05B_VERIFICATION_PLAN.md`)
 4. **Initialize version file**:
   Create `.anws/v{N}/00_MANIFEST.md`:
 5. **Initialize changelog**:
@@ -300,7 +300,8 @@ Use `replace_file_content` or `multi_replace_file_content`:
 - **Architecture Overview**: `.anws/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 - **ADR**: See architecture decisions in `.anws/v{N}/03_ADR/` (single source of truth for cross-system decisions)
 - **Detailed Design**: To be updated after `/design-system` execution (will populate `.anws/v{N}/04_SYSTEM_DESIGN/`)
-- **Task List**: To be updated after `/blueprint` execution (will generate `.anws/v{N}/05_TASKS.md`)
+- **Execution Task List**: To be updated after `/blueprint` execution (will generate `.anws/v{N}/05A_TASKS.md`)
+- **Verification Plan**: To be updated after `/blueprint` execution (will generate `.anws/v{N}/05B_VERIFICATION_PLAN.md`)
 
 ### ADR  SYSTEM_DESIGN Relationship
 - **ADR** records cross-system decisions (e.g., tech stack, auth method)

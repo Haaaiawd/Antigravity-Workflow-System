@@ -20,11 +20,11 @@ You are **CHANGE MANAGER**.
 - **Faithful to Blueprint** — All edits stay within the requirement scope defined in `01_PRD.md`
 - **Signature mechanism** — Every write must show a plan first and obtain a signature before execution; continuous backflow from `/forge auto` uses `AUTO` as signature
 - **Traceability** — Record all changes in CHANGELOG
-- **Do not maintain completion status** — `/change` only edits task definitions; do not backfill `- [x]` in `05_TASKS.md`
+- **Do not maintain completion status** — `/change` only edits task definitions; do not backfill `- [x]` in `05A_TASKS.md`
 
 **Output Goal**:
 
-- Update `.anws/v{N}/05_TASKS.md`
+- Update `.anws/v{N}/05A_TASKS.md` and adjust related verification entries in `.anws/v{N}/05B_VERIFICATION_PLAN.md` when needed
 - Update `.anws/v{N}/06_CHANGELOG.md`
 
 ---
@@ -50,13 +50,13 @@ You are **CHANGE MANAGER**.
 > | Add a small number of necessary tasks for explicitly requested localized revisions                                          | Yes | |
 > | Update task definition fields without changing completion status                                                            | Yes | |
 > | Resequence tasks / Sprint/Wave ordering **without changing ADR premise**                                                    | Yes | |
-> | **Backfill `05_TASKS.md` checkboxes**                                                                                       | | Yes |
+> | **Backfill `05A_TASKS.md` checkboxes**                                                                                      | | Yes |
 > | **Add features the AI thinks are good**                                                                                     | | Yes |
 > | **Change [REQ-XXX] requirement references**                                                                                 | | Yes |
 > | **Change requirement goals, user-story set, or requirement boundary**                                                       | | Yes |
 > | **Change system boundary, cross-system architecture baseline, or key execution model**                                      | | Yes |
 > | **Overturn ADR core decision premise**                                                                                      | | Yes |
-> | **Invalidate current `05_TASKS.md` so the task tree must be rebuilt wholesale**                                             | | Yes |
+> | **Invalidate current `05A_TASKS.md` so the task tree must be rebuilt wholesale**                                            | | Yes |
 >
 >
 > **If any forbidden row applies → the current version cannot absorb the change; escalate to `/genesis`.**
@@ -103,7 +103,7 @@ You are **CHANGE MANAGER**.
     - **TARGET_DIR** = `.anws/v{N}`.
 3. **Required files**:
   - `{TARGET_DIR}/01_PRD.md` exists
-    - `{TARGET_DIR}/05_TASKS.md` exists
+    - `{TARGET_DIR}/05A_TASKS.md` exists
     - `{TARGET_DIR}/06_CHANGELOG.md` exists
 4. **If missing**: tell the user to run `/genesis` and `/blueprint` first.
 5. **Git branches**:
@@ -130,9 +130,9 @@ You are **CHANGE MANAGER**.
 | 5   | Affect interfaces across multiple systems?                                                   | Allowed only if premise still unchanged                              |
 | 6   | Need new external deps (npm/API/services)?                                                   | No—or small controlled adds in-version without premise change        |
 | 7   | User explicitly asked for a new version?                                                     | No                                                                   |
-| 8   | **Need a small number of new tasks in `05_TASKS.md` for this change?**                       | **Allowed only if tied to user wording or `/forge` backflow reason** |
+| 8   | **Need a small number of new tasks in `05A_TASKS.md` for this change?**                      | **Allowed only if tied to user wording or `/forge` backflow reason** |
 | 9   | **Add or change public contracts and need verification handoff?**                            | **Allowed—show impact scope explicitly**                             |
-| 10  | **Can current `05_TASKS.md` still absorb via local edits?**                                  | **Yes**                                                              |
+| 10  | **Can current `05A_TASKS.md` still absorb via local edits?**                                 | **Yes**                                                             |
 
 
 > [!IMPORTANT]
@@ -180,7 +180,8 @@ You are **CHANGE MANAGER**.
 > **Reuse existing tasks first.**
 > Add a small number of tightly related new tasks only when existing tasks cannot carry the request; do not jump to `/genesis` while ADRs and version goals still hold.
 
-1. **Read tasks**: `{TARGET_DIR}/05_TASKS.md`
+1. **Read tasks**: `{TARGET_DIR}/05A_TASKS.md`
+2. **Read verification plan**: `{TARGET_DIR}/05B_VERIFICATION_PLAN.md` (if exists)
 2. **Read PRD**: `{TARGET_DIR}/01_PRD.md` — confirm scope
 3. **Locate tasks**:
   - Find related tasks (e.g. `T2.1.3`)
@@ -212,7 +213,8 @@ You are **CHANGE MANAGER**.
     - Check whether tasks already own verification
     - If not, add verification tasks, acceptance criteria, or verification notes
 7. **What to edit** (per file):
-  - `05_TASKS.md`: description? acceptance? estimate? priority?
+  - `05A_TASKS.md`: description? acceptance? estimate? priority?
+  - `05B_VERIFICATION_PLAN.md`: verification ownership or evidence expectations impacted?
     - `04_SYSTEM_DESIGN/`: interfaces? parameters? fine detail?
     - `01_PRD` / `02_ARCHITECTURE_OVERVIEW` / `03_ADR`: naming sync? contract completion? clarification? test constraints?
     - **Verification handoff**: adjust validation type/instructions or add test tasks?
@@ -263,7 +265,7 @@ Sign:  Approve /  Reject /  Revise / AUTO
 ### Step 3.1: Execute (after signature)
 
 1. **Tasks**:
-  Use `replace_file_content` on `{TARGET_DIR}/05_TASKS.md`
+  Use `replace_file_content` on `{TARGET_DIR}/05A_TASKS.md` and update `{TARGET_DIR}/05B_VERIFICATION_PLAN.md` when verification ownership changes
   - Edit descriptions, acceptance, estimates, priority, blockers only
   - Controlled expansion: few new tasks tied to user wording
   - **Do not** flip `- [ ]`  `- [x]` in `/change`

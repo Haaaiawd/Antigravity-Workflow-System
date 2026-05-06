@@ -13,7 +13,7 @@
 
 1. **读取根目录的 AGENTS.md** → 获取项目地图
 2. **查看下方"当前状态"** → 找到最新架构版本
-3. **读取 `.anws/v{N}/05_TASKS.md`** → 了解当前待办
+3. **读取 `.anws/v{N}/05A_TASKS.md` 与 `05B_VERIFICATION_PLAN.md`** → 了解执行与验证待办
 4. **开始工作**
 
 ---
@@ -53,7 +53,7 @@
 | `/genesis`       | 新项目 / 重大重构           | PRD, Architecture, ADRs                      |
 | `/probe`         | 变更前 / 接手项目           | `.anws/v{N}/00_PROBE_REPORT.md`              |
 | `/design-system` | genesis 后            | 04_SYSTEM_DESIGN/*.md                        |
-| `/blueprint`     | genesis 后            | 05_TASKS.md + AGENTS.md 初始 Wave              |
+| `/blueprint`     | genesis 后            | 05A_TASKS.md + 05B_VERIFICATION_PLAN.md + AGENTS.md 初始 Wave |
 | `/change`        | 进入 forge 编码后的任务局部修订  | 更新 TASKS + SYSTEM_DESIGN (仅修改) + CHANGELOG   |
 | `/explore`       | 调研时                  | 探索报告                                         |
 | `/challenge`     | 决策前质疑                | 07_CHALLENGE_REPORT.md (含问题总览目录)             |
@@ -68,7 +68,7 @@
 
 1. **版本即法律**: 不"修补"架构文档，只"演进"。变更必须创建新版本。
 2. **显式上下文**: 决策写入 ADR，不留在"聊天记忆"里。
-3. **交叉验证**: 编码前对照 `05_TASKS.md`。我在做计划好的事吗？
+3. **交叉验证**: 编码前对照 `05A_TASKS.md` 与 `05B_VERIFICATION_PLAN.md`。我在做计划好的事吗？
 4. **美学**: 文档应该是美的。善用 Markdown 与清晰的层次结构。
 
 ---

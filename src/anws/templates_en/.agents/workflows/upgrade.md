@@ -83,7 +83,8 @@ Use the following classification rules:
    - `02_ARCHITECTURE_OVERVIEW.md`
    - `03_ADR/*`
    - `04_SYSTEM_DESIGN/*`
-   - `05_TASKS.md` (if exists)
+   - `05A_TASKS.md` (if exists)
+   - `05B_VERIFICATION_PLAN.md` (if exists)
 2. Build mapping from "framework changes → business document nodes"
 3. Identify impacts in these three categories:
    - **Path migration**: e.g. `.agent/` → `.agents/` or workflow directory location changes

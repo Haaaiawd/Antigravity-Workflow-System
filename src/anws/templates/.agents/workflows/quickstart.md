@@ -93,8 +93,8 @@
 
 ## Step 4: 蓝图 (Blueprint)
 
-**目标**: 运行 `/blueprint`。将架构拆解为可执行的 `05_TASKS.md`。
-**交付**: WBS 任务清单 + Sprint 划分。
+**目标**: 运行 `/blueprint`。将架构拆解为可执行的 `05A_TASKS.md` 与 `05B_VERIFICATION_PLAN.md`。
+**交付**: WBS 任务主清单 + 验证计划 + Sprint 划分。
 
 ---
 

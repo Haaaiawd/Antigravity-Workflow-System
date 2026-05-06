@@ -1,629 +1,639 @@
 ---
 name: task-planner
-description: Use WBS method to decompose system design documents into hierarchical tasks. Supports dependency analysis, traceability chain, acceptance criteria.
+description: Use WBS to decompose system design into an execution list (05A_TASKS.md) and a verification plan (05B_VERIFICATION_PLAN.md), with dependency analysis, traceability, and evidence ownership.
+---
+
+# Task Planner
+
+You are the task decomposition and verification orchestration skill.
+
+Outputs:
+- `.anws/v{N}/05A_TASKS.md` (execution list)
+- `.anws/v{N}/05B_VERIFICATION_PLAN.md` (verification plan)
+
+---
+
+## Fast Flow
+
+1. Read `01_PRD.md` and `02_ARCHITECTURE_OVERVIEW.md`.
+2. Read `03_ADR/` and `04_SYSTEM_DESIGN/` when available.
+3. If ADR provides testing strategy or quality gates, follow them first.
+4. Extract public contracts (HTTP API, CLI, config, format, error semantics, persistence, cross-system interfaces).
+5. Generate WBS tasks to 05A.
+6. Generate verification anchors and evidence ownership to 05B.
+
+---
+
+## Split Responsibilities
+
+### 05A_TASKS.md (Execution Track)
+
+- WBS task definitions
+- dependencies and estimates
+- sprint roadmap
+- INT milestone tasks
+- progress checkboxes
+- User Story Overlay
+
+### 05B_VERIFICATION_PLAN.md (Verification Track)
+
+- verification layering strategy
+- risk-category coverage rules
+- Task-by-Task verification plan
+- Contract Coverage Overlay
+- Testing Coverage Overlay
+- Verification Traceability Matrix
+
+> [!IMPORTANT]
+> The following three sections are mandatory in 05B and must not be removed:
+> - Contract Coverage Overlay
+> - Testing Coverage Overlay
+> - Verification Traceability Matrix
+
+---
+
+## 05A Task Structure
+
+```markdown
+- [ ] **T{System}.{Phase}.{Seq}** [REQ-XXX]: Task title
+  - **Description**: what to build (not how)
+  - **Input**: design references + predecessor outputs (must include at least one design document reference)
+  - **Output**: files/components/interfaces/artifacts
+  - **Contract Ownership**: public contract implemented or verified by this task, or "None"
+  - **Reference**: ADR/System Design section if applicable
+  - **Acceptance Criteria**:
+    - Given ...
+    - When ...
+    - Then ...
+    - (Clear Done When is allowed only for pure technical foundation tasks)
+  - **Verification Type**: Unit Test | API Interface Functional Test | Integration Test | E2E Test | Smoke Test | Regression Test | Manual Verification | Build Check | Lint Check
+  - **Verification Summary**: verification scope and boundary only
+  - **Verification Reference**: `05B_VERIFICATION_PLAN.md#t-x-y-z`
+  - **Evidence Output**: `tests/...`, `reports/...`, `screenshots/...`, `logs/...`
+  - **Estimate**: Xh
+  - **Dependencies**: T{A}.{B}.{C}
+  - **Priority**: P0 | P1 | P2
+```
+
+---
+
+## 05B Verification Structure
+
+### Task-by-Task Entry
+
+```markdown
+### T{X}.{Y}.{Z}
+- Related Requirement:
+- Related Contract:
+- Risk Category:
+- Unit Test Coverage:
+- API Interface Functional Test Coverage:
+- Integration/E2E/Smoke Coverage:
+- Preconditions/Test Data:
+- Assertions:
+- Evidence:
+```
+
+### Traceability Matrix
+
+```markdown
+## Verification Traceability Matrix
+| REQ/Contract | Task | Verification | Test Material | Evidence | Status |
+|---|---|---|---|---|---|
+```
+
+---
+
+## Verification Type Selection Logic
+
+Follow the "lightest sufficient proof" principle:
+
+1. Local logic / pure algorithm / state transition / exception handling -> Unit Test
+2. HTTP API / CLI API / permission boundary / error semantics / data-changing endpoint -> API Interface Functional Test
+3. Cross-module or cross-service collaboration -> Integration Test
+4. Critical end-user journey -> E2E Test or Manual Verification
+5. Sprint milestone gate -> Smoke Test (prefer binding to `INT-S{N}`)
+6. Changes that may impact existing critical behavior -> Regression Test
+7. Config or scaffolding tasks -> Build Check / Lint Check / Manual Verification
+
+Selection rules:
+- do not upgrade to E2E by default
+- for public API changes, verification must include normal and representative invalid request paths
+- data-changing endpoints must include before/after assertions
+- auth/role/permission changes must include permission-denied scenarios
+
+### E2E Execution Boundary (Hard Rule)
+
+- `task-planner` only records E2E trigger assumptions, coverage scope, and expected evidence in `05A_TASKS.md` / `05B_VERIFICATION_PLAN.md`
+- planning phase must not call or execute `e2e-testing-guide`
+- actual E2E guide generation and real-browser validation are executed by `/forge` when triggered by tasks
+
+---
+
+## Hard Testing Constraints
+
+> [!IMPORTANT]
+> Project acceptance must include both Unit Tests and API Interface Functional Tests.
+
+### Unit Test Responsibilities
+
+- normal, boundary, and invalid input
+- critical state transitions (create, execute, fail, retry style)
+- exception handling (null, out-of-range, invalid state) with stable behavior
+
+### API Interface Functional Test Responsibilities
+
+- normal request path
+- missing parameter, malformed parameter, and permission-denied scenarios
+- expected error code and error message semantics
+- before/after assertions for data-changing interfaces
+
+### Anti-Bloat Policy
+
+- close risk categories, do not maximize raw test counts
+- prefer equivalence classes, boundary values, representative invalid samples, parameterized or table-driven tests
+- avoid full Cartesian-product enumeration
+- keep E2E focused on key user chains
+
+---
+
+## Contract Coverage Rules
+
+Public contract coverage is mandatory whenever tasks create or modify externally observable behavior.
+
+Rules:
+- each public contract needs at least one implementation owner task
+- each high-risk public contract needs at least one verification owner point
+- implementation-only is not contract closure
+- foundational low-dependency logic defaults to Unit Test ownership
+- external interfaces (HTTP API / CLI API) default to explicit API Interface Functional Test evaluation
+- error semantics and before/after data state are observable contract parts and cannot be skipped
+
+---
+
+## Output Quality Checklist
+
+- both 05A and 05B generated
+- every 05A task includes `Verification Reference` and `Evidence Output`
+- 05B includes Task-by-Task plan and traceability matrix
+- User Story Overlay is in 05A
+- Contract Coverage Overlay, Testing Coverage Overlay, and Verification Traceability Matrix are in 05B
+- smoke checks are centered on `INT-S{N}`
+- no E2E abuse pattern
+---
+name: task-planner
+description: Use WBS to decompose system design into executable tasks with traceability and verification ownership.
 ---
 
 # Task Planning Master Manual
 
-> "A task that can't be verified is a task that never finishes.  
-> A task without context is a task that's never understood."
+## Principles
 
-You are **Task Planning Master**, responsible for converting system design into **executable hierarchical task lists**.
+- Decompose by System -> Phase -> Task
+- Keep tasks practical (usually 2h-2d)
+- Keep acceptance criteria explicit
+- Keep verification type explicit
+- Keep requirement and contract traceability explicit
+
+## Verification types
+
+- Unit Test
+- API Interface Functional Test
+- Integration Test
+- E2E Test
+- Smoke Test
+- Regression Test
+- Manual Verification
+- Build Check
+- Lint Check
+
+## Verification selection
+
+1. Pure/local logic, state transitions, exception handling -> Unit Test
+2. Public API/CLI contracts and error semantics -> API Interface Functional Test
+3. Cross-module/database/service collaboration -> Integration Test
+4. End-user critical journey -> E2E or Manual
+5. Milestone gate -> Smoke
+6. Existing critical capability risk -> Regression
+
+## Testing Standard method
+
+### Unit Test coverage
+- normal/boundary/invalid input
+- state transitions
+- exception handling stability
+
+### API Interface Functional Test coverage
+- normal request
+- missing/malformed/permission-denied request
+- expected error code/message
+- before/after assertions for data-changing endpoints
+
+### Anti-bloat rule
+- use representative risk-based cases
+- avoid Cartesian-product expansion
+
+## Task output checklist
+
+- unique task IDs
+- explicit dependencies
+- design references in each task input
+- acceptance criteria in each task
+- verification type and notes in each task
+- public contract implementation + verification ownership
+- 3.3.4 responsibilities mapped (unit + API functional)
+---
+name: task-planner
+description: Use WBS to decompose system design into executable tasks with dependencies, traceability, acceptance criteria, and verification ownership.
+---
+
+# Task Planning Master Manual
+
+You are the **Task Planning Master**.
+
+Your goal is to convert design docs into a practical two-track plan (`05A_TASKS.md` + `05B_VERIFICATION_PLAN.md`) that is executable, verifiable, and traceable.
 
 ---
 
 ## Quick Start
 
-1. **Locate version**: Scan `.anws/` to find latest `v{N}`
-2. **Load required documents**: Read Architecture Overview + PRD
-3. **Load optional documents**: Scan ADR directory + System Design directory
-4. **Missing check**: Error exit if required documents missing
-5. **Load test constraints**: If Workflow or ADR provides test strategy, quality gates, Sprint boundaries, must include in task generation input
-6. **Execute decomposition**: Decompose tasks by WBS method
-7. **Apply verification type selection logic**: Assign "lightest but sufficient" verification type to each task, avoid default upgrade to E2E
-8. **Output**: Save to `.anws/v{N}/05_TASKS.md`
+1. Locate latest `.anws/v{N}`
+2. Read required docs: PRD + Architecture
+3. Read optional docs: ADR + System Design
+4. Load testing constraints from workflow/ADR (including Testing Standard 3.3.4)
+5. Decompose tasks with WBS
+6. Assign lightest sufficient verification types
+7. Output to `.anws/v{N}/05A_TASKS.md` and `.anws/v{N}/05B_VERIFICATION_PLAN.md`
+
+---
+
+## Core Principles
+
+- WBS hierarchy: System -> Phase -> Task
+- Task size target: 2h-2d for most tasks
+- Verifiable acceptance criteria
+- Requirement traceability (`[REQ-XXX]`)
+- Public contract ownership (implementation + verification)
+
+### Testing principles
+
+- Prefer the lightest verification type that can prove completion
+- Foundational logic defaults to unit tests
+- Smoke tests default to `INT-S{N}` or milestone checkpoints
+- Regression tests are targeted, not mandatory full-suite reruns
+- Public APIs must explicitly evaluate API Interface Functional Tests
+- 3.3.4 coverage closes risk categories, not test-count inflation
+
+---
+
+## Task Structure
+
+```markdown
+- [ ] **T{System}.{Phase}.{Seq}** [REQ-XXX]: Task title
+  - **Description**: what to build
+  - **Input**: design references + predecessor outputs
+  - **Output**: concrete deliverables
+  - **Contract ownership**: implemented/verified contract, or "None"
+  - **Reference**: ADR/System Design section
+  - **Acceptance Criteria**:
+    - Given ...
+    - When ...
+    - Then ...
+    - (Done When allowed only for pure technical foundation tasks)
+  - **Verification Type**: Unit Test | API Interface Functional Test | Integration Test | E2E Test | Smoke Test | Regression Test | Manual Verification | Build Check | Lint Check
+  - **Verification Notes**: how to verify and evidence expectations
+  - **Estimate**: Xh
+  - **Dependencies**: Task IDs
+  - **Priority**: P0/P1/P2
+```
+
+---
+
+## Verification Type Selection
+
+1. Local/pure logic, state transitions, exception handling -> Unit Test
+2. Public API/CLI contracts, permission boundaries, error semantics, data-changing endpoints -> API Interface Functional Test
+3. Cross-module/database/service collaboration -> Integration Test
+4. Key end-user journey -> E2E Test or Manual Verification
+5. Sprint milestone gate -> Smoke Test
+6. Existing critical capability risk -> Regression Test
+7. Infra/config/scaffolding -> Build/Lint/Manual checks
+
+---
+
+## Testing Standard 3.3.4 Methodology
+
+### Unit Test coverage
+
+- Normal input
+- Boundary input
+- Invalid input
+- Critical state transitions (create/execute/fail/retry style)
+- Exception handling (null/out-of-range/invalid-state)
+
+### API Interface Functional Test coverage
+
+- Normal request behavior
+- Missing parameter
+- Malformed parameter
+- Permission denied
+- Error code and error message semantics
+- Before/after state assertions for data-changing endpoints
+
+### Anti-bloat policy
+
+- Use equivalence classes, boundary values, representative negative cases
+- Prefer parameterized/table-driven patterns
+- Avoid full combinatorial Cartesian-product test generation
+
+---
+
+## Contract Risk Coverage
+
+When a task creates or changes public contracts, verification ownership is mandatory.
+
+Public contracts include:
+- operations
+- cross-system interfaces
+- HTTP APIs
+- CLI command/parameter semantics
+- config/file/state formats
+- error semantics
+- persistence structures
+
+---
+
+## Output Quality Checklist
+
+- Unique task IDs
+- Explicit dependencies
+- Design references in each task input
+- Acceptance criteria in each task
+- Verification type + notes in each task
+- Public contract implementation/verification ownership
+- 3.3.4 responsibilities mapped (unit + API functional)
+- No combinatorial test bloat pattern
+---
+name: task-planner
+description: Decompose system design documents into hierarchical WBS tasks with dependency analysis, traceability, acceptance criteria, and verification ownership.
+---
+
+# Task Planning Master Manual
+
+> "A task that cannot be verified is a task that never finishes.
+> A task without context is a task that is never understood."
+
+You are the **Task Planning Master**. Your job is to transform system design into an executable, hierarchical task list.
+
+---
+
+## Quick Start
+
+1. Locate the latest `.anws/v{N}` version
+2. Load required documents: Architecture Overview and PRD
+3. Load optional documents: ADRs and System Design
+4. Stop if required documents are missing
+5. Load testing constraints from workflows, ADRs, quality gates, sprint boundaries, and Testing Standard 3.3.4
+6. Decompose work with WBS
+7. Assign the lightest sufficient verification type to every task
+8. Save output to `.anws/v{N}/05A_TASKS.md` and `.anws/v{N}/05B_VERIFICATION_PLAN.md`
 
 ---
 
 ## Core Principles
 
 > [!IMPORTANT]
-> **Four Principles of Task Planning**:
-> 
-> 1. **WBS Hierarchical** - Work Breakdown Structure three-level organization
-> 2. **Atomic** - Each Task prioritized within 2h-2d
-> 3. **Verifiable** - Default use Given / When / Then; only pure technical base tasks allow clear Done When
-> 4. **Traceable** - Each Task associates with PRD requirement [REQ-XXX]
+> **Four task-planning principles**:
+>
+> 1. **Hierarchical WBS** - System -> Phase -> Task
+> 2. **Atomicity** - prefer tasks sized 2h-2d
+> 3. **Verifiability** - default to Given / When / Then; use clear Done When only for foundation tasks
+> 4. **Traceability** - map every task to PRD requirements like `[REQ-XXX]`
 
 > [!IMPORTANT]
-> **Additional Principles for Test Planning**:
-> - Prioritize choosing **lightest but sufficient** verification type
-> - If Workflow / ADR already declared test strategy, must prioritize following, do not self-change to heavier
-> - **Smoke test default only used for `INT-S{N}` or very few milestone tasks**
-> - **Regression test only generated when existing critical capabilities may be broken**, not default requirement for all tasks
-> - **Base layer, shared layer, pure logic layer default prioritize unit tests**, main branches, boundary cases and error paths should cover as much as possible
-> - **Public contracts must have handoff**: at least one implementation task + at least one verification handoff point
+> **Testing planning principles**:
+>
+> - Choose the **lightest sufficient** verification type
+> - If the workflow or ADR defines a testing strategy, follow it first
+> - Smoke tests default to `INT-S{N}` or rare milestone tasks
+> - Regression tests are targeted re-checks only when existing critical capabilities may be affected
+> - Foundational, shared, and pure logic defaults to unit tests, including main branches, boundary cases, and error paths
+> - Public contracts require ownership: at least one implementation task and at least one verification point
+> - Public API contracts must explicitly evaluate API interface functional tests: normal request, parameter error, permission denial, error code/message, and before/after state
+> - Testing Standard 3.3.4 closes risk categories: normal, boundary, invalid, state transitions, exception handling, and interface error semantics; do not create combinatorial test bloat
 
- **Wrong approach**:
-- Flat task list (no hierarchy)
-- Tasks too large (e.g., "implement entire backend")
-- Tasks too small (e.g., "write one line of code")
-- Missing acceptance criteria
-- Ignore dependencies
+Avoid:
 
- **Right approach**:
-- **Three-level hierarchy**: System → Phase → Task
-- **Reasonable granularity**: Each Task 2h-2d
-- **Clear acceptance**: Default Given / When / Then, use clear Done When when necessary
-- **Complete metadata**: ID, [REQ-XXX], description, input, output, acceptance, estimate, dependency, priority
+- flat task lists
+- oversized tasks such as "build the whole backend"
+- microscopic tasks such as "write one line"
+- missing acceptance criteria
+- ignored dependencies
+
+Prefer:
+
+- three levels: System -> Phase -> Task
+- task size around 2h-2d
+- clear acceptance criteria
+- complete metadata: ID, requirement, description, input, output, acceptance, verification, estimate, dependency, priority
 
 ---
 
-## WBS Method: Work Breakdown Structure
+## WBS Method
 
-### Level 1: System (System Level)
-**Group by system**, get system list from Architecture Overview.
+### Level 1: System
 
-**Example**:
+Group tasks by systems from the Architecture Overview.
+
 ```markdown
 ## System 1: Frontend UX System
 ## System 2: Backend API System
 ## System 3: Database System
 ```
 
-**Rules**:
-- Each system corresponds to a system in Architecture Overview
-- System order arranged by dependency (dependencies first)
+Rules:
+
+- each system maps to one Architecture Overview system
+- order systems by dependency direction, with dependencies earlier
 
 ---
 
-### Level 2: Phase (Phase Level)
-**Group by implementation phase within each system**.
+### Level 2: Phase
 
-**Standard Phases**:
-1. **Foundation** (Infrastructure) - Environment configuration, project initialization, dependency installation
-2. **Core** (Core Features) - Main business logic implementation
-3. **Integration** (Integration) - Cross-system integration, API connection
-4. **Polish** (Optimization) - Performance optimization, error handling, test improvement
+Group each system by implementation phase.
 
-**Example**:
-```markdown
-### Phase 1: Foundation (Infrastructure)
-### Phase 2: Core Components (Core Features)
-### Phase 3: Integration (Integration)
-### Phase 4: Polish (Optimization)
-```
+Standard phases:
 
-**Rules**:
-- Phases arranged in natural order (Foundation → Core → Integration → Polish)
-- Each phase has clear goal description
+1. **Foundation** - environment, project setup, dependencies
+2. **Core** - main business logic
+3. **Integration** - cross-system integration, API wiring
+4. **Polish** - performance, error handling, test hardening
 
 ---
 
-### Level 3: Task (Task Level)
-**Specific tasks within each phase**.
+### Level 3: Task
 
-> [!IMPORTANT]
-> **Each task's "Input" must reference design documents**, prohibited from fabricating.
->
-> Referenceable document types:
-> - `02_ARCHITECTURE_OVERVIEW.md` §Chapter - System boundaries, dependency relationships
-> - `01_PRD.md` - Requirement definitions, User Story
-> - `03_ADR/ADR-XXX.md` - Architecture decisions, technical constraints
-> - `04_SYSTEM_DESIGN/{system}.md` §Chapter - Interface contracts, data models
->
-> - Good: `04_SYSTEM_DESIGN/auth.md` §JWT signing
-> - Bad: "JWT related design" (no specific document reference)
+Every task must cite design context. Do not invent work from memory.
 
-**Task structure**:
+Allowed input references:
+
+- `02_ARCHITECTURE_OVERVIEW.md` section
+- `01_PRD.md`
+- `03_ADR/ADR-XXX.md`
+- `04_SYSTEM_DESIGN/{system}.md` section
+
+Task structure:
+
 ```markdown
-- [ ] **T{System}.{Phase}.{Seq}** [REQ-XXX]: Task description
-  - **Description**: Concise explanation of "what to do" (not "how to do")
-  - **Input**: Design document reference + prerequisite task output (must include at least one document reference)
-  - **Output**: What deliverables are produced
-  - **Contract Handoff**: Public contracts this task implements or verifies; if none write "none"
-  - ** Reference**: ADR-XXX or System Design chapter (if any)
-  - **Acceptance Criteria**: 
+- [ ] **T{System}.{Phase}.{Seq}** [REQ-XXX]: Task title
+  - **Description**: concise statement of what to do, not how to do it
+  - **Input**: design document reference + previous task outputs, with at least one document reference
+  - **Output**: deliverables
+  - **Contract ownership**: public contract implemented or verified by this task; write "None" if not applicable
+  - **Reference**: ADR-XXX or System Design section, if any
+  - **Acceptance Criteria**:
     - Given [precondition]
-    - When [action executed]
+    - When [action]
     - Then [expected result]
-    - (Only pure technical base tasks allow using clear Done When list)
-  - **Verification Type**: Unit test | Integration test | E2E test | Smoke test | Regression test | Manual verification | Compilation check | Lint check
-  - **Verification Description**: How to confirm task completion (check what, how to confirm)
-  - **Estimate**: Estimated hours (e.g., 2h, 6h, 1d, 2d)
-  - **Dependencies**: T{X}.{Y}.{Z} (dependent Task IDs)
+    - Use clear Done When items only for purely technical foundation tasks
+  - **Verification Type**: Unit Test | API Interface Functional Test | Integration Test | E2E Test | Smoke Test | Regression Test | Manual Verification | Build Check | Lint Check
+  - **Verification Notes**: how to confirm completion
+  - **Estimate**: 2h, 6h, 1d, 2d
+  - **Dependencies**: T{X}.{Y}.{Z}
   - **Priority**: P0 | P1 | P2
 ```
 
-**Example**:
-```markdown
-- [ ] **T1.1.1** [Base]: Setup Vite + React project
-  - **Description**: Initialize frontend project, configure Vite, React, TypeScript
-  - **Input**: PRD (React tech stack requirement)
-  - **Output**: Runnable Hello World application (`src/App.tsx`, `vite.config.ts`)
-  - **Acceptance Criteria**: 
-    - [ ] `npm run dev` starts normally
-    - [ ] Page displays "Hello World"
-    - [ ] TypeScript type check passes
-  - **Verification Type**: Compilation check
-  - **Estimate**: 2h
-  - **Dependencies**: None
-  - **Priority**: P0
-```
+---
 
-### Verification Type Selection Logic
+## Verification Type Selection
 
 > [!IMPORTANT]
-> **If Workflow does not give more specific constraints, decide by following default order:**
+> **If the workflow does not provide stricter constraints, decide in this order.**
 
-1. **Local logic / pure algorithm / data transformation** → Unit test
-2. **Cross-module / interface / database / multi-service collaboration** → Integration test
-3. **Direct end-user facing critical path** → E2E test or Manual verification
-4. **Sprint exit criteria / milestone gate** → Smoke test
-5. **Modification may affect completed critical capabilities** → Regression test
-6. **Configuration, scaffolding, infrastructure** → Compilation check / Lint check / Manual verification
+1. **Local logic / pure algorithms / data transforms / state transitions / exception handling** -> Unit Test
+2. **HTTP API / CLI API / public interface contract / permission boundary / error semantics / data-changing endpoint** -> API Interface Functional Test
+3. **Cross-module / database / multi-service collaboration** -> Integration Test
+4. **Critical user-facing path** -> E2E Test or Manual Verification
+5. **Sprint exit criteria / milestone gate** -> Smoke Test
+6. **Change may affect completed critical capability** -> Regression Test
+7. **Config, scaffolding, infrastructure** -> Build Check / Lint Check / Manual Verification
 
-**Selection details**:
-- Do not default to E2E test just because task "looks important"
-- If integration test sufficient to prove task completion, do not upgrade to E2E test
-- If only milestone readiness check, prioritize using few smoke tests, not creating large number of E2E tasks
-- If only verifying old capability not broken, prioritize reusing existing test set as regression test
+Selection details:
 
-### Contract Risk Coverage Rules
+- Do not choose E2E merely because a task feels important
+- If integration tests prove the requirement sufficiently, do not upgrade to E2E
+- If the task exposes or modifies a public API, do not hide API functional responsibility inside generic integration testing
+- Data-changing endpoints need before/after state or data assertions
+- Auth, role, or permission changes need permission-denied scenarios
+- Regression should reuse the smallest affected existing test set where possible
+
+---
+
+## Testing Standard 3.3.4 Methodology
 
 > [!IMPORTANT]
-> **If task output contains new public contracts or will modify existing public contracts, must assign explicit verification handoff.**
+> **3.3.4 requires a complete, executable, traceable testing plan. It does not require blindly increasing test count.**
 
-Public contracts at minimum include:
-- Operation contracts
-- Cross-system interfaces
-- HTTP API
-- CLI commands / parameter semantics
-- Configuration structure / file format / state format
-- Error semantics / return structure
-- Persistence structure
+Plan testing responsibilities by risk category.
+
+### Unit Test Responsibilities
+
+- **Core business calculation logic**: normal input, boundary input, invalid input
+- **Critical state transitions**: creation, execution, failure, retry, and similar lifecycle states
+- **Exception handling logic**: null values, out-of-range parameters, invalid states, correct error information, and stable behavior
+
+### API Interface Functional Test Responsibilities
+
+- **Normal requests**: core business APIs return correct responses for valid parameters
+- **Invalid requests**: missing parameters, malformed parameters, permission denial, expected error codes, and expected error messages
+- **Data changes**: create, update, delete, or equivalent endpoints verify system state or data results before and after the call
+
+### Test Bloat Control
+
+- Use equivalence classes, boundary values, representative invalid samples, parameterized tests, or table-driven tests
+- Do not generate Cartesian products across every field and every error condition
+- Unit tests handle fine-grained logic; API functional tests cover public contracts; E2E covers only key user flows
+
+---
+
+## Contract Risk Coverage
+
+> [!IMPORTANT]
+> **If a task creates or changes a public contract, assign explicit verification ownership.**
+
+Public contracts include:
+
+- operation contracts
+- cross-system interfaces
+- HTTP APIs
+- CLI commands and parameter semantics
+- config structures, file formats, and state formats
+- error semantics and return structures
+- persistence structures
 
 Rules:
-- Each public contract must have at least one implementation task handoff
-- Each high-risk public contract must have at least one verification handoff point
-- Do not consider only "implementation task has code changes" as contract closure
-- If contract belongs to base rule layer or low-dependency pure logic, should prioritize supplementing unit tests, not directly upgrade to E2E
 
-### Base Unit Test Priority Principle
+- every public contract has at least one implementation owner
+- every high-risk public contract has at least one verification owner
+- implementation alone does not close the contract
+- foundational rule contracts should prefer unit tests over E2E
+- HTTP APIs, CLI APIs, and other public interfaces should evaluate API Interface Functional Test ownership
+- error codes, error messages, permission-denied semantics, and before/after state are observable contracts and must not be skipped
 
-> [!IMPORTANT]
-> **For base logic like registry, manifest, parser, planner, schema, diff, merge, normalizer, selector, prioritize generating unit test tasks.**
+---
 
-- If these logic are infrastructure shared by multiple upper-layer processes, their unit tests default to mandatory, should not rely on high-level process tests for indirect coverage
-- If a Sprint adds multiple base logic points, prioritize generating corresponding unit test tasks in same Sprint or adjacent Sprint, do not drag all to closing period
-
-### Sprint and Smoke Test Binding Rules
+## Foundational Unit-Test Priority
 
 > [!IMPORTANT]
-> **Only when Workflow has provided Sprint roadmap / INT task semantics, should generate milestone-level smoke tests.**
+> **For registries, manifests, parsers, planners, schemas, diff/merge, normalizers, selectors, and similar foundational logic, prefer unit-test tasks.**
 
-- If upstream Workflow already defined `INT-S{N}`, bind smoke tests priority to these INT tasks
-- Do not generate smoke tests separately for each ordinary Level 3 development task
-- If no clear Sprint / milestone boundaries, prioritize fallback to unit test, integration test, manual verification, not indiscriminately creating smoke tasks
+- If shared by upper layers, unit tests are normally required
+- If a sprint adds several foundational logic points, add unit-test ownership in the same or adjacent sprint
 
-### Interface Traceability Rules
+---
+
+## Sprint and Smoke-Test Binding
 
 > [!IMPORTANT]
-> **Input/output between tasks must align.**
+> **Only generate milestone smoke tests when the workflow provides sprint roadmap or INT task semantics.**
+
+- If `INT-S{N}` exists, bind smoke checks there first
+- Do not generate smoke tests for every normal development task
+- Without clear sprint or milestone boundaries, prefer unit, API functional, integration, or manual verification instead of invented smoke tasks
+
+---
+
+## Interface Traceability
+
+> [!IMPORTANT]
+> **Task inputs and outputs must align.**
 >
-> If task B depends on task A, then B's "Input" must explicitly reference specific artifacts of A's "Output" (file paths, interface names, data formats).
->
-> - Good: B input = "`App.tsx` component produced by T1.1.1 + `vite.config.ts` configuration"
-> - Bad: B input = "frontend project"
+> If task B depends on task A, B's input must cite A's concrete output: file path, interface name, data format, or equivalent artifact.
 
----
+Good:
 
-## Task Metadata Completeness
-
-### Required Fields
-
-| Field | Format | Description | Example |
-|------|--------|-------------|---------|
-| **ID** | T{System}.{Phase}.{Seq} | Unique identifier | T1.2.3 |
-| **[REQ-XXX]** | [REQ-001] or [Base] | Associate PRD requirement or type | [REQ-001] |
-| **Description** | Concise verb phrase | "What to do", not "how to do" | Implement LoginForm component |
-| **Input** | Precondition list | What needed to start | PRD, design specs |
-| **Output** | Deliverable list | What produced | LoginForm.tsx |
-| **Acceptance Criteria** | [ ] list | Done When checklist | [ ] Component renders normally |
-| **Estimate** | h, d, w | Estimated hours | 4h, 2d, 1w |
-| **Dependencies** | Task ID list | Which Tasks depend on | T1.1.1, T2.1.2 |
-| **Priority** | P0, P1, P2 | Must/Should/Nice | P0 |
-
----
-
-### Optional Fields
-
-| Field | Description | Example |
-|------|-------------|---------|
-| **Owner** | Suggested owner | @frontend-dev |
-| **Risk** | Potential risk | Depends on external API, may be unstable |
-| **Notes** | Additional notes | Refer to System Design Chapter 5 |
-
----
-
-## Dependency Relationship Types
-
-### 1. Logical Dependency
-**Definition**: Technically required sequential order
-
-**Example**:
-```
-T3.1.1 (Database Schema) → T2.2.1 (Backend API implementation)
-T2.2.1 (Backend API implementation) → T1.2.1 (Frontend component consumes API)
+```text
+B input = T1.1.1 output `App.tsx` component and `vite.config.ts` configuration.
 ```
 
-**How to identify**: Ask "If A not completed, can B start?"
+Bad:
 
----
-
-### 2. Resource Dependency
-**Definition**: Dependency caused by shared resources
-
-**Example**:
-```
-T1.2.1 and T1.2.2 assigned to same developer
-→ Must execute serially (resource dependency)
-```
-
-**How to identify**: Ask "Can A and B be executed in parallel by different people?"
-
----
-
-### 3. Preference Dependency
-**Definition**: Order recommended by best practices (technically can be parallel)
-
-**Example**:
-```
-T1.2.1 (Frontend UI design) → T2.2.1 (Backend API implementation)
-Although can be parallel, better with UI design first
-```
-
-**How to identify**: Ask "Although can be parallel, is there recommended order?"
-
----
-
-## Task Decomposition Principles
-
-### Principle 1: 2h-2d Rule
-**Rule**: Single Task should prioritize within 2 hours to 2 days; over 2 days should continue decomposing.
-
-**Why?** 
-- Too large: Hard to estimate, risk uncontrollable
-- Too small: High management cost, fragmented
-
-**Check**:
-- Task estimate > 2 days → Continue decomposing
-- Task estimate < 2 hours → Consider merging
-
----
-
-### Principle 2: Single Deliverable
-**Rule**: Each Task should produce a verifiable deliverable.
-
-**Example**:
-- Good: "Implement LoginForm component" → Deliverable: LoginForm.tsx
-- Bad: "Do frontend" → Deliverable unclear
-
----
-
-### Principle 3: Git-Friendly
-**Rule**: Each Task should correspond to a reviewable PR.
-
-**Example**:
-- Good: Task completion = 1 PR (~200-500 lines code)
-- Bad: Task completion = 10 PRs
-
----
-
-### Principle 4: Verifiability
-**Rule**: Each Task must have clear, executable, observable acceptance criteria; default use Given / When / Then, pure technical base tasks can use clear Done When.
-
-**Example**:
-- Good: "Given valid input, When call interface, Then return 200 and structure matches contract"
-- Good: "[ ] Unit test passes (only for pure technical base tasks)"
-- Bad: "Done When: almost done"
-
----
-
-## Task Planning Rules
-
-### Rule 1: Complete Traceability Chain
-**Rule**: Each Task must associate with PRD requirement [REQ-XXX].
-
-**Why?** Ensure all implementations have requirement basis, avoid over-design.
-
-**Example**:
-```markdown
-- [ ] **T2.2.1** [REQ-001]: Implement POST /auth/login endpoint
-```
-
-**Check**:
-- Are all PRD requirements mapped to at least one Task?
-- Are all Tasks associated with PRD requirements?
-
----
-
-### Rule 2: Specific Acceptance Criteria
-**Rule**: Default use Given / When / Then; only when pure technical base tasks not suitable for GWT, fallback to clear Done When.
-
-**Good acceptance criteria**:
-- Given input valid, When call interface, Then return 200 and structure matches contract
-- Given invalid credential, When request login, Then return 401 and error semantics consistent
-- [ ] Unit test passes (only for pure technical base tasks)
-- [ ] Lint no errors (only for pure technical base tasks)
-
-**Bad acceptance criteria**:
-- [ ] Function normal (too vague)
-- [ ] Code written (cannot verify)
-
----
-
-### Rule 3: Dependency Visualization
-**Rule**: Must provide Mermaid dependency graph.
-
-**Example**:
-```mermaid
-graph TD
-    T1.1.1[Frontend project initialization] --> T1.2.1[Implement LoginForm]
-    T2.1.1[Backend project initialization] --> T2.2.1[Implement /auth/login]
-    T3.1.1[Database Schema] --> T2.2.1
-    T2.2.1 --> T1.2.1
-```
-
-**Why?** A picture worth a thousand words, help understand task order.
-
----
-
-### Rule 4: Conservative Estimation
-**Rule**: Estimation should be conservative, include test and documentation time.
-
-**Estimation formula**:
-```
-Total estimate = Development time × 1.5 + Test time + Documentation time
-```
-
-**Example**:
-- Development: 4h
-- Test: 1h
-- Documentation: 0.5h
-- **Total estimate**: 4 × 1.5 + 1 + 0.5 = 7.5h → Round up to **1d**
-
----
-
-## Toolbox
-
-> **Output path**: Task list should save to `.anws/v{N}/05_TASKS.md`, specific `v{N}` version specified by caller (blueprint workflow).
-
-### Tool 1: Tasks Template
-Organize tasks using WBS three-level hierarchy.
-
-**Template**:
-```markdown
-# Task List
-
-## Dependency Graph Overview
-[Mermaid dependency graph]
-
-## System 1: [System Name]
-
-### Phase 1: Foundation
-[Task list]
-
-### Phase 2: Core
-[Task list]
-
-...
+```text
+B input = frontend project.
 ```
 
 ---
 
-### Tool 2: Dependency Analysis Checklist
-After decomposing tasks, use this checklist to analyze dependencies:
+## Output Quality Checklist
 
-- [ ] Identify all logical dependencies (A must be before B)
-- [ ] Identify resource dependencies (tasks assigned to same person)
-- [ ] Identify preference dependencies (recommended order)
-- [ ] Find parallelizable tasks (mark [P])
-- [ ] Draw Mermaid dependency graph
-
----
-
-### Tool 3: Task Granularity Check Table
-
-| Check item | Standard | How to fix |
-|------------|----------|------------|
-| Estimate | 2h-2d | Too large → decompose, too small → merge |
-| Deliverable | Single clear | Multiple → split into multiple Tasks |
-| Acceptance criteria | 3-5 specific criteria | Vague → refine to testable conditions |
-| Dependencies | < 5 dependencies | Too many → reorganize Phase |
-
----
-
-## Sprint Exit Criteria and Integration Verification Tasks
-
-### Sprint Exit Criteria
-
-> [!IMPORTANT]
-> **Each Sprint/milestone must have clear exit criteria.**
->
-> Exit criteria define "what counts as done", not vague "all tasks checked", but **demonstrable, verifiable specific state**.
-
-**Sprint roadmap format**:
-```markdown
-| Sprint | Code | Core Tasks | Exit Criteria | Estimate |
-|--------|------|------------|---------------|----------|
-| S1 | Hello World | Infrastructure + Data | headless run 2 countries 5 rounds + basic rendering visible | 3-4d |
-| S2 | Feature Shaping | Entity + Interaction | Complete functionality demonstrable + HUD displays resources | 5-6d |
-```
-
-**Exit criteria requirements**:
-- Must be objectively verifiable (screenshot/recording/log proof)
-- Must cover cross-system integration (not single component)
-- Describe user/developer observable behavior, not internal implementation details
-
-### Integration Verification Task (INT Task)
-
-Generate one **INT-S{N}** task at end of each Sprint, specifically verifying exit criteria:
-
-```markdown
-- [ ] **INT-S{N}** [MILESTONE]: S{N} Integration Verification — {Code}
-  - **Description**: Verify S{N} exit criteria
-  - **Input**: Output of all S{N} tasks
-  - **Output**: Integration verification report (pass/fail + Bug list)
-  - **Acceptance Criteria**:
-    - Given S{N} all tasks completed
-    - When execute checks in exit criteria one by one
-    - Then all pass → Sprint complete; has failures → record Bugs
-  - **Verification Description**: Execute exit criteria one by one, screenshot/recording/log confirm
-  - **Estimate**: 2-4h
-  - **Dependencies**: S{N} last task
-```
-
-INT task is the "closing task" of that Sprint. **Sprint not passing INT task must not be marked as complete.**
-
----
-
-## Common Scenarios and Patterns
-
-### Scenario 1: New Feature Development
-**Characteristics**: Implement new User Story
-
-**Decomposition pattern**:
-```
-Phase 1: Data Layer (Database)
-  - T3.1.1: Design Schema
-  - T3.1.2: Create Migration
-
-Phase 2: Business Layer (Backend)
-  - T2.2.1: Implement API endpoint
-  - T2.2.2: Unit test
-
-Phase 3: Presentation Layer (Frontend)
-  - T1.3.1: Implement UI component
-  - T1.3.2: Integrate API
-
-Phase 4: Verification
-  - T99.1: E2E test
-```
-
----
-
-### Scenario 2: Performance Optimization
-**Characteristics**: Optimize performance of existing features
-
-**Decomposition pattern**:
-```
-Phase 1: Analysis (Profiling)
-  - T1.1: Performance baseline test
-  - T1.2: Identify bottlenecks
-
-Phase 2: Optimization
-  - T2.1: Add cache
-  - T2.2: Optimize database queries
-
-Phase 3: Verification
-  - T3.1: Performance comparison test
-```
-
----
-
-### Scenario 3: Bug Fix
-**Characteristics**: Fix known defects
-
-**Decomposition pattern**:
-```
-Phase 1: Reproduction
-  - T1.1: Write reproduction steps
-  - T1.2: Create failing test case
-
-Phase 2: Fix
-  - T2.1: Implement fix
-  - T2.2: Test case passes
-
-Phase 3: Regression Test
-  - T3.1: Ensure no new Bugs introduced
-```
-
----
-
-## Quality Checklist
-
-After completing task decomposition, use this checklist for self-check:
-
-### Structural Completeness
-- [ ] Use WBS three-level hierarchy (System → Phase → Task)
-- [ ] Each System has clear Phase division
-- [ ] Each Task has complete metadata
-
-### Task Quality
-- [ ] Each Task estimate 2h-2d
-- [ ] Each Task has 3-5 acceptance criteria
-- [ ] Each Task associates with PRD requirement [REQ-XXX]
-- [ ] Each Task description clear ("what to do")
-
-### Dependency Relationships
-- [ ] Provide Mermaid dependency graph
-- [ ] Mark logical dependencies, resource dependencies, preference dependencies
-- [ ] No circular dependencies
-- [ ] Identify parallelizable tasks
-
-### Traceability Chain
-- [ ] All PRD requirements mapped to at least one Task
-- [ ] All Tasks associate with PRD requirements or mark as [Base]
-- [ ] Cross-system integration tasks identified
-
-### User Story Coverage
-- [ ] Each US-XXX has sufficient tasks covering all involved systems
-- [ ] Each US's task chain can form independently verifiable closed loop
-- [ ] High priority US (P0) task distribution in earlier Sprints
-
----
-
-## Quick Start Example
-
-**Task**: Decompose tasks for "user login" feature
-
-**Step 1: Determine involved systems**
-- Frontend System, Backend API System, Database System
-
-**Step 2: Organize by Phase**
-```
-Database System:
-  Phase 1: Foundation
-    - T3.1.1: Create users table Schema
-
-Backend API System:
-  Phase 2: Core
-    - T2.2.1: Implement POST /auth/login
-    - T2.2.2: Unit test
-
-Frontend System:
-  Phase 2: Core
-    - T1.2.1: Implement LoginForm component
-    - T1.2.2: Integrate /auth/login API
-```
-
-**Step 3: Analyze dependencies**
-```
-T3.1.1 → T2.2.1 → T1.2.1 (logical dependency)
-```
-
-**Step 4: Define acceptance criteria**
-```
-T2.2.1 acceptance:
-  - [ ] API returns JWT Token
-  - [ ] Unit test passes
-  - [ ] Postman test successful
-```
-
----
-
-**Remember**: Good task decomposition is balancing art.  
-Don't over-decompose (high management cost), don't over-aggregate (uncontrollable risk).
-
-Happy Planning! 
+- all tasks have unique IDs
+- every task cites at least one design document input
+- every task has acceptance criteria
+- every task has a verification type and verification notes
+- public contracts have implementation and verification ownership
+- foundational logic has unit-test ownership when needed
+- public APIs have API Interface Functional Test ownership when needed
+- Testing Standard 3.3.4 responsibilities are closed by risk category
+- test plans avoid combinatorial test bloat
+- dependencies are explicit
+- estimates are realistic

@@ -40,11 +40,11 @@ description: 当用户在 skills-only 环境中需要判断应该从哪个 anws 
 - `references/design-system.md`
   - 用途：为单个系统补详细设计文档
 - `references/blueprint.md`
-  - 用途：将架构设计拆成可执行的 `05_TASKS.md`
+  - 用途：将架构设计拆成可执行的 `05A_TASKS.md`（任务）与 `05B_VERIFICATION_PLAN.md`（验证）
 - `references/challenge.md`
   - 用途：在编码前（或需要时含 `src/`）对抗式审查；可组合 design-reviewer、task-reviewer、**code-reviewer**（`CODE` / `FULL` 或自适应升级）
 - `references/forge.md`
-  - 用途：按 `05_TASKS.md` 执行编码；在验证与提交之间调用 **code-reviewer**（静态忠实度）及按需 **`e2e-testing-guide`**（浏览器/E2E 指南或实测）
+  - 用途：按 `05A_TASKS.md` 执行编码，并读取 `05B_VERIFICATION_PLAN.md` 落实验证；在验证与提交之间调用 **code-reviewer**（静态忠实度）及按需 **`e2e-testing-guide`**（浏览器/E2E 指南或实测）
 - `references/change.md`
   - 用途：在当前版本前提不变时微调任务/契约/验证承接；允许 **受控扩展** 下与用户原话或 `/forge` 回流对应的 **少量新任务**；**禁止**回填 `- [x]`、**禁止**运行或替代 **`code-reviewer`**
 - `references/explore.md`
@@ -68,7 +68,7 @@ description: 当用户在 skills-only 环境中需要判断应该从哪个 anws 
 ### Route 2: 请求是“开始编码 / 继续实现 / 做当前波次”
 
 1. 读取 `references/forge.md`
-2. 检查 `.anws/v{N}/05_TASKS.md` 是否存在且任务已定义
+2. 检查 `.anws/v{N}/05A_TASKS.md` 与 `.anws/v{N}/05B_VERIFICATION_PLAN.md` 是否存在且已定义
 3. 若缺任务清单，不得直接实现，先回到 `blueprint` 或 `genesis`
 4. 若任务含 **E2E / 浏览器手动验证**：在执行路径上读取 **`e2e-testing-guide`** skill（同目录 `skills/e2e-testing-guide/SKILL.md`）；投影环境下路径以目标 IDE 的 `skills/` 为准
 5. 在提交前需要静态契约核对时：读取 **`code-reviewer`** skill。**若宿主支持子代理**（如 Task、并行子会话等）→ **优先委派子代理**按该 skill 专职执行（隔离上下文，输出结构以 skill 为准）。**若无子代理能力** → 由**当前会话**按同一 skill 完整执行（检查清单、证据与输出要求不得缩水）。

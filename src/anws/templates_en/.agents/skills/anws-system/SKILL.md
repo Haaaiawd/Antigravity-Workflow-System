@@ -40,11 +40,11 @@ Use this skill when any of the following applies:
 - `references/design-system.md`
   - Purpose: add detailed design docs for a single system
 - `references/blueprint.md`
-  - Purpose: decompose architecture design into executable `05_TASKS.md`
+  - Purpose: decompose architecture design into executable `05A_TASKS.md` and `05B_VERIFICATION_PLAN.md`
 - `references/challenge.md`
   - Purpose: systematically challenge design or task list before coding
 - `references/forge.md`
-  - Purpose: execute coding tasks according to `05_TASKS.md`, and maintain Wave progress
+  - Purpose: execute coding tasks according to `05A_TASKS.md` and verification commitments in `05B_VERIFICATION_PLAN.md`, and maintain Wave progress
 - `references/change.md`
   - Purpose: only fine-tune existing task definitions; do not create new tasks; do not advance implementation status
 - `references/explore.md`
@@ -68,7 +68,7 @@ If the user does not know where to start, or you are unsure about the current st
 ### Route 2: Request is "start coding / continue implementation / do current wave"
 
 1. Read `references/forge.md`
-2. Check whether `.anws/v{N}/05_TASKS.md` exists and tasks are defined
+2. Check whether `.anws/v{N}/05A_TASKS.md` and `.anws/v{N}/05B_VERIFICATION_PLAN.md` exist and are defined
 3. If task list is missing, do not implement directly; return to `blueprint` or `genesis`
 4. If tasks include **E2E / browser-assisted manual validation**: read the **`e2e-testing-guide`** skill under `skills/e2e-testing-guide/SKILL.md` (paths follow the target IDE projection).
 5. Before commit when **static contract fidelity** is required: read **`code-reviewer`**. **If the host supports subagents** (Task, parallel agents, etc.), **prefer delegating** that skill to a subagent (same checklist and outputs). **If not**, run **`code-reviewer` in this session**—requirements do not shrink.

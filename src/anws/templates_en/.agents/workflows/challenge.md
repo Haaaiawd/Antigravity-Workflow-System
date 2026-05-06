@@ -15,7 +15,8 @@ Systematically challenge every project decision and assumption, and **prove with
 The **specification contract** is jointly composed of the following sources:
 - **Business contract**: Business goals, main flows, constraints, and acceptance semantics in `01_PRD.md`
 - **Architecture contract**: System boundaries, interfaces, states, and technical decisions in `02_ARCHITECTURE_OVERVIEW.md`, `03_ADR/`, and `04_SYSTEM_DESIGN/`
-- **Task contract**: Commitments made by `05_TASKS.md` on implementation handoff, coverage scope, and validation methods
+- **Task contract**: Commitments made by `05A_TASKS.md` on implementation handoff and scope
+- **Verification contract**: Commitments made by `05B_VERIFICATION_PLAN.md` on validation methods and evidence
 - **Documentation contract**: Operational commitments made to reviewers and implementers by README / usage docs / validation paths (if obtainable within current review scope)
 - **Runtime contract**: Error semantics, audit boundaries, logging boundaries, idempotency, retries, timeouts, degradation, scheduling, and long-running commitments
 
@@ -105,7 +106,8 @@ The **specification contract** is jointly composed of the following sources:
     - Read `{TARGET_DIR}/02_ARCHITECTURE_OVERVIEW.md`
     - Read `{TARGET_DIR}/03_ADR/`
     - Read `{TARGET_DIR}/04_SYSTEM_DESIGN/` (if exists)
-    - Read `{TARGET_DIR}/05_TASKS.md` (if exists)
+    - Read `{TARGET_DIR}/05A_TASKS.md` (if exists)
+    - Read `{TARGET_DIR}/05B_VERIFICATION_PLAN.md` (if exists)
 
 3.  **Forced deep understanding** :
 
@@ -137,13 +139,15 @@ The **specification contract** is jointly composed of the following sources:
 1.  **Identify specification sources**:
     - `01_PRD.md` → business contract
     - `02_ARCHITECTURE_OVERVIEW.md` + `03_ADR/` + `04_SYSTEM_DESIGN/` → architecture contract
-    - `05_TASKS.md` → task contract
+    - `05A_TASKS.md` → task contract
+    - `05B_VERIFICATION_PLAN.md` → verification contract
     - Readable README / validation docs / config docs within current review scope → documentation contract
 
 2.  **Build minimal semantic model** (for internal use; no need to copy as-is into final report):
     - **Specification source list**: Which files each contract category comes from
     - **Commitment list**: Source, target, and failure consequence of each key commitment
-    - **Task handoff mapping**: If `05_TASKS.md` exists, record which commitments are covered by tasks and which are not
+    - **Task handoff mapping**: If `05A_TASKS.md` exists, record which commitments are covered by tasks and which are not
+    - **Verification handoff mapping**: If `05B_VERIFICATION_PLAN.md` exists, record which commitments are covered by verification design and evidence ownership
 
 3.  **At least extract the following commitment types**:
     - **Outcome commitments**: What business outcomes the system must ultimately achieve
@@ -214,11 +218,11 @@ Infer mode from context signals:
 
 | Signal | Inferred Mode |
 | ------ | ------------- |
-| `05_TASKS.md` does not exist | `DESIGN` — design-only review |
+| `05A_TASKS.md` does not exist | `DESIGN` — design-only review |
 | User explicitly mentions task / task-list issues | `TASKS` |
 | User explicitly mentions implementation code / delivery acceptance / static code QA | `CODE` |
 | User explicitly asks for a "comprehensive review" or to "check everything" | `FULL` |
-| `05_TASKS.md` exists but the user gives no explicit direction | `DESIGN`, with **optional adaptive escalation** to task review and code review |
+| `05A_TASKS.md` exists but the user gives no explicit direction | `DESIGN`, with **optional adaptive escalation** to task review and code review |
 | Current round is a post-fix re-review and the previous round had task-class issues | `FULL` |
 
 **If mode is still unclear, ask the user directly**:
@@ -248,7 +252,7 @@ Follow the **`design-reviewer`** skill end-to-end (inputs, passes, outputs — a
 
 ## Step 3.5: Task Review
 
-**Trigger conditions** (execute if any condition is met; `05_TASKS.md` must exist):
+**Trigger conditions** (execute if any condition is met; `05A_TASKS.md` must exist):
 
 1. `REVIEW_MODE` = `TASKS` or `FULL`
 2. **Adaptive escalation**: `REVIEW_MODE` = `DESIGN`, and design-reviewer output signals task-coverage gaps (see skill / prior round).
@@ -414,7 +418,7 @@ Save report to `{TARGET_DIR}/07_CHALLENGE_REPORT.md`
 | ID | Category | Severity | Contract/Pass | Location | Finding | Impact | Recommendation |
 |----|------|--------|-----------|------|------|------|------|
 | CH-01 | Commitment distortion | Critical | Error commitment | PRD §X / ADR §Y | Default failure paths are not unified; contract is not closed | Client-side error handling forks | Unify error semantics and add validation task |
-| CH-02 | Task handoff | High | E1 | 05_TASKS.md §X | No corresponding task for P0 requirement | Core capability cannot be implemented | Add implementation and validation tasks |
+| CH-02 | Task handoff | High | E1 | 05A_TASKS.md §X | No corresponding task for P0 requirement | Core capability cannot be implemented | Add implementation and validation tasks |
 | CH-03 | Design closure | Medium | RS-5 / Code drift | 04_SYSTEM_DESIGN/... / src/... | Failure propagation path unspecified or implementation not aligned with design | Hard to recover from cascading failures | Add degradation and timeout strategies |
  
 > Keep only issues that truly affect judgment. Do not write low-value phrasing or vague concerns into the table.

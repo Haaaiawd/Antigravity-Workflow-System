@@ -13,7 +13,7 @@
 
 1. **读取根目录的 AGENTS.md** → 获取项目地图
 2. **查看下方"当前状态"** → 找到最新架构版本
-3. **读取 `.anws/v{N}/05_TASKS.md`** → 了解当前待办
+3. **读取 `.anws/v{N}/05A_TASKS.md` + `.anws/v{N}/05B_VERIFICATION_PLAN.md`** → 了解执行待办与验证承诺
 4. **开始工作**
 
 ---
@@ -53,8 +53,8 @@
 | `/genesis`       | 新项目 / 重大重构           | PRD, Architecture, ADRs                      |
 | `/probe`         | 变更前 / 接手项目           | `.anws/v{N}/00_PROBE_REPORT.md`              |
 | `/design-system` | genesis 后            | 04_SYSTEM_DESIGN/*.md                        |
-| `/blueprint`     | genesis 后            | 05_TASKS.md + AGENTS.md 初始 Wave              |
-| `/change`        | 微调已有任务               | 更新 TASKS + SYSTEM_DESIGN (仅修改) + CHANGELOG   |
+| `/blueprint`     | genesis 后            | 05A_TASKS.md + 05B_VERIFICATION_PLAN.md + AGENTS.md 初始 Wave |
+| `/change`        | 微调已有任务               | 更新 05A/05B + SYSTEM_DESIGN (仅修改) + CHANGELOG   |
 | `/explore`       | 调研时                  | 探索报告                                         |
 | `/challenge`     | 决策前质疑                | 07_CHALLENGE_REPORT.md (含问题总览目录)             |
 | `/forge`         | 编码执行                 | 代码 + 更新 AGENTS.md Wave 块                     |
@@ -68,7 +68,7 @@
 
 1. **版本即法律**: 不"修补"架构文档，只"演进"。变更必须创建新版本。
 2. **显式上下文**: 决策写入 ADR，不留在"聊天记忆"里。
-3. **交叉验证**: 编码前对照 `05_TASKS.md`。我在做计划好的事吗？
+3. **交叉验证**: 编码前对照 `05A_TASKS.md` 与 `05B_VERIFICATION_PLAN.md`。我在做计划好的事吗？验证承诺跟上了吗？
 4. **美学**: 文档应该是美的。善用 Markdown 和 Emoji。
 
 ---
@@ -80,7 +80,8 @@
 > **注意**: 这是项目文件中的保留部分，由 `/genesis`、`/blueprint` 和 `/forge` 自动维护。
 
 - **最新架构版本**: `.anws/v7`
-- **活动任务清单**: `.anws/v7/05_TASKS.md`
+- **活动任务清单**: `.anws/v7/05A_TASKS.md`
+- **验证计划**: `.anws/v7/05B_VERIFICATION_PLAN.md`
 - **待办任务数**: 11
 - **最近一次更新**: `2026-04-01`
 
@@ -145,9 +146,10 @@ src/
 
 ### 当前任务状态
 
-- 活动任务清单: `.anws/v7/05_TASKS.md`
+- 活动任务清单: `.anws/v7/05A_TASKS.md`
+- 验证计划: `.anws/v7/05B_VERIFICATION_PLAN.md`
 - 当前波次: `Current Focus / v7 Consistency Closeout`
-- 下一执行入口: 继续按 `.anws/v7/05_TASKS.md` 收口剩余任务与里程碑验证
+- 下一执行入口: 继续按 `.anws/v7/05A_TASKS.md` 与 `.anws/v7/05B_VERIFICATION_PLAN.md` 收口剩余任务、验证与里程碑
 
 ---
 

@@ -15,7 +15,7 @@
 - **文档先行** - 代码是文档的实现，而非相反
 - **产品优先** - 先PRD后技术，先需求后方案
 - **系统拆解** - 识别独立系统，关注点分离
-- **Git 分支换轨** - `/genesis` 代表版本前提变化；旧 `feature/`* 应冻结，新版本应从最新 `main` 重新开一条新的 `feature/*`
+- **Git 分支换轨** - `/genesis` 代表版本前提变化；旧 `feature/`* 应冻结，新版本应从最新 `main` 重新开一条新的 `feature/`*
 
 **Output Goal (Versioned)**:
 
@@ -33,7 +33,7 @@
 
 > [!IMPORTANT]
 > **Git 换轨前置规则**：
-> 如果 `/genesis` 是从一个正在开发中的 `feature/`* 分支升级而来，先冻结旧分支；必要时创建 checkpoint / freeze commit。随后从最新 `main` 重新开一条新的 `feature/*` 承接新版本，不要把旧分支上的实现和新版本文档混在一起。
+> 如果 `/genesis` 是从一个正在开发中的 `feature/`* 分支升级而来，先冻结旧分支；必要时创建 checkpoint / freeze commit。随后从最新 `main` 重新开一条新的 `feature/`* 承接新版本，不要把旧分支上的实现和新版本文档混在一起。
 
 ### 自动检测流程
 
@@ -87,9 +87,9 @@
     - 如果存在 `v1`, `v2` -> 目标是 `v3`。
 3. **准备工作空间**:
   - **Case A (新项目)**:
-    创建目录结构: `.anws/v1/03_ADR` 和 `.anws/v1/04_SYSTEM_DESIGN`
+  创建目录结构: `.anws/v1/03_ADR` 和 `.anws/v1/04_SYSTEM_DESIGN`
     - **Case B (迭代更新)**:
-    创建目录 `.anws/v{N+1}` (例如 v3)，复制 `.anws/v{N}/*` 到新目录，清理旧任务文件 (如 `.anws/v{N}/05_TASKS.md`)
+    创建目录 `.anws/v{N+1}` (例如 v3)，复制 `.anws/v{N}/*` 到新目录，清理旧任务文件 (如 `.anws/v{N}/05A_TASKS.md` 与 `.anws/v{N}/05B_VERIFICATION_PLAN.md`)
 4. **初始化版本文件**:
   创建 `.anws/v{N}/00_MANIFEST.md`:
 5. **初始化变更日志**:
@@ -147,7 +147,7 @@
 > [!IMPORTANT]
 > **此步骤是条件触发，不是默认必跑。**
 >
-> **满足任一条件时，应插入 `/explore*`*:
+> **满足任一条件时，应插入 `/explore`**:
 >
 > - 技术方案存在明显不确定性，需要先调研再比较
 > - 决策涉及 UI 风格、交互模式、工作台信息架构等高专业度问题
@@ -304,7 +304,7 @@
 - **架构总览**: `.anws/v{N}/02_ARCHITECTURE_OVERVIEW.md`
 - **ADR**: 架构决策见 `.anws/v{N}/03_ADR/` (跨系统决策的唯一记录源)
 - **详细设计**: 待 `/design-system` 执行后更新 (将填充 `.anws/v{N}/04_SYSTEM_DESIGN/`)
-- **任务清单**: 待 `/blueprint` 执行后更新 (将生成 `.anws/v{N}/05_TASKS.md`)
+- **任务清单**: 待 `/blueprint` 执行后更新 (将生成 `.anws/v{N}/05A_TASKS.md` 与 `.anws/v{N}/05B_VERIFICATION_PLAN.md`)
 
 ### ADR  SYSTEM_DESIGN 关系
 - **ADR** 记录跨系统决策 (如技术栈、认证方式)
@@ -349,5 +349,3 @@
 ### 7.4 展示产出
 
 告知用户阶段完成，列出产出文档，并指引下一步行动（design-system 或 blueprint）。
-
-- 创建了 `.anws/v{N}/00_MANIFEST.md` -  创建了 `.anws/v{N}/06_CHANGELOG.md` -  生成了 PRD, Architecture Overview, ADRs -  更新了 AGENTS.md (当前状态、项目结构、导航指南) -  更新了 AGENTS.md AUTO:BEGIN 区块 (技术栈、系统边界、活跃 ADR) -  用户已在人类检查点确认

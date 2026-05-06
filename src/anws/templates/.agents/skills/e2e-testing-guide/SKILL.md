@@ -1,6 +1,7 @@
 ---
 
 ## name: e2e-testing-guide
+
 description: 规定如何撰写面向真人的 E2E / 手动验证《测试指南》及《E2E Verification》报告格式（PRD 对照、功能面、旅程与步骤）；不含实机浏览器编排——实机顺序由 `/forge` §3.4.6 写死。
 
 # E2E Testing Guide
@@ -24,7 +25,7 @@ description: 规定如何撰写面向真人的 E2E / 手动验证《测试指南
 
 ## 触发条件
 
-- `05_TASKS.md` 含 **E2E测试** 或 **手动验证**；或改动影响页面/导航/表单/登录等需真机感受的路径。
+- `05A_TASKS.md` 含 **E2E测试** 或 **手动验证**，或 `05B_VERIFICATION_PLAN.md` 要求实机验证；或改动影响页面/导航/表单/登录等需真机感受的路径。
 - 用户要求「写测试指南」「E2E 报告」「浏览器验证清单」等。
 
 ---
@@ -43,7 +44,7 @@ description: 规定如何撰写面向真人的 E2E / 手动验证《测试指南
 
 ### 1. 读取上下文
 
-任务与 `05_TASKS.md`、`01_PRD.md`（或 `**输入`** 指向的需求）、相关路由/页面说明、启动方式、账号与角色；缺 URL/账号等写入 **Blockers**。
+任务与 `05A_TASKS.md`、`05B_VERIFICATION_PLAN.md`、`01_PRD.md`（或 `**输入`** 指向的需求）、相关路由/页面说明、启动方式、账号与角色；缺 URL/账号等写入 **Blockers**。
 
 ### 2. PRD 对照表（RTM）
 
@@ -78,8 +79,6 @@ description: 规定如何撰写面向真人的 E2E / 手动验证《测试指南
 ## 输出格式（Required output）
 
 以下 Markdown **原样作为报告骨架**；表头与章节名不要随意删。撰写时假定执行者是 **第一次打开产品的真人**，Surface / Journey / Step 须能体现 **「像人类那样」** 的探索顺序（见上文必遵节）。
-
-
 
 ```markdown
 ## E2E Verification

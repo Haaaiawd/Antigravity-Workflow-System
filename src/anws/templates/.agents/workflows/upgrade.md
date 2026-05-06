@@ -83,7 +83,7 @@ description: "在执行 anws update 后，读取 .anws/changelog/vX.Y.Z.md，判
    - `02_ARCHITECTURE_OVERVIEW.md`
    - `03_ADR/*`
    - `04_SYSTEM_DESIGN/*`
-   - `05_TASKS.md`（若存在）
+   - `05A_TASKS.md` 与 `05B_VERIFICATION_PLAN.md`（若存在）
 2. 建立“框架变更 → 业务文档节点”的映射
 3. 识别以下三类影响：
    - **路径迁移**：如 `.agent/` → `.agents/` 或工作流目录位置变化
@@ -180,13 +180,3 @@ description: "在执行 anws update 后，读取 .anws/changelog/vX.Y.Z.md，判
 - 是否存在 AI 推断填充风险
 - 下一步必须读取的工作流文件
 
----
-
-<completion_criteria>
-- 已读取最新 `.anws/changelog/vX.Y.Z.md`
-- 已完成升级定级
-- 已输出推荐路由 (`/change` / `/genesis`)
-- 已展示升级计划并获得用户批准
-- 已在执行前切换去读取目标工作流
-- 后续写操作由目标工作流规范接管
-</completion_criteria>

@@ -13,7 +13,7 @@
 
 1. **Read the root `AGENTS.md`** → get the project map
 2. **Check "Current status" below** → find the latest architecture version
-3. **Read `.anws/v{N}/05_TASKS.md`** → understand current backlog
+3. **Read `.anws/v{N}/05A_TASKS.md` and `.anws/v{N}/05B_VERIFICATION_PLAN.md`** → understand current backlog and verification commitments
 4. **Start working**
 
 ---
@@ -53,7 +53,7 @@ How this project is organized:
 | `/genesis`       | New project / major refactor                     | PRD, Architecture, ADRs                                  |
 | `/probe`         | Before changes / onboarding an existing codebase | `.anws/v{N}/00_PROBE_REPORT.md`                          |
 | `/design-system` | After genesis                                    | `04_SYSTEM_DESIGN/*.md`                                  |
-| `/blueprint`     | After genesis                                    | `05_TASKS.md` + initial Wave in `AGENTS.md`              |
+| `/blueprint`     | After genesis                                    | `05A_TASKS.md` + `05B_VERIFICATION_PLAN.md` + initial Wave in `AGENTS.md` |
 | `/change`        | Local task tweaks after forging                  | Updates TASKS + SYSTEM_DESIGN (edits only) + CHANGELOG   |
 | `/explore`       | Research / investigation                         | Exploration report                                       |
 | `/challenge`     | Challenge decisions before commitment            | `07_CHALLENGE_REPORT.md` (with issue overview)           |
@@ -68,7 +68,7 @@ How this project is organized:
 
 1. **Version is law**: Do not silently “patch” architecture docs—evolve them. Meaningful changes create a new version.
 2. **Explicit context**: Record decisions in ADRs, not only in chat memory.
-3. **Cross-check**: Before coding, check `05_TASKS.md`. Am I doing planned work?
+3. **Cross-check**: Before coding, check `05A_TASKS.md` and `05B_VERIFICATION_PLAN.md`. Am I doing planned work and honoring verification commitments?
 4. **Aesthetics**: Docs should read well—use Markdown with clear structure and hierarchy.
 
 ---

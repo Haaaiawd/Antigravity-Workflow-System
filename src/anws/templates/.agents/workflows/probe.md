@@ -25,7 +25,6 @@
 
 **Output Goal**: `.anws/v{N}/00_PROBE_REPORT.md`
 
-
 ---
 
 ## CRITICAL 强约束：双级别探测
@@ -240,4 +239,3 @@ python $SKILL_DIR/scripts/query_graph.py $AST_JSON --impact <关注模块路径>
 | ... | // | ... | ... |
 ```
 
-- 确定了探测级别（轻量/深度） -  调用了 nexus-query 或 nexus-mapper -  调用了 runtime-inspector -  完成了 Gap Analysis（模式 B） -  产出了风险矩阵 -  生成了报告文件
