@@ -157,6 +157,19 @@ description: 当 [具体触发场景] 时加载。[能力概括]
 - 输入输出契约完整
 - 失败信号可被外部观察
 
+## 评分闸门（发布前）
+
+发布前必须执行静态评分：
+
+- 读取 `references/PROMPT_QUALITY_RUBRIC.md`
+- 生成 `references/SCORECARD_TEMPLATE.md` 对应的评分卡
+- 输出 Tier（T0/T1/T2/T3）与七维加权得分
+
+硬门规则：
+
+- 若触发 Hard Fail Gate，结论必须为 `Infeasible`
+- 若未触发 Hard Fail 且总分 < 4.0，必须回炉一次再评分
+
 ## 自我批评（输出前最后一道）
 
 用 `sequential-thinking` 做 3-5 个 thought：

@@ -1,17 +1,32 @@
 ---
-
 ## name: craft-authoring
-description: Required when running /craft: Workflow / Skill / Prompt scaffolds, guardrail syntax, fill + validation checklists; long templates are not duplicated in the craft workflow—follow this skill.
+description: Required when running /craft. Provides Workflow / Skill / Prompt scaffolds and quality guardrails using judgment-driven criteria.
+---
 
-# Craft Authoring — scaffolds & self-check
+# Craft Authoring - Scaffolds and Self-Check
 
-This skill holds the **“how to write”** detail for `**/craft`**; the workflow only routes the ritual. **Do not** paste this file back into the workflow.
+This skill carries the execution detail of `/craft`.  
+`/craft` defines direction; this file defines landing. Direction without landing becomes rhetoric. Landing without direction becomes mechanical output.
 
-## Workflow skeleton (minimal)
+## Global Authoring Protocol
+
+1. Keep language precise and intentional.
+2. Let narration add force, not noise.
+3. Prefer judgment signals over decorative phrasing.
+4. Ensure every major section answers: what / why / how to validate.
+5. Build meaning first, then rules, then verification.
+
+**Judgment bar**:
+- A good document makes execution clearer, steadier, and reproducible.
+- A weak document sounds energetic but depends on improvisation.
+
+---
+
+## Workflow Skeleton (minimal)
 
 ```markdown
 ---
-description: [one line for listings]
+description: [one-line purpose]
 ---
 
 # /name
@@ -21,102 +36,141 @@ You are **[role]**.
 **Mission**: …
 **Capabilities**: …
 **Constraints**: …
-**Principles**: …
 **Relationship to user**: …
 **Output Goal**: `path`
 </phase_context>
 
 ---
 
-## CRITICAL …
+## CRITICAL Writing Constraints
 
 > [!IMPORTANT]
-> **Why**: …
-> - …
-> - …
+> Writing constraints are defined in `/craft` and should not be duplicated here.
 
 ---
 
-## Step 1: …
+## Step 1: [Title]
 
-**Goal**: …
+### What
+...
 
-> [!IMPORTANT]
-> You **must** … **Why?** …
+### Why
+...
 
-**Thinking prompts**:
-1. …
+### How to Validate
+- ...
+- ...
 
 ---
 
 <completion_criteria>
-- …
+- [observable done condition]
 </completion_criteria>
 ```
 
-## Skill skeleton (`description` = trigger)
+## Skill Skeleton (`description` is the trigger)
 
 ```markdown
 ---
 name: kebab-name
-description: When [concrete trigger scenario], load this skill. [One-line capability]
+description: When [concrete trigger scenario], load this skill. [Capability summary]
 ---
 
 # Title
 
-## Hard boundaries / principles
-…
+## What
+...
 
-## Input / output contract
-…
+## Why
+...
+
+## How to Validate
+- Input contract: ...
+- Output contract: ...
 ```
 
-**Bad** description: “I can handle PDFs.” **Good**: “When the user needs to read/edit PDFs.”
+**Bad description**: capability slogan.  
+**Good description**: precise trigger boundary.
 
-## Prompt skeleton
+**Judgment bar**:  
+A strong description behaves like a gate, not a banner.  
+It defines both when to activate and when not to activate.
+
+## Prompt Skeleton
 
 ```markdown
 # Title
 
-## Role
-…
+## What
+...
 
-## Task
-…
+## Why
+...
 
-## Constraints
-…
-
-## Output format
-…
+## How to Validate
+- Constraints: ...
+- Output format: ...
 ```
 
-## Guardrail cheat sheet
+## Guardrail Cheat Sheet
 
+| Mechanism | Use |
+| --- | --- |
+| `[!IMPORTANT]` | non-skippable node |
+| `## CRITICAL` | loud boundary |
+| `you **must**` | hard action |
+| `<completion_criteria>` | definition of done |
 
-| Mechanism               | Use                       |
-| ----------------------- | ------------------------- |
-| `[!IMPORTANT]`          | Non-skippable nodes       |
-| `## CRITICAL`           | Loud boundaries           |
-| `you **must**`          | Hard actions              |
-| Concrete questions      | Instead of “think harder” |
-| `<completion_criteria>` | Definition of done        |
+Strong constraints explain at least: what, why, and drift signal.
 
+## Filling Pass (equivalent to old Step 5)
 
-Strong constraints answer: **what / why / what violation looks like**.
+Use `sequential-thinking` for 3-5 thoughts to cover goals, risks, I/O, and where research lands.
 
-## Filling content (equivalent to old Step 5)
+Quick checks:
+- Is each section actionable?
+- Is each critical rule justified?
+- Is completion externally verifiable?
 
-Use `sequential-thinking` with **3–5 thoughts**: goal, failure modes, I/O per step, prompts, reuse, how research lands in the doc.
-
-Quick scan: goals per step, “why” on constraints, output templates, / contrasts where useful.
+**Judgment bar**:  
+If a paragraph cannot tell the executor what to do, it is noise.  
+If it cannot tell why, it is command theater.  
+If it cannot tell how to verify, it is wishful writing.
 
 ## Validation (before ship)
 
-**Structure**: frontmatter, `phase_context` (workflow), CRITICAL blocks, each step has a goal, `<completion_criteria>`.
+Structure:
+- frontmatter
+- `phase_context` (workflow use)
+- CRITICAL block
+- `<completion_criteria>`
 
-**Content**: paths with `.anws/v{N}/` when relevant, kebab-case, correct tool syntax.
+Content:
+- correct path and naming
+- clear trigger boundaries
+- complete input/output contracts
+- externally observable failure signals
 
-## Self-critique (last gate)
+## Scoring Gate (before release)
 
-`sequential-thinking` **3–5 thoughts**: where would users stall? where would the model skip steps? vs `/challenge`-level bar—fix, then ship.
+Before shipping, run static scoring:
+
+- read `references/PROMPT_QUALITY_RUBRIC.md`
+- produce a scorecard using `references/SCORECARD_TEMPLATE.md`
+- report Tier (T0/T1/T2/T3) and weighted seven-dimension score
+
+Hard rules:
+
+- if Hard Fail Gate is triggered, final verdict must be `Infeasible`
+- if no Hard Fail and weighted score < 4.0, run one repair iteration and re-score
+
+## Self-Critique (last gate)
+
+Use `sequential-thinking` for 3-5 thoughts:
+- where users might stall
+- where the model might skip
+- which section still mixes too many concerns
+- what to revise before shipping
+
+Final question:  
+If this document is executed repeatedly, are you willing to own its consequences?
