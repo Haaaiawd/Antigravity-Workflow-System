@@ -276,7 +276,7 @@ Sign:  Approve /  Reject /  Revise / AUTO
     - Local refinement does not change open-task count.
 4. **Report** completion to the user.
 5. **Handoff before returning to `/forge` (not static code review)**:
-  - **`/change` does not run or substitute `code-reviewer`.** Static fidelity belongs only to **`/forge` §3.4.5** and **`/challenge` (CODE/FULL)**. Do **not** claim in this change report that “code was statically reviewed.”
+  - **`/change` does not run or substitute `code-reviewer`.** Static fidelity belongs only to **`/forge` §3.6** and **`/challenge` (CODE/FULL)**. Do **not** claim in this change report that “code was statically reviewed.”
     - If this edit touched contract handoff fields, validation type/notes, `04_SYSTEM_DESIGN/`, or public interface semantics: **list the touched areas** in the report so `/forge` can plan gates and execution.
     - **Optional (doc-side only)**: If the task list or design wording needs a readability pass, you may **suggest** `task-reviewer` or `design-reviewer`. Do **not** treat `/change` as a substitute gate with the same **Critical/High blocks coding** semantics as **`/forge`** / **challenge report** handling.
 

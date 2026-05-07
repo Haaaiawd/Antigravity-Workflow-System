@@ -1,11 +1,11 @@
 ---
 name: e2e-testing-guide
-description: Defines how to write a human-like E2E / manual verification testing guide and the E2E Verification report shape (PRD trace, surfaces, journeys, steps). No live browser protocol here—`/forge` §3.4.6 owns execution order.
+description: Defines how to write a human-like E2E / manual verification testing guide and the E2E Verification report shape (PRD trace, surfaces, journeys, steps). No live browser protocol here—`/forge` §3.7 owns execution order.
 ---
 
 # E2E Testing Guide
 
-This skill covers **only**: (1) **how to write** an executable E2E / manual verification **guide**; (2) the **report layout** (including verdict columns). **Whether the browser is driven against that guide** is orchestrated in **`/forge` §3.4.6**: produce this report first, then use host browser tools with user authorization to fill evidence.
+This skill covers **only**: (1) **how to write** an executable E2E / manual verification **guide**; (2) the **report layout** (including verdict columns). **Whether the browser is driven against that guide** is orchestrated in **`/forge` §3.7**: produce this report first, then use host browser tools with user authorization to fill evidence.
 
 > Write paths the way a human explores: where you enter, what you click, what you should see. Each row should trace to **PRD / acceptance**.
 
@@ -67,7 +67,7 @@ Cover: happy path, cold/empty start, representative errors, light edges (refresh
 
 ### 5. Short execution plan (optional)
 
-`Target` / `Environment` / `Role` / `Data setup` / `Side effects` / `Blockers` in a short list. **Do not** write a long browser automation protocol—live execution is **`/forge` §3.4.6**.
+`Target` / `Environment` / `Role` / `Data setup` / `Side effects` / `Blockers` in a short list. **Do not** write a long browser automation protocol—live execution is **`/forge` §3.7**.
 
 ---
 

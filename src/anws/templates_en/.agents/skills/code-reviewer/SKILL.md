@@ -1,7 +1,7 @@
 ---
 
 ## name: code-reviewer
-description: Pure static fidelity / implementation-side evidence review against PRD, ADR, System Design, and 05_TASKS—cover contract closure, task fulfillment, architecture fit, safety boundaries, verification evidence, and backflow/handoff consistency with traceable findings; shared by /challenge (CODE/FULL) and /forge (Step 3 §3.4.5 wave-end).
+description: Pure static fidelity / implementation-side evidence review against PRD, ADR, System Design, and 05_TASKS—cover contract closure, task fulfillment, architecture fit, safety boundaries, verification evidence, and backflow/handoff consistency with traceable findings; shared by /challenge (CODE/FULL) and /forge (Step 3 §3.6 wave-end).
 
 # Code Reviewer — implementation-side evidence layer
 
@@ -23,12 +23,24 @@ Use **Critical / High / Medium / Low** (same as `/challenge`). **Critical** = sh
 ## When to activate
 
 - **`/challenge`**: `REVIEW_MODE` = `CODE` / `FULL`, or **adaptive escalation** from design/task review to implementation-side evidence.
-- **`/forge`**: **Step 3 §3.4.5 wave-end** gate (**last task of the wave**, after §3.4 automated checks, before §3.4.6; default **once per wave**). `/forge` also requires **§3.4.5.1 minimal delivery index** after §3.4.6 (see `forge` workflow)—**not** part of this skill’s report body; never substitute the index for the full review.
+- **`/forge`**: **Step 3 §3.6 wave-end** gate (mandatory after the last task's §3.5 commit; default **once per wave**). `/forge` also requires the **§3.8 delivery index** after §3.7 (see `forge` workflow)—**not** part of this skill's report body; never substitute the index for the full review.
 
-## Execution model (host capabilities)
+## Execution model (default: full execution in current session)
 
-- **Subagent available**: If the host offers subagents, Task / parallel sessions, or equivalent, **prefer** running this skill in a **dedicated subagent** (isolate context from coding/navigation turns). **Output shape, lenses, and evidence rules remain exactly this skill**—subagents must not silently trim scope.
-- **No subagent**: Run **in this session**, fully—**do not** weaken evidence requirements or skip lenses because no subagent is available.
+- **Default path**: Execute this skill in full **in the current session**—Lens 1–6 covered, output the full review per the "Output shape (compact)" six sections. This is baseline; no preconditions.
+- **Optional optimization**: If the host explicitly offers subagent / Task / parallel-session capabilities, you **may** delegate this skill to a subagent for context isolation. The subagent is just an execution container; **output shape, lenses, and evidence rules remain exactly this skill**—subagents must not silently trim scope.
+- **Forbidden excuses**: **Do not** weaken evidence requirements, skip lenses, or skip execution on grounds like "no subagent available", "low context", "small change", or "time pressure". Waivers under `/forge` may **only** be issued by the user at wave sign-off.
+
+## Persistence requirement (mandatory under `/forge`)
+
+When invoked by `/forge` §3.6, the full review body **must** be written to a physical file:
+
+- **Path**: `{TARGET_DIR}/wave-reviews/wave-{N}-review.md` (`{N}` is the current Wave number)
+- **First line**: must start with `# Wave {N} Code Review — {YYYY-MM-DD}`
+- **Not persisted = §4.0 hard block**, no exception (including AUTO mode). Self-filled tables or verbal claims of "review done" do not count as execution.
+- On user waiver, **do not write** the review file; instead create `{TARGET_DIR}/wave-reviews/wave-{N}-WAIVED.md` (see `/forge` §3.6 waiver protocol).
+
+When invoked by `/challenge`, write to the report path defined by the `/challenge` workflow (default: into the corresponding section of `07_CHALLENGE_REPORT.md`); independent persistence to `wave-reviews/` is not required.
 
 ## Required inputs
 
