@@ -25,13 +25,13 @@
 ```markdown
 ## Dependency Overview
 
-```mermaid
+\`\`\`mermaid
 graph TD
     T1.1.1[Project setup] --> T2.1.1[Implement core logic]
     T2.1.1 --> T2.1.2[Implement API endpoint]
     T3.1.1[Database schema] --> T2.1.1
     T2.1.2 --> T1.2.1[Frontend integration]
-```
+\`\`\`
 
 ```
 

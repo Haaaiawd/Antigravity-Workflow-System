@@ -1,5 +1,5 @@
 ---
-description: "Orchestrate /blueprint: generate 05A_TASKS.md and 05B_VERIFICATION_PLAN.md from approved design inputs."
+description: "Orchestrate /blueprint: generate 05A_TASKS.md and 05B_VERIFICATION_PLAN.md from approved design inputs and finish mandatory closure checks."
 ---
 
 # /blueprint
